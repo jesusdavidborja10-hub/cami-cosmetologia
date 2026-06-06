@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cami Cosmetología — Realza tu belleza</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<!-- ══ TOAST ══ -->
+<div id="toast"></div>
+
+<!-- ══ NAVBAR ══════════════════════════════════════════════════════════════ -->
+<nav class="barra-nav" id="navbar">
+  <div class="nav-inner">
+    <a href="/" class="nav-brand">
+      <div class="nav-brand-icon">🌸</div>
+      <span class="nav-brand-name">CAMI <span>Cosmetología</span></span>
+    </a>
+
+    <button class="nav-toggle" id="navToggle" aria-label="Menú">☰</button>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="/" class="{{ 'activo' if seccion=='inicio' else '' }}">✦ Inicio</a></li>
+      <li><a href="/citas" class="{{ 'activo' if seccion=='citas' else '' }}">📅 Citas</a></li>
+      <li><a href="/contacto" class="{{ 'activo' if seccion=='contacto' else '' }}">💬 Contacto</a></li>
+      <li><a href="/ubicacion" class="{{ 'activo' if seccion=='ubicacion' else '' }}">📍 Ubicación</a></li>
+      <!-- Bloque usuario solo visible en móvil dentro del menú -->
+      <li class="nav-user-mobile">
+        {% if usuario %}
+          <span class="nav-user-name">👤 {{ usuario.nombre }}</span>
+          <button class="btn-logout" onclick="doLogout()">🚪 Cerrar sesión</button>
+        {% else %}
+          <a href="/login" class="btn-login-mobile">🌸 Iniciar sesión</a>
+        {% endif %}
+      </li>
+    </ul>
+
+    <div class="nav-user" id="navUser">
+      {% if usuario %}
+      <span class="nav-user-name">👤 {{ usuario.nombre }}</span>
+      <button class="btn-logout" onclick="doLogout()">Salir</button>
+      {% else %}
+      <a href="/login" class="btn-outline" style="padding:8px 18px;font-size:.8rem">Iniciar sesión</a>
+      {% endif %}
+    </div>
+  </div>
+</nav>
+
+<!-- ══ INICIO ═══════════════════════════════════════════════════════════════ -->
+{% if seccion == 'inicio' %}
+<section id="sec-inicio">
+  <div class="container">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      Agenda tu cita hoy · Cartagena, Colombia
+    </div>
+    <h1 class="hero-title">
+      Tu <span class="accent italic">belleza</span><br>
+      merece lo mejor
+    </h1>
+    <p class="hero-sub">
+      En Cami Cosmetología te ofrecemos tratamientos faciales, limpiezas, micropigmentación y mucho más.
+      Agenda tu cita en minutos y potencia tu confianza.
+    </p>
+    <div class="hero-cta">
+      <a href="/citas" class="btn-primary">🌸 &nbsp;Apartar cita</a>
+      <a href="/contacto" class="btn-outline">💬 &nbsp;Contáctanos</a>
+    </div>
+  </div>
+</section>
+
+<section class="servicios-section">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-tag">✦ Nuestros servicios</p>
+      <h2 class="section-title">Todo para tu <span>bienestar</span></h2>
+      <p class="section-desc">Tratamientos especializados con los mejores productos del mercado</p>
+    </div>
+    <div class="srv-grid">
+      <div class="srv-card">
+        <div class="srv-card-icon">✨</div>
+        <div class="srv-card-name">Limpieza Facial</div>
+        <div class="srv-card-desc">Eliminamos impurezas y revitalizamos tu piel con técnicas profesionales.</div>
+        <div class="srv-card-price">Desde $60.000</div>
+      </div>
+      <div class="srv-card">
+        <div class="srv-card-icon">💆</div>
+        <div class="srv-card-name">Tratamientos Faciales</div>
+        <div class="srv-card-desc">Hidratación, antiedad, acné y más. Personalizados para tu tipo de piel.</div>
+        <div class="srv-card-price">Desde $80.000</div>
+      </div>
+      <div class="srv-card">
+        <div class="srv-card-icon">🖊️</div>
+        <div class="srv-card-name">Micropigmentación</div>
+        <div class="srv-card-desc">Cejas, labios y delineado permanente con trazos naturales y duraderos.</div>
+        <div class="srv-card-price">Desde $200.000</div>
+      </div>
+      <div class="srv-card">
+        <div class="srv-card-icon">⚡</div>
+        <div class="srv-card-name">Depilación Láser</div>
+        <div class="srv-card-desc">Remoción de vello permanente y sin dolor. Resultados visibles desde la primera sesión.</div>
+        <div class="srv-card-price">Desde $120.000</div>
+      </div>
+      <div class="srv-card">
+        <div class="srv-card-icon">🌿</div>
+        <div class="srv-card-name">Masajes Faciales</div>
+        <div class="srv-card-desc">Relajación profunda que activa la circulación y deja tu piel luminosa.</div>
+        <div class="srv-card-price">Desde $50.000</div>
+      </div>
+      <div class="srv-card">
+        <div class="srv-card-icon">💬</div>
+        <div class="srv-card-name">Asesoría Personalizada</div>
+        <div class="srv-card-desc">Te orientamos en el cuidado de tu piel con un plan diseñado solo para ti.</div>
+        <div class="srv-card-price">Desde $30.000</div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ══ CITAS ═════════════════════════════════════════════════════════════════ -->
+{% if seccion == 'citas' %}
+<section id="sec-citas">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-tag">✦ Agenda</p>
+      <h2 class="section-title">Aparta tu <span>cita</span></h2>
+      <p class="section-desc">Selecciona servicio, fecha y hora. ¡Así de fácil!</p>
+    </div>
+
+    <div class="tabs-row">
+      <button class="tab-btn active" onclick="switchTab('nueva')">✦ Nueva cita</button>
+      <button class="tab-btn" onclick="switchTab('mis')">☰ Mis citas</button>
+    </div>
+
+    <!-- Nueva cita -->
+    <div id="panel-nueva">
+      <div class="card">
+        <div class="form-grid">
+
+          <div class="field">
+            <label>Nombre completo</label>
+            <input id="nombre" type="text" placeholder="Tu nombre">
+          </div>
+
+          <div class="field">
+            <label>Teléfono / WhatsApp</label>
+            <input id="telefono" type="tel" placeholder="+57 300 000 0000">
+          </div>
+
+          <div class="field full">
+            <label>Correo electrónico (opcional)</label>
+            <input id="email" type="email" placeholder="correo@ejemplo.com">
+          </div>
+
+          <div class="field full">
+            <label>Servicio</label>
+            <div class="servicios-chips" id="serviciosGrid">
+              <div class="srv-chip" data-value="Limpieza Facial" onclick="selectServicio(this)">
+                <span class="chip-icon">✨</span>Limpieza Facial
+              </div>
+              <div class="srv-chip" data-value="Tratamientos Faciales" onclick="selectServicio(this)">
+                <span class="chip-icon">💆</span>Tratamientos Faciales
+              </div>
+              <div class="srv-chip" data-value="Micropigmentación" onclick="selectServicio(this)">
+                <span class="chip-icon">🖊️</span>Micropigmentación
+              </div>
+              <div class="srv-chip" data-value="Depilación Láser" onclick="selectServicio(this)">
+                <span class="chip-icon">⚡</span>Depilación Láser
+              </div>
+              <div class="srv-chip" data-value="Masajes Faciales" onclick="selectServicio(this)">
+                <span class="chip-icon">🌿</span>Masajes Faciales
+              </div>
+              <div class="srv-chip" data-value="Asesoría Personalizada" onclick="selectServicio(this)">
+                <span class="chip-icon">💬</span>Asesoría Personal.
+              </div>
+            </div>
+            <input id="servicio" type="hidden">
+          </div>
+
+          <div class="field">
+            <label>Fecha</label>
+            <input id="fecha" type="date" onchange="cargarHorarios()">
+          </div>
+
+          <div class="field">
+            <label>Hora disponible</label>
+            <div class="horas-grid" id="horasGrid">
+              <p style="color:var(--text-muted);font-size:.8rem;grid-column:1/-1;padding:8px 0">
+                Selecciona una fecha primero
+              </p>
+            </div>
+            <input id="hora" type="hidden">
+          </div>
+
+          <div class="field full">
+            <label>Notas adicionales (opcional)</label>
+            <textarea id="notas" placeholder="Alergias, preferencias, información extra…"></textarea>
+          </div>
+
+          <div class="full">
+            <button class="btn-form-primary" onclick="crearCita()">
+              🌸 &nbsp;Confirmar Cita
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Mis citas -->
+    <div id="panel-mis" style="display:none">
+      <div class="card">
+        <div class="filter-row">
+          <div class="field" style="flex:1;min-width:160px">
+            <label>Filtrar por fecha</label>
+            <input type="date" id="filtroFecha" onchange="cargarCitas()">
+          </div>
+          <button class="btn-secondary-sm" onclick="limpiarFiltro()">Ver todas</button>
+          <button class="btn-secondary-sm" onclick="cargarCitas()">↻ Actualizar</button>
+        </div>
+        <div id="listaCitas">
+          <div class="empty-state">
+            <div class="big">🌸</div>
+            <p>Cargando citas…</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+{% endif %}
+
+<!-- ══ CONTACTO ══════════════════════════════════════════════════════════════ -->
+{% if seccion == 'contacto' %}
+<section id="sec-contacto">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-tag">✦ Contáctanos</p>
+      <h2 class="section-title">Estamos para <span>servirte</span></h2>
+      <p class="section-desc">Escríbenos o llámanos. Siempre tendremos la mejor respuesta para ti.</p>
+    </div>
+
+    <div class="contacto-grid">
+      <div class="contacto-info">
+        <h3>¿Tienes alguna pregunta?</h3>
+
+        <div class="contacto-item">
+          <div class="contacto-item-icon">📱</div>
+          <div class="contacto-item-text">
+            <strong>WhatsApp / Teléfono</strong>
+            <span>+57 300 123 4567</span>
+          </div>
+        </div>
+
+        <div class="contacto-item">
+          <div class="contacto-item-icon">✉️</div>
+          <div class="contacto-item-text">
+            <strong>Correo electrónico</strong>
+            <span>cami.cosmetologia@gmail.com</span>
+          </div>
+        </div>
+
+        <div class="contacto-item">
+          <div class="contacto-item-icon">⏰</div>
+          <div class="contacto-item-text">
+            <strong>Horario de atención</strong>
+            <span>Lun–Vie: 9am – 6pm · Sáb: 9am – 2pm</span>
+          </div>
+        </div>
+
+        <div class="contacto-item">
+          <div class="contacto-item-icon">📍</div>
+          <div class="contacto-item-text">
+            <strong>Dirección</strong>
+            <span>Centro Histórico, Cartagena de Indias</span>
+          </div>
+        </div>
+
+        <div class="redes-row">
+          <a href="#" class="red-btn">📷 Instagram</a>
+          <a href="#" class="red-btn">💬 WhatsApp</a>
+          <a href="#" class="red-btn">🎵 TikTok</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="font-family:var(--font-display);font-size:1.3rem;color:#fff;margin-bottom:22px">
+          Envíanos un mensaje
+        </h3>
+        <div class="form-grid" style="gap:16px">
+          <div class="field">
+            <label>Nombre</label>
+            <input id="cnt-nombre" type="text" placeholder="Tu nombre">
+          </div>
+          <div class="field">
+            <label>Teléfono</label>
+            <input id="cnt-tel" type="tel" placeholder="+57 300 000 0000">
+          </div>
+          <div class="field full">
+            <label>Correo</label>
+            <input id="cnt-email" type="email" placeholder="correo@ejemplo.com">
+          </div>
+          <div class="field full">
+            <label>Mensaje</label>
+            <textarea id="cnt-msg" placeholder="¿En qué podemos ayudarte?" style="min-height:110px"></textarea>
+          </div>
+          <div class="full">
+            <button class="btn-form-primary" onclick="enviarMensaje()">
+              💌 &nbsp;Enviar mensaje
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ══ UBICACIÓN ═════════════════════════════════════════════════════════════ -->
+{% if seccion == 'ubicacion' %}
+<section id="sec-ubicacion">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-tag">✦ Encuéntranos</p>
+      <h2 class="section-title">Nuestra <span>ubicación</span></h2>
+      <p class="section-desc">En el corazón de Cartagena de Indias, Colombia</p>
+    </div>
+
+    <div class="ubicacion-grid">
+      <div class="mapa-placeholder">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3923.6!2d-75.5136!3d10.3997!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8ef625775c0c5f6d%3A0x3a3d31d5c3b6e9e!2sCartagena%2C+Bol%C3%ADvar!5e0!3m2!1ses!2sco!4v1"
+          allowfullscreen loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+
+      <div class="ubicacion-detalles">
+        <div class="ubic-card">
+          <div class="ubic-card-icon">📍</div>
+          <h4>Dirección</h4>
+          <p>Centro Histórico, Cartagena de Indias, Bolívar, Colombia.<br>A 2 cuadras del Parque Bolívar.</p>
+        </div>
+        <div class="ubic-card">
+          <div class="ubic-card-icon">⏰</div>
+          <h4>Horarios</h4>
+          <p>
+            Lunes a Viernes: 9:00 am – 6:00 pm<br>
+            Sábados: 9:00 am – 2:00 pm<br>
+            Domingos: Cerrado
+          </p>
+        </div>
+        <div class="ubic-card">
+          <div class="ubic-card-icon">🚗</div>
+          <h4>Cómo llegar</h4>
+          <p>Fácil acceso en transporte público. Parqueadero a 50 metros. Cerca de la zona amurallada.</p>
+        </div>
+        <div class="ubic-card">
+          <div class="ubic-card-icon">📱</div>
+          <h4>Contacto directo</h4>
+          <p>+57 300 123 4567<br>cami.cosmetologia@gmail.com</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ══ LOGIN ══════════════════════════════════════════════════════════════════ -->
+{% if seccion == 'login' %}
+<section id="sec-login">
+  <div class="auth-card">
+    <div class="auth-icon">🌸</div>
+    <h2 class="auth-title">Bienvenida de nuevo</h2>
+    <p class="auth-sub">Inicia sesión para gestionar tus citas</p>
+    <div class="auth-fields">
+      <div class="field">
+        <label>Correo electrónico</label>
+        <input id="lg-email" type="email" placeholder="correo@ejemplo.com">
+      </div>
+      <div class="field">
+        <label>Contraseña</label>
+        <input id="lg-pw" type="password" placeholder="••••••••">
+      </div>
+      <label class="remember-row">
+        <input type="checkbox" id="lg-remember">
+        Recordar mi sesión
+      </label>
+    </div>
+    <button class="btn-form-primary" onclick="doLogin()">🌸 &nbsp;Iniciar sesión</button>
+    <p class="auth-link">¿No tienes cuenta? <a href="/registro">Regístrate aquí</a></p>
+  </div>
+</section>
+{% endif %}
+
+<!-- ══ REGISTRO ═══════════════════════════════════════════════════════════════ -->
+{% if seccion == 'registro' %}
+<section id="sec-registro">
+  <div class="auth-card">
+    <div class="auth-icon">💐</div>
+    <h2 class="auth-title">Crea tu cuenta</h2>
+    <p class="auth-sub">Regístrate y gestiona tus citas fácilmente</p>
+    <div class="auth-fields">
+      <div class="field">
+        <label>Nombre completo</label>
+        <input id="rg-nombre" type="text" placeholder="Tu nombre">
+      </div>
+      <div class="field">
+        <label>Correo electrónico</label>
+        <input id="rg-email" type="email" placeholder="correo@ejemplo.com">
+      </div>
+      <div class="field">
+        <label>Contraseña</label>
+        <input id="rg-pw" type="password" placeholder="Mínimo 6 caracteres">
+      </div>
+      <div class="field">
+        <label>Confirmar contraseña</label>
+        <input id="rg-pw2" type="password" placeholder="Repite tu contraseña">
+      </div>
+    </div>
+    <button class="btn-form-primary" onclick="doRegistro()">💐 &nbsp;Crear cuenta</button>
+    <p class="auth-link">¿Ya tienes cuenta? <a href="/login">Inicia sesión</a></p>
+  </div>
+</section>
+{% endif %}
+
+<!-- ══ FOOTER ════════════════════════════════════════════════════════════════ -->
+<footer>
+  <p>© 2025 <span>Cami Cosmetología</span> — Realza tu belleza · Potencia tu confianza 🌸</p>
+  <p style="margin-top:8px">Cartagena de Indias, Colombia</p>
+</footer>
+
+<!-- Modal cancelar cita -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h3>¿Cancelar esta cita?</h3>
+    <p>Esta acción no se puede deshacer. La cita quedará marcada como cancelada.</p>
+    <div class="modal-btns">
+      <button class="btn-secondary-sm" onclick="cerrarModal()">No, volver</button>
+      <button class="btn-cancel-cita" id="btnConfirmCancelar">Sí, cancelar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Config ───────────────────────────────────────────────────────────────────
+const API = '/api';
+let servicioSel = '', horaSel = '';
+
+// ── Toast ────────────────────────────────────────────────────────────────────
+function toast(msg, type='info'){
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = `show ${type}`;
+  setTimeout(()=>{ el.className=''; }, 3800);
+}
+
+// ── Navbar hamburger ─────────────────────────────────────────────────────────
+const navToggle = document.getElementById('navToggle');
+const navLinks  = document.getElementById('navLinks');
+if(navToggle && navLinks){
+  navToggle.addEventListener('click', ()=>{
+    navLinks.classList.toggle('open');
+  });
+  navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click', ()=>navLinks.classList.remove('open')));
+}
+
+// ── Auth ─────────────────────────────────────────────────────────────────────
+async function doLogin(){
+  const email    = document.getElementById('lg-email')?.value?.trim();
+  const password = document.getElementById('lg-pw')?.value;
+  const remember = document.getElementById('lg-remember')?.checked;
+  if(!email || !password) return toast('⚠ Completa todos los campos','error');
+  const r = await fetch(`${API}/login`,{
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({email, password, remember})
+  });
+  const data = await r.json();
+  if(!r.ok) return toast(`⚠ ${data.error}`,'error');
+  toast(`🌸 ${data.mensaje}`,'success');
+  setTimeout(()=>{ window.location.href='/'; }, 1000);
+}
+
+async function doRegistro(){
+  const nombre   = document.getElementById('rg-nombre')?.value?.trim();
+  const email    = document.getElementById('rg-email')?.value?.trim();
+  const password = document.getElementById('rg-pw')?.value;
+  const pw2      = document.getElementById('rg-pw2')?.value;
+  if(!nombre || !email || !password) return toast('⚠ Completa todos los campos','error');
+  if(password !== pw2) return toast('⚠ Las contraseñas no coinciden','error');
+  const r = await fetch(`${API}/registro`,{
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({nombre, email, password})
+  });
+  const data = await r.json();
+  if(!r.ok) return toast(`⚠ ${data.error}`,'error');
+  toast(`💐 ${data.mensaje}`,'success');
+  setTimeout(()=>{ window.location.href='/'; }, 1000);
+}
+
+async function doLogout(){
+  await fetch(`${API}/logout`, {method:'POST'});
+  window.location.href = '/';
+}
+
+// ── Citas tabs ────────────────────────────────────────────────────────────────
+function switchTab(tab){
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>{
+    b.classList.toggle('active', (tab==='nueva'&&i===0)||(tab==='mis'&&i===1));
+  });
+  const pN = document.getElementById('panel-nueva');
+  const pM = document.getElementById('panel-mis');
+  if(pN) pN.style.display = tab==='nueva' ? 'block' : 'none';
+  if(pM) pM.style.display = tab==='mis'   ? 'block' : 'none';
+  if(tab==='mis') cargarCitas();
+}
+
+// ── Servicios ─────────────────────────────────────────────────────────────────
+function selectServicio(el){
+  document.querySelectorAll('.srv-chip').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  servicioSel = el.dataset.value;
+  document.getElementById('servicio').value = servicioSel;
+}
+
+// ── Horarios ──────────────────────────────────────────────────────────────────
+async function cargarHorarios(){
+  const fecha = document.getElementById('fecha').value;
+  if(!fecha) return;
+  horaSel = '';
+  const grid = document.getElementById('horasGrid');
+  grid.innerHTML='<p style="color:var(--text-muted);font-size:.8rem;grid-column:1/-1;padding:8px 0">Cargando…</p>';
+  try{
+    const r = await fetch(`${API}/disponibilidad?fecha=${fecha}`);
+    const data = await r.json();
+    grid.innerHTML = data.map(h=>`
+      <button class="hora-btn ${h.disponible?'':'ocupado'}"
+              onclick="${h.disponible?`selectHora(this,'${h.hora}')`:''}">${h.hora}</button>
+    `).join('');
+  }catch{
+    grid.innerHTML='<p style="color:var(--pink-glow);font-size:.8rem;grid-column:1/-1">Sin conexión al servidor</p>';
+  }
+}
+
+function selectHora(el, hora){
+  document.querySelectorAll('.hora-btn').forEach(b=>b.classList.remove('selected'));
+  el.classList.add('selected'); horaSel = hora;
+  document.getElementById('hora').value = hora;
+}
+
+// ── Crear cita ────────────────────────────────────────────────────────────────
+async function crearCita(){
+  const nombre   = document.getElementById('nombre')?.value?.trim();
+  const telefono = document.getElementById('telefono')?.value?.trim();
+  const email    = document.getElementById('email')?.value?.trim();
+  const fecha    = document.getElementById('fecha')?.value;
+  const notas    = document.getElementById('notas')?.value?.trim();
+  if(!nombre)    return toast('⚠ Ingresa tu nombre','error');
+  if(!telefono)  return toast('⚠ Ingresa tu teléfono','error');
+  if(!servicioSel) return toast('⚠ Selecciona un servicio','error');
+  if(!fecha)     return toast('⚠ Selecciona una fecha','error');
+  if(!horaSel)   return toast('⚠ Selecciona una hora','error');
+  try{
+    const r = await fetch(`${API}/citas`,{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({nombre,telefono,email,servicio:servicioSel,fecha,hora:horaSel,notas})
+    });
+    const data = await r.json();
+    if(!r.ok) return toast(`⚠ ${data.error}`,'error');
+    toast('🌸 ¡Cita confirmada con éxito!','success');
+    resetForm();
+  }catch{ toast('Sin conexión al servidor','error'); }
+}
+
+function resetForm(){
+  ['nombre','telefono','email','notas'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  const fecha=document.getElementById('fecha'); if(fecha) fecha.value='';
+  servicioSel=''; horaSel='';
+  document.querySelectorAll('.srv-chip').forEach(c=>c.classList.remove('selected'));
+  const g=document.getElementById('horasGrid');
+  if(g) g.innerHTML='<p style="color:var(--text-muted);font-size:.8rem;grid-column:1/-1;padding:8px 0">Selecciona una fecha primero</p>';
+}
+
+// ── Listar citas ──────────────────────────────────────────────────────────────
+function fmtFecha(f){
+  if(!f) return '';
+  const [y,m,d]=f.split('-');
+  return `${d}/${m}/${y}`;
+}
+
+async function cargarCitas(){
+  const fecha = document.getElementById('filtroFecha')?.value;
+  const url   = fecha ? `${API}/citas?fecha=${fecha}` : `${API}/citas`;
+  const lista = document.getElementById('listaCitas');
+  if(!lista) return;
+  lista.innerHTML='<div class="empty-state"><div class="big">🌸</div><p>Cargando…</p></div>';
+  try{
+    const r = await fetch(url);
+    const citas = await r.json();
+    if(!citas.length){
+      lista.innerHTML='<div class="empty-state"><div class="big">📋</div><p>No hay citas registradas</p></div>';
+      return;
+    }
+    lista.innerHTML = citas.map(c=>`
+      <div class="cita-card">
+        <div>
+          <div class="cita-nombre">${c.nombre}</div>
+          <div class="cita-meta">
+            <span>📅 ${fmtFecha(c.fecha)} · ${c.hora}</span>
+            <span>📱 ${c.telefono}</span>
+            ${c.email?`<span>✉ ${c.email}</span>`:''}
+          </div>
+          <div style="margin-top:8px">
+            <span class="badge ${c.estado}">${c.servicio}</span>
+            <span class="badge ${c.estado}">${c.estado}</span>
+          </div>
+          ${c.notas?`<p style="font-size:.78rem;color:var(--text-muted);margin-top:6px">📝 ${c.notas}</p>`:''}
+        </div>
+        <div>
+          ${c.estado!=='cancelada'?`<button class="btn-cancel-cita" onclick="confirmarCancelar(${c.id})">Cancelar</button>`:''}
+        </div>
+      </div>`).join('');
+  }catch{
+    lista.innerHTML='<div class="empty-state"><div class="big">⚠️</div><p>¿Está corriendo el servidor Python?</p></div>';
+  }
+}
+
+function limpiarFiltro(){
+  const el=document.getElementById('filtroFecha'); if(el) el.value='';
+  cargarCitas();
+}
+
+function confirmarCancelar(id){
+  document.getElementById('modalOverlay').classList.add('open');
+  document.getElementById('btnConfirmCancelar').onclick = async ()=>{
+    try{
+      await fetch(`${API}/citas/${id}`,{method:'DELETE'});
+      toast('Cita cancelada','info');
+      cerrarModal(); cargarCitas();
+    }catch{ toast('Error al cancelar','error'); }
+  };
+}
+function cerrarModal(){ document.getElementById('modalOverlay').classList.remove('open'); }
+document.getElementById('modalOverlay').addEventListener('click',e=>{ if(e.target===e.currentTarget) cerrarModal(); });
+
+// ── Contacto ──────────────────────────────────────────────────────────────────
+function enviarMensaje(){
+  const n = document.getElementById('cnt-nombre')?.value?.trim();
+  const e = document.getElementById('cnt-email')?.value?.trim();
+  const m = document.getElementById('cnt-msg')?.value?.trim();
+  if(!n || !m) return toast('⚠ Ingresa tu nombre y mensaje','error');
+  toast('💌 ¡Mensaje enviado! Te contactaremos pronto.','success');
+  ['cnt-nombre','cnt-tel','cnt-email','cnt-msg'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+}
+
+// ── Fecha mínima hoy ──────────────────────────────────────────────────────────
+const fechaInput = document.getElementById('fecha');
+if(fechaInput) fechaInput.min = new Date().toISOString().split('T')[0];
+
+// Panel inicial
+const pN = document.getElementById('panel-nueva');
+if(pN) pN.style.display='block';
+</script>
+</body>
+</html>
