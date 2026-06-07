@@ -1351,7 +1351,7 @@ function enviarMensaje(){
   const m = document.getElementById('cnt-msg')?.value?.trim();
   if(!n || !m) return toast('⚠ Ingresa tu nombre y mensaje','error');
   const texto = `Hola, me llamo ${n}${t ? ', mi teléfono es ' + t : ''}${e ? ', mi correo es ' + e : ''}. ${m}`;
-  const url = `https://wa.me/573105165442?text=${encodeURIComponent(texto)}`;
+  const url = `https://wa.me/573105165342?text=${encodeURIComponent(texto)}`;
   window.open(url, '_blank');
 }
 
