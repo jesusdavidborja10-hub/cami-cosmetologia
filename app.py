@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 from flask_cors import CORS
+from authlib.integrations.flask_client import OAuth
 import os, hashlib, secrets
 import psycopg2
 import psycopg2.extras
@@ -9,6 +10,16 @@ app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', secrets.token_hex(32))
 app.permanent_session_lifetime = timedelta(days=30)
 CORS(app)
+
+# ── Google OAuth ───────────────────────────────────────────────────────────────
+oauth = OAuth(app)
+google = oauth.register(
+    name='google',
+    client_id=os.environ.get('GOOGLE_CLIENT_ID'),
+    client_secret=os.environ.get('GOOGLE_CLIENT_SECRET'),
+    server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
+    client_kwargs={'scope': 'openid email profile'},
+)
 
 # ── Conexión PostgreSQL ────────────────────────────────────────────────────────
 def get_conn():
@@ -130,6 +141,43 @@ def login():
 def logout():
     session.clear()
     return jsonify({'mensaje': 'Sesión cerrada'})
+
+# ── Google OAuth routes ────────────────────────────────────────────────────────
+@app.route('/auth/google')
+def auth_google():
+    redirect_uri = url_for('auth_google_callback', _external=True)
+    return google.authorize_redirect(redirect_uri)
+
+@app.route('/auth/google/callback')
+def auth_google_callback():
+    try:
+        token = google.authorize_access_token()
+        userinfo = token.get('userinfo')
+        if not userinfo:
+            return redirect(url_for('login_page'))
+        email  = userinfo['email'].strip().lower()
+        nombre = userinfo.get('name', email.split('@')[0])
+        conn = get_conn()
+        c = conn.cursor()
+        c.execute('SELECT id, nombre, email FROM usuarios WHERE email=%s', (email,))
+        row = c.fetchone()
+        if row:
+            uid, nombre_db, email_db = row
+            conn.close()
+        else:
+            placeholder_pw = 'GOOGLE_OAUTH_' + secrets.token_hex(16)
+            c.execute('INSERT INTO usuarios (nombre, email, password) VALUES (%s,%s,%s) RETURNING id',
+                      (nombre, email, placeholder_pw))
+            uid = c.fetchone()[0]
+            conn.commit()
+            conn.close()
+            nombre_db, email_db = nombre, email
+        session.permanent = True
+        session['usuario'] = {'id': uid, 'nombre': nombre_db, 'email': email_db}
+        return redirect(url_for('home'))
+    except Exception as e:
+        print(f"Google OAuth error: {e}")
+        return redirect(url_for('login_page'))
 
 @app.route('/api/me')
 def me():
