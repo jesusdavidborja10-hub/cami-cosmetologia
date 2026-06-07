@@ -1346,11 +1346,13 @@ document.getElementById('modalOverlay').addEventListener('click',e=>{ if(e.targe
 // ── Contacto ──────────────────────────────────────────────────────────────────
 function enviarMensaje(){
   const n = document.getElementById('cnt-nombre')?.value?.trim();
+  const t = document.getElementById('cnt-tel')?.value?.trim();
   const e = document.getElementById('cnt-email')?.value?.trim();
   const m = document.getElementById('cnt-msg')?.value?.trim();
   if(!n || !m) return toast('⚠ Ingresa tu nombre y mensaje','error');
-  toast('💌 ¡Mensaje enviado! Te contactaremos pronto.','success');
-  ['cnt-nombre','cnt-tel','cnt-email','cnt-msg'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  const texto = `Hola, me llamo ${n}${t ? ', mi teléfono es ' + t : ''}${e ? ', mi correo es ' + e : ''}. ${m}`;
+  const url = `https://wa.me/573105165442?text=${encodeURIComponent(texto)}`;
+  window.open(url, '_blank');
 }
 
 // ── Fecha mínima hoy ──────────────────────────────────────────────────────────
