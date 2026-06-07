@@ -910,6 +910,23 @@ footer span { color: var(--pink-glow); }
   .redes-row { flex-wrap: wrap; }
 }
 
+
+/* ── Animaciones de entrada ── */
+.fade-up {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.fade-up-delay-1 { transition-delay: .1s; }
+.fade-up-delay-2 { transition-delay: .2s; }
+.fade-up-delay-3 { transition-delay: .3s; }
+.fade-up-delay-4 { transition-delay: .4s; }
+.fade-up-delay-5 { transition-delay: .5s; }
+
   </style>
 </head>
 <body>
@@ -1849,6 +1866,27 @@ document.addEventListener('touchstart', e => {
   const t = e.touches[0];
   crearParticulas(t.clientX, t.clientY);
 }, { passive: true });
+</script>
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(el => {
+    if (el.isIntersecting) {
+      el.target.classList.add('visible');
+      observer.unobserve(el.target);
+    }
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll(
+  '.section-header, .card, .servicio-card, .contacto-item, .resena-card, .sobre-mi-layout, .rating-summary-card, .contacto-centro, .ubicacion-grid, .resenas-layout, .sobre-mi-chip, .red-btn'
+).forEach((el, i) => {
+  el.classList.add('fade-up');
+  if (i % 5 === 1) el.classList.add('fade-up-delay-1');
+  if (i % 5 === 2) el.classList.add('fade-up-delay-2');
+  if (i % 5 === 3) el.classList.add('fade-up-delay-3');
+  if (i % 5 === 4) el.classList.add('fade-up-delay-4');
+  observer.observe(el);
+});
 </script>
 </body>
 </html>
