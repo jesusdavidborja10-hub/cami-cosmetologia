@@ -105,6 +105,12 @@ def resenas_page():
 def sobre_mi():
     return render_template('index.html', seccion='sobre-mi', usuario=session.get('usuario'))
 
+@app.route('/foto-cami')
+def foto_cami():
+    from flask import send_file
+    path = os.path.join(app.static_folder, 'cami.jpeg')
+    return send_file(path, mimetype='image/jpeg')
+
 # ── Auth API ───────────────────────────────────────────────────────────────────
 @app.route('/api/registro', methods=['POST'])
 def registro():
