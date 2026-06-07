@@ -910,16 +910,6 @@ footer span { color: var(--pink-glow); }
   .redes-row { flex-wrap: wrap; }
 }
 
-* { cursor: none !important; }
-
-.cursor-brush {
-  position: fixed; top: 0; left: 0; pointer-events: none;
-  z-index: 99999; width: 32px; height: 32px;
-  transform: translate(-4px, -4px) rotate(-45deg);
-  transition: transform .1s ease;
-  font-size: 26px; line-height: 1;
-  filter: drop-shadow(0 0 4px rgba(233,30,140,.5));
-}
   </style>
 </head>
 <body>
@@ -1819,27 +1809,8 @@ async function enviarResena(){
 if(document.getElementById('resenaLista')) cargarResenas();
 </script>
 
-<div class="cursor-brush" id="cursorBrush">🖌️</div>
-
 <script>
-  const brush = document.getElementById('cursorBrush');
-  document.addEventListener('mousemove', e => {
-    brush.style.left = e.clientX + 'px';
-    brush.style.top  = e.clientY + 'px';
-  });
-  document.addEventListener('mousedown', () => {
-    brush.style.transform = 'translate(-4px,-4px) rotate(-45deg) scale(0.85)';
-    brush.style.filter = 'drop-shadow(0 0 8px rgba(233,30,140,.9))';
-  });
-  document.addEventListener('mouseup', () => {
-    brush.style.transform = 'translate(-4px,-4px) rotate(-45deg) scale(1)';
-    brush.style.filter = 'drop-shadow(0 0 4px rgba(233,30,140,.5))';
-  });
-</script>
-
-<script>
-document.addEventListener('touchstart', function(e) {
-  const touch = e.touches[0];
+function crearParticulas(x, y) {
   for (let i = 0; i < 8; i++) {
     const particle = document.createElement('div');
     const size = Math.random() * 8 + 4;
@@ -1847,36 +1818,36 @@ document.addEventListener('touchstart', function(e) {
     const distance = Math.random() * 40 + 20;
     const colors = ['#ff69b4','#ff1493','#ffb6c1','#ff85c1','#ffffff'];
     const color = colors[Math.floor(Math.random() * colors.length)];
-
     particle.style.cssText = `
       position: fixed;
-      left: ${touch.clientX}px;
-      top: ${touch.clientY}px;
-      width: ${size}px;
-      height: ${size}px;
-      background: ${color};
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 99999;
+      left: ${x}px; top: ${y}px;
+      width: ${size}px; height: ${size}px;
+      background: ${color}; border-radius: 50%;
+      pointer-events: none; z-index: 99999;
       transform: translate(-50%, -50%);
       box-shadow: 0 0 6px ${color};
-      transition: all 0.6s ease-out;
-      opacity: 1;
+      transition: all 0.6s ease-out; opacity: 1;
     `;
-
     document.body.appendChild(particle);
-
     requestAnimationFrame(() => {
       setTimeout(() => {
-        particle.style.left = (touch.clientX + Math.cos(angle) * distance) + 'px';
-        particle.style.top  = (touch.clientY + Math.sin(angle) * distance) + 'px';
+        particle.style.left = (x + Math.cos(angle) * distance) + 'px';
+        particle.style.top  = (y + Math.sin(angle) * distance) + 'px';
         particle.style.opacity = '0';
         particle.style.transform = 'translate(-50%, -50%) scale(0)';
       }, 10);
     });
-
     setTimeout(() => particle.remove(), 700);
   }
+}
+
+// PC - clic
+document.addEventListener('click', e => crearParticulas(e.clientX, e.clientY));
+
+// Móvil - touch
+document.addEventListener('touchstart', e => {
+  const t = e.touches[0];
+  crearParticulas(t.clientX, t.clientY);
 }, { passive: true });
 </script>
 </body>
