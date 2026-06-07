@@ -101,6 +101,10 @@ def registro_page():
 def resenas_page():
     return render_template('index.html', seccion='resenas', usuario=session.get('usuario'))
 
+@app.route('/sobre-mi')
+def sobre_mi():
+    return render_template('index.html', seccion='sobre-mi', usuario=session.get('usuario'))
+
 # ── Auth API ───────────────────────────────────────────────────────────────────
 @app.route('/api/registro', methods=['POST'])
 def registro():

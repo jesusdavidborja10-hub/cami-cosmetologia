@@ -667,6 +667,79 @@ textarea { resize: vertical; min-height: 80px; }
   .resenas-layout { grid-template-columns: 1fr; }
 }
 
+/* ── Sobre mí ── */
+#sec-sobre-mi { padding: 80px 0; position: relative; z-index: 1; }
+
+.sobre-mi-layout {
+  display: grid; grid-template-columns: 1fr 1.2fr; gap: 60px;
+  align-items: center; margin-top: 48px;
+}
+.sobre-mi-foto-wrap {
+  position: relative; display: flex; justify-content: center;
+}
+.sobre-mi-foto-wrap::before {
+  content: ''; position: absolute;
+  inset: -3px; border-radius: 28px;
+  background: linear-gradient(135deg, var(--pink-mid), transparent, var(--pink-mid));
+  z-index: 0;
+}
+.sobre-mi-foto {
+  width: 100%; max-width: 340px; aspect-ratio: 3/4;
+  border-radius: 26px; object-fit: cover;
+  position: relative; z-index: 1;
+  background: var(--dark-card);
+  border: 1px solid var(--dark-border);
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 12px;
+  color: var(--text-muted); font-size: .85rem; text-align: center;
+  min-height: 380px;
+}
+.sobre-mi-foto-placeholder {
+  width: 100%; max-width: 340px; aspect-ratio: 3/4;
+  border-radius: 26px; position: relative; z-index: 1;
+  background: var(--dark-card); border: 2px dashed rgba(233,30,140,.3);
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 12px;
+  color: var(--text-muted); font-size: .85rem; text-align: center;
+  min-height: 380px;
+}
+.sobre-mi-texto { display: flex; flex-direction: column; gap: 20px; }
+.sobre-mi-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(233,30,140,.08); border: 1px solid rgba(233,30,140,.2);
+  color: var(--pink-mid); border-radius: 20px;
+  padding: 6px 16px; font-size: .8rem; width: fit-content;
+}
+.sobre-mi-nombre {
+  font-family: var(--font-display); font-size: 2.6rem;
+  color: #fff; line-height: 1.1; margin: 0;
+}
+.sobre-mi-nombre span { color: var(--pink-mid); }
+.sobre-mi-desc {
+  color: var(--text-muted); font-size: .93rem; line-height: 1.8;
+}
+.sobre-mi-chips { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
+.sobre-mi-chip {
+  background: rgba(255,255,255,.04); border: 1px solid var(--dark-border);
+  border-radius: 20px; padding: 7px 16px;
+  color: #fff; font-size: .8rem; display: flex; align-items: center; gap: 6px;
+}
+.sobre-mi-cta {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: linear-gradient(135deg, var(--pink-mid), #c2185b);
+  color: #fff; padding: 14px 28px; border-radius: 14px;
+  text-decoration: none; font-weight: 600; font-size: .9rem;
+  width: fit-content; margin-top: 8px;
+  transition: transform .2s, box-shadow .2s;
+}
+.sobre-mi-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(233,30,140,.35); }
+
+@media (max-width: 768px) {
+  .sobre-mi-layout { grid-template-columns: 1fr; gap: 36px; }
+  .sobre-mi-foto-placeholder { max-width: 100%; }
+  .sobre-mi-nombre { font-size: 2rem; }
+}
+
 /* ═══════════════════════════════════════════
    TOAST
 ════════════════════════════════════════════ */
@@ -859,6 +932,7 @@ footer span { color: var(--pink-glow); }
       <li><a href="/contacto" class="{{ 'activo' if seccion=='contacto' else '' }}">💬 Contacto</a></li>
       <li><a href="/ubicacion" class="{{ 'activo' if seccion=='ubicacion' else '' }}">📍 Ubicación</a></li>
       <li><a href="/resenas" class="{{ 'activo' if seccion=='resenas' else '' }}">⭐ Reseñas</a></li>
+      <li><a href="/sobre-mi" class="{{ 'activo' if seccion=='sobre-mi' else '' }}">🌸 Sobre mí</a></li>
       <!-- Bloque usuario solo visible en móvil dentro del menú -->
       <li class="nav-user-mobile">
         {% if usuario %}
@@ -1338,6 +1412,66 @@ footer span { color: var(--pink-glow); }
       Continuar con Google
     </a>
     <p class="auth-link">¿Ya tienes cuenta? <a href="/login">Inicia sesión</a></p>
+  </div>
+</section>
+{% endif %}
+
+<!-- ══ SOBRE MÍ ════════════════════════════════════════════════════════════════ -->
+{% if seccion == 'sobre-mi' %}
+<section id="sec-sobre-mi">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-tag">✦ Conóceme</p>
+      <h2 class="section-title">Sobre <span>mí</span></h2>
+      <p class="section-desc">La persona detrás de cada sonrisa</p>
+    </div>
+
+    <div class="sobre-mi-layout">
+
+      <!-- FOTO — reemplaza el div por una etiqueta <img src="..." class="sobre-mi-foto"> cuando tengas la foto -->
+      <div class="sobre-mi-foto-wrap">
+        <div class="sobre-mi-foto-placeholder">
+          <span style="font-size:3rem">🌸</span>
+          <span>Tu foto aquí</span>
+          <span style="font-size:.75rem;opacity:.6">Reemplaza este div por<br>&lt;img src="..." class="sobre-mi-foto"&gt;</span>
+        </div>
+      </div>
+
+      <div class="sobre-mi-texto">
+        <span class="sobre-mi-tag">🌸 Cosmetóloga & Maquilladora</span>
+
+        <h2 class="sobre-mi-nombre">Hola, soy <span>Camila</span> 👋</h2>
+
+        <p class="sobre-mi-desc">
+          Soy una joven de 18 años apasionada por el mundo de la belleza desde pequeña.
+          Lo que comenzó como un hobby se convirtió en mi vocación: desde muy joven descubrí
+          que tenía un don especial para realzar la belleza de las personas y desde entonces
+          no he parado de crecer.
+        </p>
+        <p class="sobre-mi-desc">
+          Me especializo en cosmetología y maquillaje, dos artes que combino para ofrecerte
+          una experiencia completa. Con el tiempo he perfeccionado mis técnicas,
+          manteniéndome siempre actualizada con las tendencias más modernas para darte
+          resultados que te hagan sentir segura y radiante.
+        </p>
+        <p class="sobre-mi-desc">
+          Lo que más me caracteriza es mi trato cercano y personalizado. Para mí cada clienta
+          es única, y me tomo el tiempo de entender lo que necesitas para que salgas
+          sintiéndote exactamente como querías. A pesar de mi juventud, mi dedicación y amor
+          por lo que hago hablan por sí solos. 🌸
+        </p>
+
+        <div class="sobre-mi-chips">
+          <span class="sobre-mi-chip">✨ Trato personalizado</span>
+          <span class="sobre-mi-chip">💄 Técnicas modernas</span>
+          <span class="sobre-mi-chip">🌸 Cosmetología</span>
+          <span class="sobre-mi-chip">💅 Maquillaje</span>
+        </div>
+
+        <a href="/citas" class="sobre-mi-cta">🌸 &nbsp;Agendar una cita</a>
+      </div>
+
+    </div>
   </div>
 </section>
 {% endif %}
