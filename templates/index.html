@@ -553,6 +553,59 @@ textarea { resize: vertical; min-height: 80px; }
 }
 
 /* ═══════════════════════════════════════════
+   SECCIÓN RESEÑAS
+════════════════════════════════════════════ */
+#sec-resenas { padding: 80px 0; position: relative; z-index: 1; }
+
+.resenas-layout {
+  display: grid; grid-template-columns: 1fr 1.8fr; gap: 36px;
+  margin-top: 48px; align-items: start;
+}
+.resena-form-card {
+  background: var(--dark-card); border: 1px solid var(--dark-border);
+  border-radius: 20px; padding: 32px 28px;
+  position: relative; overflow: hidden;
+}
+.resena-form-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--pink-mid), transparent);
+}
+.stars-selector { display: flex; gap: 6px; margin: 8px 0; }
+.star-btn {
+  font-size: 1.7rem; cursor: pointer; background: none; border: none;
+  color: rgba(255,255,255,.15); transition: color .15s, transform .15s;
+  padding: 0; line-height: 1;
+}
+.star-btn.active { color: #f9a825; }
+.star-btn:hover  { color: #f9a825; transform: scale(1.2); }
+
+.resena-lista { display: flex; flex-direction: column; gap: 14px; }
+.resena-card {
+  background: rgba(255,255,255,.03); border: 1px solid var(--dark-border);
+  border-radius: 16px; padding: 20px 24px;
+  transition: border-color .2s; animation: fadeUp .35s ease;
+}
+.resena-card:hover { border-color: rgba(233,30,140,.3); }
+.resena-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10px;
+}
+.resena-nombre { font-family: var(--font-display); font-size: 1rem; color: #fff; font-weight: 600; }
+.resena-stars  { color: #f9a825; font-size: 1rem; letter-spacing: 1px; }
+.resena-texto  { color: var(--text-muted); font-size: .88rem; line-height: 1.65; }
+.resena-fecha  { font-size: .72rem; color: var(--text-muted); margin-top: 8px; opacity: .6; }
+
+.login-prompt {
+  background: rgba(233,30,140,.06); border: 1px solid rgba(233,30,140,.2);
+  border-radius: 16px; padding: 36px 28px; text-align: center;
+}
+.login-prompt p { color: var(--text-muted); font-size: .9rem; margin-bottom: 18px; line-height: 1.6; }
+
+@media (max-width: 768px) {
+  .resenas-layout { grid-template-columns: 1fr; }
+}
+
+/* ═══════════════════════════════════════════
    TOAST
 ════════════════════════════════════════════ */
 #toast {
@@ -743,6 +796,7 @@ footer span { color: var(--pink-glow); }
       <li><a href="/citas" class="{{ 'activo' if seccion=='citas' else '' }}">📅 Citas</a></li>
       <li><a href="/contacto" class="{{ 'activo' if seccion=='contacto' else '' }}">💬 Contacto</a></li>
       <li><a href="/ubicacion" class="{{ 'activo' if seccion=='ubicacion' else '' }}">📍 Ubicación</a></li>
+      <li><a href="/resenas" class="{{ 'activo' if seccion=='resenas' else '' }}">⭐ Reseñas</a></li>
       <!-- Bloque usuario solo visible en móvil dentro del menú -->
       <li class="nav-user-mobile">
         {% if usuario %}
@@ -1087,6 +1141,67 @@ footer span { color: var(--pink-glow); }
 </section>
 {% endif %}
 
+<!-- ══ RESEÑAS ════════════════════════════════════════════════════════════════ -->
+{% if seccion == 'resenas' %}
+<section id="sec-resenas">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-tag">✦ Lo que dicen de nosotras</p>
+      <h2 class="section-title">Nuestras <span>reseñas</span></h2>
+      <p class="section-desc">La experiencia de nuestras clientas es lo que nos impulsa cada día</p>
+    </div>
+
+    <div class="resenas-layout">
+
+      <!-- Formulario o prompt de login -->
+      <div>
+        {% if usuario %}
+        <div class="resena-form-card">
+          <h3 style="font-family:var(--font-display);font-size:1.2rem;color:#fff;margin-bottom:20px">
+            Deja tu reseña
+          </h3>
+          <div class="field" style="margin-bottom:18px">
+            <label>Calificación</label>
+            <div class="stars-selector" id="starsSelector">
+              <button class="star-btn" onclick="selectEstrella(1)">★</button>
+              <button class="star-btn" onclick="selectEstrella(2)">★</button>
+              <button class="star-btn" onclick="selectEstrella(3)">★</button>
+              <button class="star-btn" onclick="selectEstrella(4)">★</button>
+              <button class="star-btn" onclick="selectEstrella(5)">★</button>
+            </div>
+          </div>
+          <div class="field" style="margin-bottom:22px">
+            <label>Comentario</label>
+            <textarea id="resena-comentario" placeholder="Cuéntanos tu experiencia…" style="min-height:110px"></textarea>
+          </div>
+          <button class="btn-form-primary" onclick="enviarResena()">
+            ⭐ &nbsp;Publicar reseña
+          </button>
+        </div>
+        {% else %}
+        <div class="login-prompt">
+          <div style="font-size:2.5rem;margin-bottom:14px">⭐</div>
+          <p>Inicia sesión para dejar tu reseña<br>y ayudar a otras clientas a elegirnos</p>
+          <a href="/login" class="btn-primary" style="display:inline-flex">🌸 &nbsp;Iniciar sesión</a>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Lista de reseñas -->
+      <div>
+        <div class="resena-lista" id="resenaLista">
+          <div class="empty-state">
+            <div class="big">⭐</div>
+            <p>Cargando reseñas…</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endif %}
+
 <!-- ══ LOGIN ══════════════════════════════════════════════════════════════════ -->
 {% if seccion == 'login' %}
 <section id="sec-login">
@@ -1403,6 +1518,70 @@ if(fechaInput) fechaInput.min = new Date().toISOString().split('T')[0];
 // Panel inicial
 const pN = document.getElementById('panel-nueva');
 if(pN) pN.style.display='block';
+
+// ── Reseñas ───────────────────────────────────────────────────────────────────
+let estrellaSel = 0;
+
+function selectEstrella(n){
+  estrellaSel = n;
+  document.querySelectorAll('.star-btn').forEach((b, i) => {
+    b.classList.toggle('active', i < n);
+  });
+}
+
+function starsHtml(n){
+  return '★'.repeat(n) + '☆'.repeat(5 - n);
+}
+
+function fmtFechaResena(ts){
+  if(!ts) return '';
+  return new Date(ts).toLocaleDateString('es-CO', {day:'numeric', month:'long', year:'numeric'});
+}
+
+async function cargarResenas(){
+  const lista = document.getElementById('resenaLista');
+  if(!lista) return;
+  try{
+    const r = await fetch('/api/resenas');
+    const data = await r.json();
+    if(!data.length){
+      lista.innerHTML = '<div class="empty-state"><div class="big">💬</div><p>Sé la primera en dejar una reseña</p></div>';
+      return;
+    }
+    lista.innerHTML = data.map(rv => `
+      <div class="resena-card">
+        <div class="resena-header">
+          <span class="resena-nombre">👤 ${rv.nombre}</span>
+          <span class="resena-stars">${starsHtml(rv.estrellas)}</span>
+        </div>
+        <p class="resena-texto">${rv.comentario}</p>
+        <p class="resena-fecha">${fmtFechaResena(rv.creada_en)}</p>
+      </div>`).join('');
+  }catch{
+    lista.innerHTML = '<div class="empty-state"><div class="big">⚠️</div><p>No se pudieron cargar las reseñas</p></div>';
+  }
+}
+
+async function enviarResena(){
+  const comentario = document.getElementById('resena-comentario')?.value?.trim();
+  if(!estrellaSel)  return toast('⚠ Selecciona una calificación','error');
+  if(!comentario)   return toast('⚠ Escribe un comentario','error');
+  try{
+    const r = await fetch('/api/resenas', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({comentario, estrellas: estrellaSel})
+    });
+    const data = await r.json();
+    if(!r.ok) return toast(`⚠ ${data.error}`,'error');
+    toast('⭐ ¡Gracias por tu reseña!','success');
+    document.getElementById('resena-comentario').value = '';
+    estrellaSel = 0;
+    document.querySelectorAll('.star-btn').forEach(b => b.classList.remove('active'));
+    cargarResenas();
+  }catch{ toast('Sin conexión al servidor','error'); }
+}
+
+if(document.getElementById('resenaLista')) cargarResenas();
 </script>
 </body>
 </html>

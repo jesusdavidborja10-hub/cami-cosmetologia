@@ -49,6 +49,14 @@ def init_db():
         estado     TEXT DEFAULT 'pendiente',
         creada_en  TIMESTAMP DEFAULT NOW()
     )''')
+    c.execute('''CREATE TABLE IF NOT EXISTS resenas (
+        id         SERIAL PRIMARY KEY,
+        usuario_id INTEGER REFERENCES usuarios(id),
+        nombre     TEXT NOT NULL,
+        comentario TEXT NOT NULL,
+        estrellas  INTEGER NOT NULL CHECK (estrellas BETWEEN 1 AND 5),
+        creada_en  TIMESTAMP DEFAULT NOW()
+    )''')
     conn.commit()
     conn.close()
 
@@ -88,6 +96,10 @@ def registro_page():
     if session.get('usuario'):
         return redirect(url_for('home'))
     return render_template('index.html', seccion='registro', usuario=None)
+
+@app.route('/resenas')
+def resenas_page():
+    return render_template('index.html', seccion='resenas', usuario=session.get('usuario'))
 
 # ── Auth API ───────────────────────────────────────────────────────────────────
 @app.route('/api/registro', methods=['POST'])
@@ -272,6 +284,48 @@ def cancelar_cita(cid):
         conn.commit()
         conn.close()
         return jsonify({'mensaje': 'Cita cancelada'})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+# ── Reseñas API ────────────────────────────────────────────────────────────────
+@app.route('/api/resenas', methods=['GET'])
+def listar_resenas():
+    try:
+        conn = get_conn()
+        c = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        c.execute('SELECT id,nombre,comentario,estrellas,creada_en FROM resenas ORDER BY creada_en DESC')
+        rows = c.fetchall()
+        conn.close()
+        result = []
+        for row in rows:
+            d = dict(row)
+            if d.get('creada_en'): d['creada_en'] = str(d['creada_en'])
+            result.append(d)
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/resenas', methods=['POST'])
+def crear_resena():
+    u = session.get('usuario')
+    if not u:
+        return jsonify({'error': 'Debes iniciar sesión para publicar una reseña'}), 401
+    data = request.get_json()
+    comentario = data.get('comentario', '').strip()
+    estrellas  = data.get('estrellas')
+    if not comentario:
+        return jsonify({'error': 'El comentario no puede estar vacío'}), 400
+    if not isinstance(estrellas, int) or not (1 <= estrellas <= 5):
+        return jsonify({'error': 'La calificación debe ser entre 1 y 5'}), 400
+    try:
+        conn = get_conn()
+        c = conn.cursor()
+        c.execute('INSERT INTO resenas (usuario_id,nombre,comentario,estrellas) VALUES (%s,%s,%s,%s) RETURNING id',
+                  (u['id'], u['nombre'], comentario, estrellas))
+        rid = c.fetchone()[0]
+        conn.commit()
+        conn.close()
+        return jsonify({'mensaje': '¡Gracias por tu reseña!', 'id': rid}), 201
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
