@@ -557,6 +557,35 @@ textarea { resize: vertical; min-height: 80px; }
 ════════════════════════════════════════════ */
 #sec-resenas { padding: 80px 0; position: relative; z-index: 1; }
 
+/* ── Rating Summary Widget ── */
+.rating-summary-card {
+  display: flex; align-items: center; gap: 32px;
+  background: var(--dark-card); border: 1px solid var(--dark-border);
+  border-radius: 20px; padding: 28px 36px; margin: 36px auto 0;
+  position: relative; overflow: hidden; max-width: 580px;
+}
+.rating-summary-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--pink-mid), transparent);
+}
+.rs-score-block { text-align: center; flex-shrink: 0; min-width: 90px; }
+.rs-big-num { font-family: var(--font-display); font-size: 3.2rem; font-weight: 700; color: #fff; line-height: 1; }
+.rs-stars { display: flex; gap: 3px; justify-content: center; margin: 8px 0 6px; }
+.rs-star { font-size: 1.1rem; color: #f9a825; }
+.rs-star.empty { color: rgba(255,255,255,.15); }
+.rs-total { font-size: .75rem; color: var(--text-muted); }
+.rs-divider { width: 1px; height: 80px; background: var(--dark-border); flex-shrink: 0; }
+.rs-bars { flex: 1; display: flex; flex-direction: column; gap: 7px; }
+.rs-bar-row { display: flex; align-items: center; gap: 10px; }
+.rs-bar-label { font-size: .78rem; color: var(--text-muted); width: 10px; text-align: right; flex-shrink: 0; }
+.rs-bar-bg { flex: 1; height: 7px; background: rgba(255,255,255,.08); border-radius: 4px; overflow: hidden; }
+.rs-bar-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--pink-mid), #e91e8c); transition: width .8s cubic-bezier(.4,0,.2,1); }
+.rs-bar-count { font-size: .72rem; color: var(--text-muted); width: 22px; text-align: right; flex-shrink: 0; }
+@media (max-width: 480px) {
+  .rating-summary-card { flex-direction: column; gap: 20px; padding: 22px 20px; }
+  .rs-divider { width: 60px; height: 1px; }
+}
+
 .resenas-layout {
   display: grid; grid-template-columns: 1fr 1.8fr; gap: 36px;
   margin-top: 48px; align-items: start;
@@ -1151,6 +1180,23 @@ footer span { color: var(--pink-glow); }
       <p class="section-desc">La experiencia de nuestras clientas es lo que nos impulsa cada día</p>
     </div>
 
+    <!-- Widget resumen de calificaciones -->
+    <div class="rating-summary-card" id="ratingSummary">
+      <div class="rs-score-block">
+        <div class="rs-big-num" id="rsAvg">—</div>
+        <div class="rs-stars" id="rsStars"></div>
+        <div class="rs-total" id="rsTotal">0 reseñas</div>
+      </div>
+      <div class="rs-divider"></div>
+      <div class="rs-bars" id="rsBars">
+        <div class="rs-bar-row" data-star="5"><span class="rs-bar-label">5</span><div class="rs-bar-bg"><div class="rs-bar-fill" style="width:0%"></div></div><span class="rs-bar-count">0</span></div>
+        <div class="rs-bar-row" data-star="4"><span class="rs-bar-label">4</span><div class="rs-bar-bg"><div class="rs-bar-fill" style="width:0%"></div></div><span class="rs-bar-count">0</span></div>
+        <div class="rs-bar-row" data-star="3"><span class="rs-bar-label">3</span><div class="rs-bar-bg"><div class="rs-bar-fill" style="width:0%"></div></div><span class="rs-bar-count">0</span></div>
+        <div class="rs-bar-row" data-star="2"><span class="rs-bar-label">2</span><div class="rs-bar-bg"><div class="rs-bar-fill" style="width:0%"></div></div><span class="rs-bar-count">0</span></div>
+        <div class="rs-bar-row" data-star="1"><span class="rs-bar-label">1</span><div class="rs-bar-bg"><div class="rs-bar-fill" style="width:0%"></div></div><span class="rs-bar-count">0</span></div>
+      </div>
+    </div>
+
     <div class="resenas-layout">
 
       <!-- Formulario o prompt de login -->
@@ -1538,12 +1584,43 @@ function fmtFechaResena(ts){
   return new Date(ts).toLocaleDateString('es-CO', {day:'numeric', month:'long', year:'numeric'});
 }
 
+function actualizarRatingSummary(data) {
+  const el = document.getElementById('ratingSummary');
+  if (!el) return;
+  const counts = {1:0,2:0,3:0,4:0,5:0};
+  data.forEach(r => { if(counts[r.estrellas] !== undefined) counts[r.estrellas]++; });
+  const total = data.length;
+  const avg = total > 0 ? data.reduce((a,r) => a + r.estrellas, 0) / total : 0;
+
+  document.getElementById('rsAvg').textContent = total > 0 ? avg.toFixed(1) : '—';
+  document.getElementById('rsTotal').textContent = total === 1 ? '1 reseña' : `${total} reseñas`;
+
+  const starsEl = document.getElementById('rsStars');
+  starsEl.innerHTML = '';
+  const full = Math.floor(avg), half = avg - full >= 0.3 && avg - full < 0.8;
+  for (let i = 1; i <= 5; i++) {
+    const s = document.createElement('span');
+    s.className = 'rs-star' + (i <= full ? '' : (i === full+1 && half ? '' : ' empty'));
+    s.textContent = (i <= full || (i === full+1 && half)) ? '★' : '☆';
+    starsEl.appendChild(s);
+  }
+
+  const maxCount = Math.max(...Object.values(counts), 1);
+  [5,4,3,2,1].forEach(star => {
+    const row = el.querySelector(`.rs-bar-row[data-star="${star}"]`);
+    if (!row) return;
+    row.querySelector('.rs-bar-fill').style.width = Math.round((counts[star]/maxCount)*100) + '%';
+    row.querySelector('.rs-bar-count').textContent = counts[star];
+  });
+}
+
 async function cargarResenas(){
   const lista = document.getElementById('resenaLista');
   if(!lista) return;
   try{
     const r = await fetch('/api/resenas');
     const data = await r.json();
+    actualizarRatingSummary(data);
     if(!data.length){
       lista.innerHTML = '<div class="empty-state"><div class="big">💬</div><p>Sé la primera en dejar una reseña</p></div>';
       return;
