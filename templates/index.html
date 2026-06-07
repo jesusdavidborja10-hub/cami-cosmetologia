@@ -428,11 +428,11 @@ textarea { resize: vertical; min-height: 80px; }
 
 .contacto-centro {
   display: flex; flex-direction: column; align-items: center;
-  margin-top: 48px; gap: 0;
+  margin-top: 48px; gap: 32px;
 }
 .contacto-items-grid {
   display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;
-  width: 100%; max-width: 680px; margin-bottom: 40px;
+  width: 100%; max-width: 480px;
 }
 .contacto-item {
   display: flex; align-items: flex-start; gap: 14px;
@@ -449,22 +449,45 @@ textarea { resize: vertical; min-height: 80px; }
 .contacto-item-text strong { display: block; color: #fff; font-size: .9rem; font-weight: 600; }
 .contacto-item-text span { color: var(--text-muted); font-size: .83rem; line-height: 1.5; }
 
-.redes-row { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+.redes-row { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; }
 .red-btn {
-  padding: 12px 24px; border-radius: 14px;
+  padding: 14px 28px; border-radius: 16px;
   border: 1px solid var(--dark-border);
   background: rgba(255,255,255,.03);
-  color: #fff; font-size: .88rem; cursor: pointer;
+  color: #fff; font-size: .92rem;
   text-decoration: none; display: inline-flex; align-items: center; gap: 10px;
-  transition: border-color .2s, background .2s; font-weight: 500;
+  font-weight: 500; position: relative; overflow: hidden;
+  transition: transform .25s cubic-bezier(.34,1.56,.64,1), border-color .25s, box-shadow .25s;
 }
-.red-btn-ig:hover { border-color: #d6249f; background: rgba(214,36,159,.08); }
-.red-btn-wa:hover { border-color: #25D366; background: rgba(37,211,102,.08); }
-.red-btn-tt:hover { border-color: #69C9D0; background: rgba(105,201,208,.08); }
-@media (max-width: 640px) {
+.red-btn::before {
+  content: ''; position: absolute; inset: 0; opacity: 0;
+  transition: opacity .3s;
+}
+.red-btn-ig::before { background: linear-gradient(135deg, rgba(253,212,83,.08), rgba(214,36,159,.12), rgba(40,90,235,.08)); }
+.red-btn-wa::before { background: radial-gradient(circle at 30% 50%, rgba(37,211,102,.12), transparent 70%); }
+.red-btn-tt::before { background: linear-gradient(135deg, rgba(105,201,208,.08), rgba(238,29,82,.08)); }
+.red-btn:hover::before { opacity: 1; }
+
+.red-btn-ig:hover { border-color: #d6249f; box-shadow: 0 0 18px rgba(214,36,159,.25); transform: translateY(-3px) scale(1.03); }
+.red-btn-wa:hover { border-color: #25D366; box-shadow: 0 0 18px rgba(37,211,102,.25); transform: translateY(-3px) scale(1.03); }
+.red-btn-tt:hover { border-color: #69C9D0; box-shadow: 0 0 18px rgba(105,201,208,.25); transform: translateY(-3px) scale(1.03); }
+
+.red-btn svg { transition: transform .3s cubic-bezier(.34,1.56,.64,1); }
+.red-btn:hover svg { transform: rotate(-8deg) scale(1.2); }
+
+@keyframes pulseIg { 0%,100% { box-shadow: 0 0 0 0 rgba(214,36,159,.3); } 50% { box-shadow: 0 0 0 8px rgba(214,36,159,0); } }
+@keyframes pulseWa { 0%,100% { box-shadow: 0 0 0 0 rgba(37,211,102,.3); } 50% { box-shadow: 0 0 0 8px rgba(37,211,102,0); } }
+@keyframes pulseTt { 0%,100% { box-shadow: 0 0 0 0 rgba(105,201,208,.3); } 50% { box-shadow: 0 0 0 8px rgba(105,201,208,0); } }
+
+.red-btn-ig { animation: pulseIg 3s ease-in-out infinite; }
+.red-btn-wa { animation: pulseWa 3s ease-in-out infinite 1s; }
+.red-btn-tt { animation: pulseTt 3s ease-in-out infinite 2s; }
+.red-btn-ig:hover, .red-btn-wa:hover, .red-btn-tt:hover { animation: none; }
+
+@media (max-width: 480px) {
   .contacto-items-grid { grid-template-columns: 1fr; }
-  .redes-row { gap: 10px; }
-  .red-btn { padding: 11px 18px; font-size: .82rem; }
+  .redes-row { gap: 12px; }
+  .red-btn { padding: 12px 20px; font-size: .85rem; }
 }
 
 /* ═══════════════════════════════════════════
@@ -1065,24 +1088,10 @@ footer span { color: var(--pink-glow); }
       </div>
     </div>
     <div class="contacto-item">
-      <div class="contacto-item-icon">✉️</div>
-      <div class="contacto-item-text">
-        <strong>Correo electrónico</strong>
-        <span>cami.cosmetologia@gmail.com</span>
-      </div>
-    </div>
-    <div class="contacto-item">
       <div class="contacto-item-icon">⏰</div>
       <div class="contacto-item-text">
         <strong>Horario de atención</strong>
         <span>Lun–Vie: 9am – 6pm · Sáb: 9am – 2pm</span>
-      </div>
-    </div>
-    <div class="contacto-item">
-      <div class="contacto-item-icon">📍</div>
-      <div class="contacto-item-text">
-        <strong>Dirección</strong>
-        <span>La maria, Cll 51 Cra 30, Cartagena de Indias</span>
       </div>
     </div>
   </div>
