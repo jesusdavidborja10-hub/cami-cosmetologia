@@ -5,9 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cami Cosmetología — Realza tu belleza</title>
   <style>
-/* ── Google Fonts ── */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Nunito:wght@300;400;500;600;700&display=swap');
-
 /* ── Variables ── */
 :root {
   --pink-deep:    #ad1457;
@@ -422,75 +419,6 @@ textarea { resize: vertical; min-height: 80px; }
 .empty-state .big { font-size: 2.5rem; margin-bottom: 12px; }
 
 /* ═══════════════════════════════════════════
-   SECCIÓN CONTACTO
-════════════════════════════════════════════ */
-#sec-contacto { padding: 80px 0; position: relative; z-index: 1; }
-
-.contacto-centro {
-  display: flex; flex-direction: column; align-items: center;
-  margin-top: 48px; gap: 32px;
-}
-.contacto-items-grid {
-  display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;
-  width: 100%; max-width: 480px;
-}
-.contacto-item {
-  display: flex; align-items: flex-start; gap: 14px;
-  background: var(--dark-card); border: 1px solid var(--dark-border);
-  border-radius: 16px; padding: 20px 22px;
-  transition: border-color .2s;
-}
-.contacto-item:hover { border-color: rgba(233,30,140,.4); }
-.contacto-item-icon {
-  width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
-  background: rgba(233,30,140,.12); border: 1px solid rgba(233,30,140,.25);
-  display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
-}
-.contacto-item-text strong { display: block; color: #fff; font-size: .9rem; font-weight: 600; }
-.contacto-item-text span { color: var(--text-muted); font-size: .83rem; line-height: 1.5; }
-
-.redes-row { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; }
-.red-btn {
-  padding: 14px 28px; border-radius: 16px;
-  border: 1px solid var(--dark-border);
-  background: rgba(255,255,255,.03);
-  color: #fff; font-size: .92rem;
-  text-decoration: none; display: inline-flex; align-items: center; gap: 10px;
-  font-weight: 500; position: relative; overflow: hidden;
-  transition: transform .25s cubic-bezier(.34,1.56,.64,1), border-color .25s, box-shadow .25s;
-}
-.red-btn::before {
-  content: ''; position: absolute; inset: 0; opacity: 0;
-  transition: opacity .3s;
-}
-.red-btn-ig::before { background: linear-gradient(135deg, rgba(253,212,83,.08), rgba(214,36,159,.12), rgba(40,90,235,.08)); }
-.red-btn-wa::before { background: radial-gradient(circle at 30% 50%, rgba(37,211,102,.12), transparent 70%); }
-.red-btn-tt::before { background: linear-gradient(135deg, rgba(105,201,208,.08), rgba(238,29,82,.08)); }
-.red-btn:hover::before { opacity: 1; }
-
-.red-btn-ig:hover { border-color: #d6249f; box-shadow: 0 0 18px rgba(214,36,159,.25); transform: translateY(-3px) scale(1.03); }
-.red-btn-wa:hover { border-color: #25D366; box-shadow: 0 0 18px rgba(37,211,102,.25); transform: translateY(-3px) scale(1.03); }
-.red-btn-tt:hover { border-color: #69C9D0; box-shadow: 0 0 18px rgba(105,201,208,.25); transform: translateY(-3px) scale(1.03); }
-
-.red-btn svg { transition: transform .3s cubic-bezier(.34,1.56,.64,1); }
-.red-btn:hover svg { transform: rotate(-8deg) scale(1.2); }
-
-@keyframes pulseIg { 0%,100% { box-shadow: 0 0 0 0 rgba(214,36,159,.3); } 50% { box-shadow: 0 0 0 8px rgba(214,36,159,0); } }
-@keyframes pulseWa { 0%,100% { box-shadow: 0 0 0 0 rgba(37,211,102,.3); } 50% { box-shadow: 0 0 0 8px rgba(37,211,102,0); } }
-@keyframes pulseTt { 0%,100% { box-shadow: 0 0 0 0 rgba(105,201,208,.3); } 50% { box-shadow: 0 0 0 8px rgba(105,201,208,0); } }
-
-.red-btn-ig { animation: pulseIg 3s ease-in-out infinite; }
-.red-btn-wa { animation: pulseWa 3s ease-in-out infinite 1s; }
-.red-btn-tt { animation: pulseTt 3s ease-in-out infinite 2s; }
-.red-btn-ig:hover, .red-btn-wa:hover, .red-btn-tt:hover { animation: none; }
-
-@media (max-width: 480px) {
-  .contacto-items-grid { grid-template-columns: 1fr; }
-  .redes-row { gap: 12px; }
-  .red-btn { padding: 12px 20px; font-size: .85rem; }
-}
-
-/* ═══════════════════════════════════════════
    SECCIÓN UBICACIÓN
 ════════════════════════════════════════════ */
 #sec-ubicacion { padding: 80px 0; position: relative; z-index: 1; }
@@ -563,182 +491,6 @@ textarea { resize: vertical; min-height: 80px; }
 .auth-link { color: var(--text-muted); font-size: .85rem; text-align: center; margin-top: 20px; }
 .auth-link a { color: var(--pink-glow); text-decoration: none; font-weight: 600; }
 .auth-link a:hover { text-decoration: underline; }
-.auth-divider {
-  display: flex; align-items: center; gap: 12px;
-  margin: 20px 0 0; color: var(--text-muted); font-size: .8rem;
-}
-.auth-divider::before, .auth-divider::after {
-  content: ''; flex: 1; height: 1px; background: var(--dark-border);
-}
-.btn-google {
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  width: 100%; padding: 13px; border-radius: 12px; margin-top: 12px;
-  border: 1px solid var(--dark-border);
-  background: rgba(255,255,255,.06);
-  color: var(--text-light); font-family: var(--font-body);
-  font-size: .88rem; font-weight: 600;
-  text-decoration: none; cursor: pointer; transition: all .25s;
-}
-.btn-google:hover {
-  border-color: rgba(255,255,255,.28);
-  background: rgba(255,255,255,.11);
-  color: #fff;
-}
-
-/* ═══════════════════════════════════════════
-   SECCIÓN RESEÑAS
-════════════════════════════════════════════ */
-#sec-resenas { padding: 80px 0; position: relative; z-index: 1; }
-
-/* ── Rating Summary Widget ── */
-.rating-summary-card {
-  display: flex; align-items: center; gap: 32px;
-  background: var(--dark-card); border: 1px solid var(--dark-border);
-  border-radius: 20px; padding: 28px 36px; margin: 36px auto 0;
-  position: relative; overflow: hidden; max-width: 580px;
-}
-.rating-summary-card::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, transparent, var(--pink-mid), transparent);
-}
-.rs-score-block { text-align: center; flex-shrink: 0; min-width: 90px; }
-.rs-big-num { font-family: var(--font-display); font-size: 3.2rem; font-weight: 700; color: #fff; line-height: 1; }
-.rs-stars { display: flex; gap: 3px; justify-content: center; margin: 8px 0 6px; }
-.rs-star { font-size: 1.1rem; color: #f9a825; }
-.rs-star.empty { color: rgba(255,255,255,.15); }
-.rs-total { font-size: .75rem; color: var(--text-muted); }
-.rs-divider { width: 1px; height: 80px; background: var(--dark-border); flex-shrink: 0; }
-.rs-bars { flex: 1; display: flex; flex-direction: column; gap: 7px; }
-.rs-bar-row { display: flex; align-items: center; gap: 10px; }
-.rs-bar-label { font-size: .78rem; color: var(--text-muted); width: 10px; text-align: right; flex-shrink: 0; }
-.rs-bar-bg { flex: 1; height: 7px; background: rgba(255,255,255,.08); border-radius: 4px; overflow: hidden; }
-.rs-bar-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--pink-mid), #e91e8c); transition: width .8s cubic-bezier(.4,0,.2,1); }
-.rs-bar-count { font-size: .72rem; color: var(--text-muted); width: 22px; text-align: right; flex-shrink: 0; }
-@media (max-width: 480px) {
-  .rating-summary-card { flex-direction: column; gap: 20px; padding: 22px 20px; }
-  .rs-divider { width: 60px; height: 1px; }
-}
-
-.resenas-layout {
-  display: grid; grid-template-columns: 1fr 1.8fr; gap: 36px;
-  margin-top: 48px; align-items: start;
-}
-.resena-form-card {
-  background: var(--dark-card); border: 1px solid var(--dark-border);
-  border-radius: 20px; padding: 32px 28px;
-  position: relative; overflow: hidden;
-}
-.resena-form-card::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, transparent, var(--pink-mid), transparent);
-}
-.stars-selector { display: flex; gap: 6px; margin: 8px 0; }
-.star-btn {
-  font-size: 1.7rem; cursor: pointer; background: none; border: none;
-  color: rgba(255,255,255,.15); transition: color .15s, transform .15s;
-  padding: 0; line-height: 1;
-}
-.star-btn.active { color: #f9a825; }
-.star-btn:hover  { color: #f9a825; transform: scale(1.2); }
-
-.resena-lista { display: flex; flex-direction: column; gap: 14px; }
-.resena-card {
-  background: rgba(255,255,255,.03); border: 1px solid var(--dark-border);
-  border-radius: 16px; padding: 20px 24px;
-  transition: border-color .2s; animation: fadeUp .35s ease;
-}
-.resena-card:hover { border-color: rgba(233,30,140,.3); }
-.resena-header {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 10px;
-}
-.resena-nombre { font-family: var(--font-display); font-size: 1rem; color: #fff; font-weight: 600; }
-.resena-stars  { color: #f9a825; font-size: 1rem; letter-spacing: 1px; }
-.resena-texto  { color: var(--text-muted); font-size: .88rem; line-height: 1.65; }
-.resena-fecha  { font-size: .72rem; color: var(--text-muted); margin-top: 8px; opacity: .6; }
-
-.login-prompt {
-  background: rgba(233,30,140,.06); border: 1px solid rgba(233,30,140,.2);
-  border-radius: 16px; padding: 36px 28px; text-align: center;
-}
-.login-prompt p { color: var(--text-muted); font-size: .9rem; margin-bottom: 18px; line-height: 1.6; }
-
-@media (max-width: 768px) {
-  .resenas-layout { grid-template-columns: 1fr; }
-}
-
-/* ── Sobre mí ── */
-#sec-sobre-mi { padding: 80px 0; position: relative; z-index: 1; }
-
-.sobre-mi-layout {
-  display: grid; grid-template-columns: 1fr 1.2fr; gap: 60px;
-  align-items: center; margin-top: 48px;
-}
-.sobre-mi-foto-wrap {
-  position: relative; display: flex; justify-content: center;
-}
-.sobre-mi-foto-wrap::before {
-  content: ''; position: absolute;
-  inset: -3px; border-radius: 28px;
-  background: linear-gradient(135deg, var(--pink-mid), transparent, var(--pink-mid));
-  z-index: 0;
-}
-.sobre-mi-foto {
-  width: 100%; max-width: 340px; aspect-ratio: 3/4;
-  border-radius: 26px; object-fit: cover;
-  position: relative; z-index: 1;
-  background: var(--dark-card);
-  border: 1px solid var(--dark-border);
-  display: flex; align-items: center; justify-content: center;
-  flex-direction: column; gap: 12px;
-  color: var(--text-muted); font-size: .85rem; text-align: center;
-  min-height: 380px;
-}
-.sobre-mi-foto-placeholder {
-  width: 100%; max-width: 340px; aspect-ratio: 3/4;
-  border-radius: 26px; position: relative; z-index: 1;
-  background: var(--dark-card); border: 2px dashed rgba(233,30,140,.3);
-  display: flex; align-items: center; justify-content: center;
-  flex-direction: column; gap: 12px;
-  color: var(--text-muted); font-size: .85rem; text-align: center;
-  min-height: 380px;
-}
-.sobre-mi-texto { display: flex; flex-direction: column; gap: 20px; }
-.sobre-mi-tag {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: rgba(233,30,140,.08); border: 1px solid rgba(233,30,140,.2);
-  color: var(--pink-mid); border-radius: 20px;
-  padding: 6px 16px; font-size: .8rem; width: fit-content;
-}
-.sobre-mi-nombre {
-  font-family: var(--font-display); font-size: 2.6rem;
-  color: #fff; line-height: 1.1; margin: 0;
-}
-.sobre-mi-nombre span { color: var(--pink-mid); }
-.sobre-mi-desc {
-  color: var(--text-muted); font-size: .93rem; line-height: 1.8;
-}
-.sobre-mi-chips { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
-.sobre-mi-chip {
-  background: rgba(255,255,255,.04); border: 1px solid var(--dark-border);
-  border-radius: 20px; padding: 7px 16px;
-  color: #fff; font-size: .8rem; display: flex; align-items: center; gap: 6px;
-}
-.sobre-mi-cta {
-  display: inline-flex; align-items: center; gap: 10px;
-  background: linear-gradient(135deg, var(--pink-mid), #c2185b);
-  color: #fff; padding: 14px 28px; border-radius: 14px;
-  text-decoration: none; font-weight: 600; font-size: .9rem;
-  width: fit-content; margin-top: 8px;
-  transition: transform .2s, box-shadow .2s;
-}
-.sobre-mi-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(233,30,140,.35); }
-
-@media (max-width: 768px) {
-  .sobre-mi-layout { grid-template-columns: 1fr; gap: 36px; }
-  .sobre-mi-foto-placeholder { max-width: 100%; }
-  .sobre-mi-nombre { font-size: 2rem; }
-}
 
 /* ═══════════════════════════════════════════
    TOAST
@@ -911,23 +663,8 @@ footer span { color: var(--pink-glow); }
 }
 
 
-/* ── Animaciones de entrada ── */
-.fade-up {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
-}
-.fade-up.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-.fade-up-delay-1 { transition-delay: .1s; }
-.fade-up-delay-2 { transition-delay: .2s; }
-.fade-up-delay-3 { transition-delay: .3s; }
-.fade-up-delay-4 { transition-delay: .4s; }
-.fade-up-delay-5 { transition-delay: .5s; }
-
   </style>
+  <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 
@@ -1487,14 +1224,107 @@ footer span { color: var(--pink-glow); }
       </div>
 
     </div>
+
+    <!-- ── Galería de trabajos ── -->
+    <div class="galeria-section">
+      <div class="galeria-eyebrow">Portafolio</div>
+      <h2 class="galeria-titulo">Mis <span>trabajos</span></h2>
+
+      <div class="carrusel-wrap" id="carrusel">
+        <div class="carrusel-track" id="carruselTrack">
+
+          <div class="carrusel-slide">
+            <div class="carrusel-slide-placeholder">
+              <span style="font-size:2.5rem">💄</span>
+              <span>Foto trabajo 1</span>
+            </div>
+            <div class="carrusel-label">Maquillaje de noche</div>
+          </div>
+
+          <div class="carrusel-slide">
+            <div class="carrusel-slide-placeholder">
+              <span style="font-size:2.5rem">✨</span>
+              <span>Foto trabajo 2</span>
+            </div>
+            <div class="carrusel-label">Limpieza facial</div>
+          </div>
+
+          <div class="carrusel-slide">
+            <div class="carrusel-slide-placeholder">
+              <span style="font-size:2.5rem">💅</span>
+              <span>Foto trabajo 3</span>
+            </div>
+            <div class="carrusel-label">Manicure semipermanente</div>
+          </div>
+
+          <div class="carrusel-slide">
+            <div class="carrusel-slide-placeholder">
+              <span style="font-size:2.5rem">🌸</span>
+              <span>Foto trabajo 4</span>
+            </div>
+            <div class="carrusel-label">Maquillaje natural</div>
+          </div>
+
+        </div>
+
+        <button class="carrusel-btn carrusel-btn-prev" id="carruselPrev">&#8592;</button>
+        <button class="carrusel-btn carrusel-btn-next" id="carruselNext">&#8594;</button>
+      </div>
+
+      <div class="carrusel-dots" id="carruselDots"></div>
+    </div>
+
+    <script>
+    (function(){
+      const track = document.getElementById('carruselTrack');
+      const dotsEl = document.getElementById('carruselDots');
+      if (!track) return;
+      const slides = track.querySelectorAll('.carrusel-slide');
+      const total = slides.length;
+      let current = 0, timer;
+
+      slides.forEach((_, i) => {
+        const d = document.createElement('button');
+        d.className = 'carrusel-dot' + (i === 0 ? ' active' : '');
+        d.addEventListener('click', () => goTo(i));
+        dotsEl.appendChild(d);
+      });
+
+      function goTo(n) {
+        current = (n + total) % total;
+        track.style.transform = `translateX(-${current * 100}%)`;
+        dotsEl.querySelectorAll('.carrusel-dot').forEach((d, i) => d.classList.toggle('active', i === current));
+      }
+
+      function next() { goTo(current + 1); }
+      function prev() { goTo(current - 1); }
+      function startAuto() { timer = setInterval(next, 3500); }
+      function stopAuto() { clearInterval(timer); }
+
+      document.getElementById('carruselNext').addEventListener('click', () => { stopAuto(); next(); startAuto(); });
+      document.getElementById('carruselPrev').addEventListener('click', () => { stopAuto(); prev(); startAuto(); });
+
+      let startX = 0;
+      track.addEventListener('touchstart', e => { startX = e.touches[0].clientX; stopAuto(); }, { passive: true });
+      track.addEventListener('touchend', e => {
+        const diff = startX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 40) diff > 0 ? next() : prev();
+        startAuto();
+      });
+
+      startAuto();
+    })();
+    </script>
+
   </div>
 </section>
 {% endif %}
 
 <!-- ══ FOOTER ════════════════════════════════════════════════════════════════ -->
 <footer>
-  <p>© 2025 <span>Cami Cosmetología</span> — Realza tu belleza · Potencia tu confianza 🌸</p>
-  <p style="margin-top:8px">Cartagena de Indias, Colombia</p>
+  <div class="footer-brand">Cami Cosmetología</div>
+  <p>© 2025 <span>Cami Cosmetología</span> · Cartagena de Indias, Colombia</p>
+  <p style="margin-top:6px">Realza tu belleza · <span class="footer-gold">Potencia tu confianza</span> 🌸</p>
 </footer>
 
 <!-- Modal cancelar cita -->
