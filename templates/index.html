@@ -728,6 +728,29 @@ footer span { color: var(--rose); }
   .cita-card { grid-template-columns: 1fr; }
   .filter-row { flex-direction: column; align-items: stretch; }
 }
+
+.nav-toggle-wrap {
+  display: none; flex-direction: column; align-items: center;
+  cursor: pointer; gap: 2px; background: none; border: none; padding: 4px;
+}
+.nav-toggle {
+  display: none; background: none; border: none; cursor: pointer;
+  color: var(--text-light); font-size: 1.4rem; padding: 0;
+  animation: pulsoMenu 2s ease-in-out infinite;
+}
+.nav-toggle-label {
+  font-size: .55rem; letter-spacing: 2px; color: var(--rose);
+  font-family: var(--font-body); font-weight: 500;
+  animation: pulsoMenu 2s ease-in-out infinite;
+}
+@keyframes pulsoMenu {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .6; transform: scale(1.15); }
+}
+@media (max-width: 768px) {
+  .nav-toggle-wrap { display: flex; }
+  .nav-toggle { display: block; }
+}
 </style>
 </head>
 <body>
@@ -743,7 +766,10 @@ footer span { color: var(--rose); }
       <span class="nav-brand-name">CAMI <span>Cosmetología</span></span>
     </a>
 
-    <button class="nav-toggle" id="navToggle" aria-label="Menú">☰</button>
+    <div class="nav-toggle-wrap" id="navToggle">
+      <button class="nav-toggle" aria-label="Menú">☰</button>
+      <span class="nav-toggle-label">MENÚ</span>
+    </div>
 
     <ul class="nav-links" id="navLinks">
       <li><a href="/" class="{{ 'activo' if seccion=='inicio' else '' }}">✦ Inicio</a></li>
