@@ -130,6 +130,67 @@ body::before {
 
 #sec-inicio { padding: 20px 0; position: relative; z-index: 1; }
 
+.hero-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; min-height: 70vh;
+}
+.hero-carrusel-wrap {
+  position: relative; overflow: hidden; border-radius: 24px;
+  border: 0.5px solid var(--dark-border);
+}
+.hero-carrusel-track { display: flex; transition: transform .5s cubic-bezier(.4,0,.2,1); }
+.hero-carrusel-slide { min-width: 100%; position: relative; }
+.hero-carrusel-slide img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 24px; display: block; }
+.hero-carrusel-placeholder {
+  width: 100%; aspect-ratio: 4/3;
+  background: var(--dark-card); border-radius: 24px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 10px; color: var(--text-muted); font-size: .85rem;
+}
+.hero-carrusel-info {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 50px 20px 18px;
+  background: linear-gradient(to top, rgba(0,0,0,.75), transparent);
+  border-radius: 0 0 24px 24px;
+}
+.hero-carrusel-servicio {
+  font-family: var(--font-display); font-size: 1.1rem; color: #fff; font-style: italic; display: block;
+}
+.hero-carrusel-precio {
+  font-size: .8rem; color: var(--gold); letter-spacing: 1px; margin-top: 4px; display: block;
+}
+.hero-carrusel-btn {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 40px; height: 40px; border-radius: 50%;
+  background: rgba(20,12,16,.6); border: 0.5px solid rgba(232,130,154,.3);
+  color: #fff; font-size: .9rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .2s; z-index: 2; backdrop-filter: blur(8px);
+}
+.hero-carrusel-btn:hover { background: rgba(232,130,154,.5); border-color: var(--rose); }
+.hero-carrusel-btn-prev { left: 10px; }
+.hero-carrusel-btn-next { right: 10px; }
+.hero-carrusel-dots { display: flex; justify-content: center; gap: 6px; margin-top: 12px; }
+.hero-carrusel-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.15); border: none; cursor: pointer; transition: all .2s; padding: 0; }
+.hero-carrusel-dot.active { background: var(--rose); transform: scale(1.4); }
+
+/* Móvil — carrusel colapsable */
+.hero-carrusel-movil-toggle {
+  display: none; width: 100%; padding: 12px; border-radius: 14px;
+  border: 0.5px solid var(--dark-border); background: rgba(255,255,255,.03);
+  color: var(--text-muted); font-family: var(--font-body); font-size: .78rem;
+  letter-spacing: 1px; text-transform: uppercase; cursor: pointer;
+  margin-top: 24px; transition: all .2s;
+}
+.hero-carrusel-movil-toggle:hover { border-color: var(--rose); color: var(--rose); }
+.hero-carrusel-movil-wrap { display: none; }
+.hero-carrusel-movil-wrap.abierto { display: block; margin-top: 16px; }
+
+@media (max-width: 768px) {
+  .hero-grid { grid-template-columns: 1fr; gap: 0; min-height: unset; }
+  .hero-carrusel-desktop { display: none; }
+  .hero-carrusel-movil-toggle { display: block; }
+}
+
 .hero-badge {
   display: inline-flex; align-items: center; gap: 8px;
   background: rgba(232,130,154,.08);
@@ -717,21 +778,85 @@ footer span { color: var(--rose); }
 {% if seccion == 'inicio' %}
 <section id="sec-inicio">
   <div class="container">
-    <div class="hero-badge">
-      <span class="hero-badge-dot"></span>
-      Agenda tu cita hoy · Cartagena, Colombia
-    </div>
-    <h1 class="hero-title">
-      Tu <span class="accent italic">belleza</span><br>
-      merece lo mejor
-    </h1>
-    <p class="hero-sub">
-      En Cami Cosmetología te ofrecemos tratamientos faciales, limpiezas, micropigmentación y mucho más.
-      Agenda tu cita en minutos y potencia tu confianza.
-    </p>
-    <div class="hero-cta">
-      <a href="/citas" class="btn-primary">🌸 &nbsp;Apartar cita</a>
-      <a href="/contacto" class="btn-outline">💬 &nbsp;Contáctanos</a>
+    <div class="hero-grid">
+
+      <!-- Texto izquierda -->
+      <div>
+        <div class="hero-badge">
+          <span class="hero-badge-dot"></span>
+          Agenda tu cita hoy · Cartagena, Colombia
+        </div>
+        <h1 class="hero-title">
+          Tu <span class="accent italic">belleza</span><br>
+          merece lo mejor
+        </h1>
+        <p class="hero-sub">
+          En Cami Cosmetología te ofrecemos tratamientos faciales, limpiezas,
+          micropigmentación y mucho más. Agenda tu cita en minutos y potencia tu confianza.
+        </p>
+        <div class="hero-cta">
+          <a href="/citas" class="btn-primary">🌸 &nbsp;Apartar cita</a>
+          <a href="/contacto" class="btn-outline">💬 &nbsp;Contáctanos</a>
+        </div>
+
+        <!-- Botón ver trabajos solo en móvil -->
+        <button class="hero-carrusel-movil-toggle" onclick="toggleCarruselMovil(this)">
+          ✦ Ver mis trabajos ↓
+        </button>
+        <div class="hero-carrusel-movil-wrap" id="carruselMovilWrap">
+          <div class="hero-carrusel-wrap">
+            <div class="hero-carrusel-track" id="heroTrackMovil">
+              <div class="hero-carrusel-slide">
+                <div class="hero-carrusel-placeholder"><span style="font-size:2rem">💄</span><span>Foto trabajo 1</span></div>
+                <div class="hero-carrusel-info"><span class="hero-carrusel-servicio">Maquillaje de noche</span><span class="hero-carrusel-precio">Desde $60.000</span></div>
+              </div>
+              <div class="hero-carrusel-slide">
+                <div class="hero-carrusel-placeholder"><span style="font-size:2rem">✨</span><span>Foto trabajo 2</span></div>
+                <div class="hero-carrusel-info"><span class="hero-carrusel-servicio">Limpieza facial</span><span class="hero-carrusel-precio">Desde $80.000</span></div>
+              </div>
+              <div class="hero-carrusel-slide">
+                <div class="hero-carrusel-placeholder"><span style="font-size:2rem">💅</span><span>Foto trabajo 3</span></div>
+                <div class="hero-carrusel-info"><span class="hero-carrusel-servicio">Manicure semipermanente</span><span class="hero-carrusel-precio">Desde $35.000</span></div>
+              </div>
+              <div class="hero-carrusel-slide">
+                <div class="hero-carrusel-placeholder"><span style="font-size:2rem">🌸</span><span>Foto trabajo 4</span></div>
+                <div class="hero-carrusel-info"><span class="hero-carrusel-servicio">Maquillaje natural</span><span class="hero-carrusel-precio">Desde $60.000</span></div>
+              </div>
+            </div>
+            <button class="hero-carrusel-btn hero-carrusel-btn-prev" onclick="heroNav('movil',-1)">&#8592;</button>
+            <button class="hero-carrusel-btn hero-carrusel-btn-next" onclick="heroNav('movil',1)">&#8594;</button>
+          </div>
+          <div class="hero-carrusel-dots" id="heroDotsMovil"></div>
+        </div>
+      </div>
+
+      <!-- Carrusel derecha solo desktop -->
+      <div class="hero-carrusel-desktop">
+        <div class="hero-carrusel-wrap">
+          <div class="hero-carrusel-track" id="heroTrackDesktop">
+            <div class="hero-carrusel-slide">
+              <div class="hero-carrusel-placeholder"><span style="font-size:2.5rem">💄</span><span>Foto trabajo 1</span></div>
+              <div class="hero-carrusel-info"><span class="hero-carrusel-servicio">Maquillaje de noche</span><span class="hero-carrusel-precio">Desde $60.000</span></div>
+            </div>
+            <div class="hero-carrusel-slide">
+              <div class="hero-carrusel-placeholder"><span style="font-size:2.5rem">✨</span><span>Foto trabajo 2</span></div>
+              <div class="hero-carrusel-info"><span class="hero-carrusel-servicio">Limpieza facial</span><span class="hero-carrusel-precio">Desde $80.000</span></div>
+            </div>
+            <div class="hero-carrusel-slide">
+              <div class="hero-carrusel-placeholder"><span style="font-size:2.5rem">💅</span><span>Foto trabajo 3</span></div>
+              <div class="hero-carrusel-info"><span class="hero-carrusel-servicio">Manicure semipermanente</span><span class="hero-carrusel-precio">Desde $35.000</span></div>
+            </div>
+            <div class="hero-carrusel-slide">
+              <div class="hero-carrusel-placeholder"><span style="font-size:2.5rem">🌸</span><span>Foto trabajo 4</span></div>
+              <div class="hero-carrusel-info"><span class="hero-carrusel-servicio">Maquillaje natural</span><span class="hero-carrusel-precio">Desde $60.000</span></div>
+            </div>
+          </div>
+          <button class="hero-carrusel-btn hero-carrusel-btn-prev" onclick="heroNav('desktop',-1)">&#8592;</button>
+          <button class="hero-carrusel-btn hero-carrusel-btn-next" onclick="heroNav('desktop',1)">&#8594;</button>
+        </div>
+        <div class="hero-carrusel-dots" id="heroDotsDesktop"></div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -1657,6 +1782,61 @@ async function enviarResena(){
 }
 
 if(document.getElementById('resenaLista')) cargarResenas();
+
+// ── Hero carrusel ─────────────────────────────────────────────────────────────
+(function(){
+  function initHeroCarrusel(trackId, dotsId) {
+    const track = document.getElementById(trackId);
+    const dotsEl = document.getElementById(dotsId);
+    if (!track || !dotsEl) return;
+    const slides = track.querySelectorAll('.hero-carrusel-slide');
+    const total = slides.length;
+    let current = 0, timer;
+
+    slides.forEach((_, i) => {
+      const d = document.createElement('button');
+      d.className = 'hero-carrusel-dot' + (i === 0 ? ' active' : '');
+      d.addEventListener('click', () => goTo(i));
+      dotsEl.appendChild(d);
+    });
+
+    function goTo(n) {
+      current = (n + total) % total;
+      track.style.transform = `translateX(-${current * 100}%)`;
+      dotsEl.querySelectorAll('.hero-carrusel-dot').forEach((d, i) => d.classList.toggle('active', i === current));
+    }
+
+    window['_heroGoTo_' + trackId] = function(dir) {
+      clearInterval(timer);
+      goTo(current + dir);
+      timer = setInterval(() => goTo(current + 1), 4000);
+    };
+
+    let startX = 0;
+    track.addEventListener('touchstart', e => { startX = e.touches[0].clientX; clearInterval(timer); }, { passive: true });
+    track.addEventListener('touchend', e => {
+      const diff = startX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 40) goTo(current + (diff > 0 ? 1 : -1));
+      timer = setInterval(() => goTo(current + 1), 4000);
+    });
+
+    timer = setInterval(() => goTo(current + 1), 4000);
+  }
+
+  initHeroCarrusel('heroTrackDesktop', 'heroDotsDesktop');
+  initHeroCarrusel('heroTrackMovil', 'heroDotsMovil');
+})();
+
+function heroNav(tipo, dir) {
+  const id = tipo === 'desktop' ? 'heroTrackDesktop' : 'heroTrackMovil';
+  window['_heroGoTo_' + id]?.(dir);
+}
+
+function toggleCarruselMovil(btn) {
+  const wrap = document.getElementById('carruselMovilWrap');
+  const abierto = wrap.classList.toggle('abierto');
+  btn.textContent = abierto ? '✦ Ocultar trabajos ↑' : '✦ Ver mis trabajos ↓';
+}
 </script>
 
 <script>
