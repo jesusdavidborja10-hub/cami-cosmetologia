@@ -80,11 +80,11 @@ def citas_page():
 
 @app.route('/contacto')
 def contacto_page():
-    return render_template('index.html', seccion='contacto', usuario=session.get('usuario'))
+    return redirect('/#contacto')
 
 @app.route('/ubicacion')
 def ubicacion_page():
-    return render_template('index.html', seccion='ubicacion', usuario=session.get('usuario'))
+    return redirect('/#ubicacion')
 
 @app.route('/login')
 def login_page():
@@ -100,11 +100,11 @@ def registro_page():
 
 @app.route('/resenas')
 def resenas_page():
-    return render_template('index.html', seccion='resenas', usuario=session.get('usuario'))
+    return redirect('/#resenas')
 
 @app.route('/sobre-mi')
 def sobre_mi():
-    return render_template('index.html', seccion='sobre-mi', usuario=session.get('usuario'))
+    return redirect('/#sobre-mi')
 
 @app.route('/admin')
 def admin_page():
