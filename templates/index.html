@@ -2729,24 +2729,84 @@ document.addEventListener('touchstart', e => {
 }, { passive: true });
 </script>
 <script>
+// ── Animaciones de scroll — se repiten cada vez que aparece ──────────────────
+const observerOpciones = { threshold: 0.12, rootMargin: '0px 0px -40px 0px' };
+
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(el => {
     if (el.isIntersecting) {
       el.target.classList.add('visible');
-      observer.unobserve(el.target);
+    } else {
+      el.target.classList.remove('visible');
     }
   });
-}, { threshold: 0.15 });
+}, observerOpciones);
 
-document.querySelectorAll(
-  '.section-header, .card, .servicio-card, .contacto-item, .resena-card, .sobre-mi-layout, .rating-summary-card, .contacto-centro, .ubicacion-grid, .resenas-layout, .sobre-mi-chip, .red-btn'
-).forEach((el, i) => {
-  el.classList.add('fade-up');
-  if (i % 5 === 1) el.classList.add('fade-up-delay-1');
-  if (i % 5 === 2) el.classList.add('fade-up-delay-2');
-  if (i % 5 === 3) el.classList.add('fade-up-delay-3');
-  if (i % 5 === 4) el.classList.add('fade-up-delay-4');
+// Títulos
+document.querySelectorAll('.section-header').forEach(el => {
+  el.classList.add('anim-abajo'); observer.observe(el);
+});
+
+// Tarjetas de servicios
+document.querySelectorAll('.srv-card').forEach((el, i) => {
+  el.classList.add('anim-escalar');
+  el.style.transitionDelay = `${i * 0.08}s`;
   observer.observe(el);
+});
+
+// Reseñas
+document.querySelectorAll('.resena-card').forEach((el, i) => {
+  el.classList.add('anim-abajo');
+  el.style.transitionDelay = `${i * 0.1}s`;
+  observer.observe(el);
+});
+
+// Rating summary
+document.querySelectorAll('.rating-summary-card').forEach(el => {
+  el.classList.add('anim-escalar'); observer.observe(el);
+});
+
+// Ubicación
+document.querySelectorAll('.mapa-placeholder').forEach(el => {
+  el.classList.add('anim-izq'); observer.observe(el);
+});
+document.querySelectorAll('.ubicacion-detalles').forEach(el => {
+  el.classList.add('anim-der'); observer.observe(el);
+});
+document.querySelectorAll('.ubic-card').forEach((el, i) => {
+  el.classList.add('anim-abajo');
+  el.style.transitionDelay = `${i * 0.1}s`;
+  observer.observe(el);
+});
+
+// Sobre mí
+document.querySelectorAll('.sobre-mi-foto-wrap').forEach(el => {
+  el.classList.add('anim-izq'); observer.observe(el);
+});
+document.querySelectorAll('.sobre-mi-texto').forEach(el => {
+  el.classList.add('anim-der'); observer.observe(el);
+});
+document.querySelectorAll('.sobre-mi-chip').forEach((el, i) => {
+  el.classList.add('anim-abajo');
+  el.style.transitionDelay = `${i * 0.08}s`;
+  observer.observe(el);
+});
+
+// Contacto
+document.querySelectorAll('.contacto-item').forEach((el, i) => {
+  el.classList.add('anim-abajo');
+  el.style.transitionDelay = `${i * 0.12}s`;
+  observer.observe(el);
+});
+document.querySelectorAll('.red-btn').forEach((el, i) => {
+  el.classList.add('anim-escalar');
+  el.style.transitionDelay = `${i * 0.1}s`;
+  observer.observe(el);
+});
+
+// Carrusel
+document.querySelectorAll('.carrusel-wrap, .hero-carrusel-wrap').forEach(el => {
+  el.classList.add('anim-escalar'); observer.observe(el);
 });
 </script>
 </body>
