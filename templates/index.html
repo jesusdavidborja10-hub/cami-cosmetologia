@@ -751,6 +751,109 @@ footer span { color: var(--rose); }
   .nav-toggle-wrap { display: flex; }
   .nav-toggle { display: block; }
 }
+
+/* ── Calendario visual ── */
+.calendario-wrap {
+  background: var(--dark-card); border: 0.5px solid var(--dark-border);
+  border-radius: 20px; padding: 24px; user-select: none;
+}
+.cal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 20px;
+}
+.cal-mes-titulo {
+  font-family: var(--font-display); font-size: 1.3rem;
+  color: #fff; font-weight: 400; text-transform: capitalize;
+}
+.cal-nav {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 0.5px solid var(--dark-border); background: rgba(255,255,255,.03);
+  color: var(--text-muted); font-size: 1rem; cursor: pointer;
+  transition: all .2s; display: flex; align-items: center; justify-content: center;
+}
+.cal-nav:hover { border-color: var(--rose); color: var(--rose); }
+
+.cal-dias-semana {
+  display: grid; grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 8px;
+}
+.cal-dias-semana span {
+  text-align: center; font-size: .68rem; letter-spacing: 1px;
+  text-transform: uppercase; color: var(--text-muted); padding: 6px 0;
+}
+
+.cal-grid {
+  display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px;
+}
+.cal-dia {
+  aspect-ratio: 1; border-radius: 12px; display: flex; align-items: center;
+  justify-content: center; font-size: .88rem; cursor: pointer;
+  border: 0.5px solid transparent; transition: all .2s;
+  color: var(--text-light); font-family: var(--font-body);
+  background: rgba(255,255,255,.02);
+}
+.cal-dia:hover:not(.cal-dia-pasado):not(.cal-dia-vacio) {
+  border-color: rgba(232,130,154,.4); background: rgba(232,130,154,.08);
+  color: #fff;
+}
+.cal-dia-seleccionado {
+  background: linear-gradient(135deg, var(--rose3), var(--rose)) !important;
+  border-color: transparent !important; color: #fff !important;
+  box-shadow: 0 4px 16px rgba(232,130,154,.35);
+  font-weight: 600;
+}
+.cal-dia-hoy {
+  border-color: rgba(201,169,110,.5) !important;
+  color: var(--gold) !important; font-weight: 600;
+}
+.cal-dia-pasado {
+  opacity: .25; cursor: not-allowed; color: var(--text-muted);
+}
+.cal-dia-vacio { background: transparent; border: none; cursor: default; }
+
+/* ── Horas visuales ── */
+.horas-grid-visual {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 10px;
+  margin-top: 8px;
+}
+.hora-visual {
+  padding: 14px 8px; border-radius: 14px; text-align: center; cursor: pointer;
+  border: 0.5px solid var(--dark-border); background: rgba(255,255,255,.02);
+  transition: all .25s cubic-bezier(.34,1.56,.64,1);
+  font-family: var(--font-body);
+}
+.hora-visual .hora-time {
+  font-size: 1rem; color: #fff; font-weight: 500; display: block; margin-bottom: 4px;
+}
+.hora-visual .hora-estado {
+  font-size: .62rem; letter-spacing: 1px; text-transform: uppercase; color: #81c784;
+}
+.hora-visual:hover:not(.hora-ocupada) {
+  border-color: rgba(232,130,154,.5); background: rgba(232,130,154,.08);
+  transform: translateY(-3px); box-shadow: 0 8px 20px rgba(232,130,154,.15);
+}
+.hora-visual.hora-seleccionada {
+  background: linear-gradient(135deg, var(--rose3), var(--rose));
+  border-color: transparent; box-shadow: 0 6px 20px rgba(232,130,154,.4);
+  transform: translateY(-3px);
+}
+.hora-visual.hora-seleccionada .hora-time { color: #fff; }
+.hora-visual.hora-seleccionada .hora-estado { color: rgba(255,255,255,.8); }
+.hora-visual.hora-ocupada {
+  opacity: .35; cursor: not-allowed;
+  background: rgba(255,255,255,.02);
+}
+.hora-visual.hora-ocupada .hora-time {
+  color: var(--text-muted); text-decoration: line-through;
+}
+.hora-visual.hora-ocupada .hora-estado { color: var(--rose); }
+
+@media (max-width: 480px) {
+  .cal-dia { font-size: .78rem; border-radius: 8px; }
+  .horas-grid-visual { grid-template-columns: repeat(auto-fill, minmax(75px, 1fr)); gap: 8px; }
+  .hora-visual { padding: 10px 6px; }
+  .hora-visual .hora-time { font-size: .88rem; }
+}
 </style>
 </head>
 <body>
@@ -978,15 +1081,27 @@ footer span { color: var(--rose); }
             <input id="servicio" type="hidden">
           </div>
 
-          <div class="field">
-            <label>Fecha</label>
-            <input id="fecha" type="date" onchange="cargarHorarios()">
+          <div class="field full">
+            <label>Selecciona una fecha</label>
+            <div class="calendario-wrap" id="calendarioWrap">
+              <div class="cal-header">
+                <button class="cal-nav" onclick="cambiarMes(-1)">&#8592;</button>
+                <span class="cal-mes-titulo" id="calMesTitulo"></span>
+                <button class="cal-nav" onclick="cambiarMes(1)">&#8594;</button>
+              </div>
+              <div class="cal-dias-semana">
+                <span>Dom</span><span>Lun</span><span>Mar</span><span>Mié</span>
+                <span>Jue</span><span>Vie</span><span>Sáb</span>
+              </div>
+              <div class="cal-grid" id="calGrid"></div>
+            </div>
+            <input id="fecha" type="hidden">
           </div>
 
-          <div class="field">
-            <label>Hora disponible</label>
-            <div class="horas-grid" id="horasGrid">
-              <p style="color:var(--text-muted);font-size:.8rem;grid-column:1/-1;padding:8px 0">
+          <div class="field full" id="horasSection" style="display:none;">
+            <label id="horasLabel">Horas disponibles</label>
+            <div class="horas-grid-visual" id="horasGrid">
+              <p style="color:var(--text-muted);font-size:.85rem;grid-column:1/-1;padding:8px 0">
                 Selecciona una fecha primero
               </p>
             </div>
@@ -1658,28 +1773,104 @@ function selectServicio(el){
   document.getElementById('servicio').value = servicioSel;
 }
 
-// ── Horarios ──────────────────────────────────────────────────────────────────
-async function cargarHorarios(){
-  const fecha = document.getElementById('fecha').value;
-  if(!fecha) return;
-  horaSel = '';
-  const grid = document.getElementById('horasGrid');
-  grid.innerHTML='<p style="color:var(--text-muted);font-size:.8rem;grid-column:1/-1;padding:8px 0">Cargando…</p>';
-  try{
-    const r = await fetch(`${API}/disponibilidad?fecha=${fecha}`);
-    const data = await r.json();
-    grid.innerHTML = data.map(h=>`
-      <button class="hora-btn ${h.disponible?'':'ocupado'}"
-              onclick="${h.disponible?`selectHora(this,'${h.hora}')`:''}">${h.hora}</button>
-    `).join('');
-  }catch{
-    grid.innerHTML='<p style="color:var(--pink-glow);font-size:.8rem;grid-column:1/-1">Sin conexión al servidor</p>';
+// ── Calendario ────────────────────────────────────────────────────────────────
+let calFecha = new Date();
+calFecha.setDate(1);
+
+const MESES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+               'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
+function renderCalendario() {
+  const hoy = new Date();
+  hoy.setHours(0,0,0,0);
+  const mes = calFecha.getMonth();
+  const anio = calFecha.getFullYear();
+
+  document.getElementById('calMesTitulo').textContent = MESES[mes] + ' ' + anio;
+
+  const grid = document.getElementById('calGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+
+  const primerDia = new Date(anio, mes, 1).getDay();
+  const diasEnMes = new Date(anio, mes + 1, 0).getDate();
+
+  for (let i = 0; i < primerDia; i++) {
+    const vacio = document.createElement('div');
+    vacio.className = 'cal-dia cal-dia-vacio';
+    grid.appendChild(vacio);
+  }
+
+  const fechaSeleccionada = document.getElementById('fecha').value;
+
+  for (let d = 1; d <= diasEnMes; d++) {
+    const fecha = new Date(anio, mes, d);
+    fecha.setHours(0,0,0,0);
+    const fechaStr = `${anio}-${String(mes+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const esHoy = fecha.getTime() === hoy.getTime();
+    const esPasado = fecha < hoy;
+    const seleccionado = fechaStr === fechaSeleccionada;
+
+    const div = document.createElement('div');
+    div.textContent = d;
+    div.className = 'cal-dia' +
+      (esPasado ? ' cal-dia-pasado' : '') +
+      (esHoy ? ' cal-dia-hoy' : '') +
+      (seleccionado ? ' cal-dia-seleccionado' : '');
+
+    if (!esPasado) {
+      div.onclick = () => seleccionarFecha(fechaStr);
+    }
+    grid.appendChild(div);
   }
 }
 
-function selectHora(el, hora){
-  document.querySelectorAll('.hora-btn').forEach(b=>b.classList.remove('selected'));
-  el.classList.add('selected'); horaSel = hora;
+function cambiarMes(dir) {
+  calFecha.setMonth(calFecha.getMonth() + dir);
+  renderCalendario();
+}
+
+async function seleccionarFecha(fechaStr) {
+  document.getElementById('fecha').value = fechaStr;
+  document.getElementById('hora').value = '';
+  horaSel = '';
+  renderCalendario();
+  await cargarHorariosVisuales(fechaStr);
+}
+
+async function cargarHorariosVisuales(fecha) {
+  const seccion = document.getElementById('horasSection');
+  const grid = document.getElementById('horasGrid');
+  const label = document.getElementById('horasLabel');
+
+  seccion.style.display = 'block';
+  const [anio, mes, dia] = fecha.split('-');
+  label.textContent = `Horas disponibles — ${dia}/${mes}/${anio}`;
+  grid.innerHTML = '<div style="grid-column:1/-1;color:var(--text-muted);font-size:.85rem;padding:8px;">Cargando horarios...</div>';
+
+  try {
+    const r = await fetch(`/api/disponibilidad?fecha=${fecha}`);
+    const data = await r.json();
+    grid.innerHTML = '';
+    data.forEach(h => {
+      const div = document.createElement('div');
+      div.className = 'hora-visual' + (h.disponible ? '' : ' hora-ocupada');
+      div.innerHTML = `
+        <span class="hora-time">${h.hora}</span>
+        <span class="hora-estado">${h.disponible ? 'Disponible' : 'Ocupada'}</span>
+      `;
+      if (h.disponible) div.onclick = () => selectHora(div, h.hora);
+      grid.appendChild(div);
+    });
+  } catch {
+    grid.innerHTML = '<div style="grid-column:1/-1;color:var(--rose);font-size:.85rem;">Sin conexión al servidor</div>';
+  }
+}
+
+function selectHora(el, hora) {
+  document.querySelectorAll('.hora-visual').forEach(b => b.classList.remove('hora-seleccionada'));
+  el.classList.add('hora-seleccionada');
+  horaSel = hora;
   document.getElementById('hora').value = hora;
 }
 
@@ -1790,13 +1981,12 @@ function enviarMensaje(){
   window.open(url, '_blank');
 }
 
-// ── Fecha mínima hoy ──────────────────────────────────────────────────────────
-const fechaInput = document.getElementById('fecha');
-if(fechaInput) fechaInput.min = new Date().toISOString().split('T')[0];
-
 // Panel inicial
 const pN = document.getElementById('panel-nueva');
 if(pN) pN.style.display='block';
+
+// Inicializar calendario
+if (document.getElementById('calGrid')) renderCalendario();
 
 // ── Reseñas ───────────────────────────────────────────────────────────────────
 let estrellaSel = 0;
