@@ -890,6 +890,39 @@ footer span { color: var(--rose); }
   .hora-visual { padding: 10px 6px; }
   .hora-visual .hora-time { font-size: .88rem; }
 }
+.precio-resumen {
+  background: var(--dark-card); border: 0.5px solid var(--dark-border);
+  border-radius: 16px; padding: 20px 24px; position: relative; overflow: hidden;
+}
+.precio-resumen::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--rose) 40%, var(--gold) 60%, transparent);
+}
+.precio-header { margin-bottom: 14px; }
+.precio-label {
+  font-family: var(--font-display); font-size: 1.1rem; color: #fff; font-style: italic;
+}
+.precio-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 0; border-bottom: 0.5px solid var(--dark-border);
+  font-size: .85rem;
+}
+.precio-item-nombre { color: var(--text-muted); }
+.precio-item-valor { color: var(--rose); font-weight: 500; }
+.precio-total-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-top: 14px; margin-top: 4px;
+}
+.precio-total-label {
+  font-family: var(--font-display); font-size: 1rem; color: #fff; font-weight: 500;
+}
+.precio-total-valor {
+  font-family: var(--font-display); font-size: 1.5rem; color: var(--gold);
+  font-weight: 400;
+}
+.precio-nota {
+  font-size: .68rem; color: var(--text-muted); margin-top: 10px; font-style: italic;
+}
 </style>
 </head>
 <body>
@@ -1147,6 +1180,20 @@ footer span { color: var(--rose); }
           <div class="field full">
             <label>Notas adicionales (opcional)</label>
             <textarea id="notas" placeholder="Alergias, preferencias, información extra…"></textarea>
+          </div>
+
+          <div class="field full" id="resumenPrecio" style="display:none;">
+            <div class="precio-resumen">
+              <div class="precio-header">
+                <span class="precio-label">Resumen de tu cita</span>
+              </div>
+              <div id="precioItems"></div>
+              <div class="precio-total-row">
+                <span class="precio-total-label">Total estimado</span>
+                <span class="precio-total-valor" id="precioTotal">$0</span>
+              </div>
+              <p class="precio-nota">* Los precios son aproximados. El valor final puede variar según el servicio.</p>
+            </div>
           </div>
 
           <div class="full">
@@ -1801,11 +1848,47 @@ function switchTab(tab){
 }
 
 // ── Servicios ─────────────────────────────────────────────────────────────────
-function selectServicio(el){
-  document.querySelectorAll('.srv-chip').forEach(c=>c.classList.remove('selected'));
-  el.classList.add('selected');
-  servicioSel = el.dataset.value;
+const PRECIOS = {
+  'Cejas': 15000,
+  'Pestañas': 18000,
+  'Maquillaje': 65000,
+  'Depilación media pierna': 30000,
+  'Depilación pierna completa': 50000,
+};
+
+function formatPrecio(n) {
+  return '$' + n.toLocaleString('es-CO');
+}
+
+function selectServicio(el) {
+  el.classList.toggle('selected');
+  const seleccionados = [...document.querySelectorAll('.srv-chip.selected')]
+    .map(c => c.dataset.value);
+  servicioSel = seleccionados.join(', ');
   document.getElementById('servicio').value = servicioSel;
+
+  const resumen = document.getElementById('resumenPrecio');
+  const itemsEl = document.getElementById('precioItems');
+  const totalEl = document.getElementById('precioTotal');
+
+  if (seleccionados.length === 0) {
+    resumen.style.display = 'none';
+    return;
+  }
+
+  resumen.style.display = 'block';
+  let total = 0;
+  itemsEl.innerHTML = seleccionados.map(s => {
+    const precio = PRECIOS[s] || 0;
+    total += precio;
+    return `
+      <div class="precio-item">
+        <span class="precio-item-nombre">${s}</span>
+        <span class="precio-item-valor">${precio ? formatPrecio(precio) : 'A consultar'}</span>
+      </div>`;
+  }).join('');
+
+  totalEl.textContent = formatPrecio(total);
 }
 
 // ── Calendario ────────────────────────────────────────────────────────────────
