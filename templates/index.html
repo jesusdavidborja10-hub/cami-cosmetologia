@@ -941,6 +941,151 @@ footer span { color: var(--rose); }
 .precio-nota {
   font-size: .68rem; color: var(--text-muted); margin-top: 10px; font-style: italic;
 }
+
+/* ── Auth mejorado ── */
+#sec-login, #sec-registro {
+  min-height: calc(100vh - var(--nav-h));
+  display: flex; align-items: center; justify-content: center;
+  padding: 40px 24px; position: relative; z-index: 1; overflow: hidden;
+}
+#sec-login::before, #sec-registro::before {
+  content: ''; position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 60% at 20% 50%, rgba(232,130,154,.08), transparent),
+    radial-gradient(ellipse 40% 40% at 80% 30%, rgba(201,169,110,.05), transparent);
+  pointer-events: none;
+}
+
+.auth-card {
+  background: var(--dark-card); border: 0.5px solid var(--dark-border);
+  border-radius: 28px; padding: 48px 52px; width: 100%; max-width: 460px;
+  position: relative; overflow: hidden; box-sizing: border-box;
+  animation: entrarCard .6s cubic-bezier(.34,1.56,.64,1) both;
+  box-shadow: 0 40px 80px rgba(0,0,0,.4), 0 0 0 0.5px rgba(232,130,154,.1);
+}
+@keyframes entrarCard {
+  from { opacity: 0; transform: translateY(40px) scale(.95); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.auth-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--rose) 30%, var(--gold) 70%, transparent);
+  animation: brilloNav 4s ease infinite; background-size: 200%;
+}
+.auth-card::after {
+  content: ''; position: absolute; top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: radial-gradient(ellipse at 50% 0%, rgba(232,130,154,.04), transparent 60%);
+  pointer-events: none;
+}
+
+.auth-icon {
+  width: 64px; height: 64px; border-radius: 50%;
+  border: 1px solid rgba(232,130,154,.4);
+  box-shadow: 0 0 30px rgba(232,130,154,.3), 0 0 60px rgba(232,130,154,.1);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; margin: 0 auto 24px;
+  animation: pulsoIcon 3s ease-in-out infinite;
+  background: rgba(232,130,154,.06);
+}
+@keyframes pulsoIcon {
+  0%,100% { box-shadow: 0 0 20px rgba(232,130,154,.3), 0 0 0 0 rgba(232,130,154,.2); }
+  50% { box-shadow: 0 0 40px rgba(232,130,154,.5), 0 0 0 12px rgba(232,130,154,0); }
+}
+
+.auth-title {
+  font-family: var(--font-display); font-size: 2.2rem; font-weight: 400;
+  color: #fff; text-align: center; margin-bottom: 6px; letter-spacing: .5px;
+}
+.auth-sub {
+  color: var(--text-muted); text-align: center; font-size: .85rem;
+  margin-bottom: 36px; font-weight: 300; letter-spacing: .3px;
+}
+
+.auth-fields { display: flex; flex-direction: column; gap: 18px; margin-bottom: 28px; }
+
+.field label {
+  font-size: .65rem; letter-spacing: 2.5px; text-transform: uppercase;
+  color: var(--text-muted); font-weight: 400; margin-bottom: 2px;
+}
+input, select, textarea {
+  background: rgba(255,255,255,.03);
+  border: 0.5px solid rgba(255,255,255,.08);
+  border-radius: 14px; padding: 15px 18px;
+  color: var(--text-light); font-family: var(--font-body); font-size: .92rem;
+  transition: all .3s; outline: none; width: 100%; max-width: 100%;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: rgba(232,130,154,.5);
+  background: rgba(232,130,154,.04);
+  box-shadow: 0 0 0 3px rgba(232,130,154,.08), 0 4px 20px rgba(232,130,154,.1);
+}
+
+.btn-form-primary {
+  width: 100%; padding: 17px; border: none; border-radius: 30px;
+  background: linear-gradient(135deg, var(--rose3), var(--rose), #ff85b3);
+  background-size: 200%; animation: brilloNav 3s ease infinite;
+  color: #fff; font-family: var(--font-body); font-size: .78rem;
+  font-weight: 500; letter-spacing: 2.5px; text-transform: uppercase;
+  cursor: pointer; transition: transform .3s, box-shadow .3s; margin-top: 4px;
+  position: relative; overflow: hidden;
+}
+.btn-form-primary::after {
+  content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.2), transparent);
+  animation: ondaBtn 2.5s ease-in-out infinite;
+}
+@keyframes ondaBtn { 0%{left:-100%} 100%{left:200%} }
+.btn-form-primary:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 10px 36px rgba(232,130,154,.5);
+}
+
+.auth-divider {
+  display: flex; align-items: center; gap: 14px;
+  color: var(--text-muted); font-size: .75rem; margin: 24px 0; letter-spacing: 1px;
+}
+.auth-divider::before, .auth-divider::after {
+  content: ''; flex: 1; height: 0.5px;
+  background: linear-gradient(90deg, transparent, var(--dark-border), transparent);
+}
+
+.btn-google {
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  width: 100%; padding: 15px; border-radius: 14px;
+  border: 0.5px solid rgba(255,255,255,.1);
+  background: rgba(255,255,255,.03);
+  color: var(--text-light); font-family: var(--font-body); font-size: .85rem;
+  cursor: pointer; text-decoration: none; transition: all .3s; letter-spacing: .3px;
+}
+.btn-google:hover {
+  border-color: rgba(232,130,154,.3);
+  background: rgba(255,255,255,.06);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,.2);
+}
+
+.auth-link { color: var(--text-muted); font-size: .83rem; text-align: center; margin-top: 24px; }
+.auth-link a {
+  color: var(--rose); text-decoration: none; font-weight: 500;
+  position: relative; transition: all .2s;
+}
+.auth-link a::after {
+  content: ''; position: absolute; bottom: -2px; left: 0; right: 0;
+  height: 1px; background: var(--rose); transform: scaleX(0); transition: transform .3s;
+}
+.auth-link a:hover::after { transform: scaleX(1); }
+
+/* Transición entre login y registro */
+.auth-card.saliendo {
+  animation: salirCard .3s ease forwards;
+}
+.auth-card.entrando {
+  animation: entrarCard .5s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes salirCard {
+  to { opacity: 0; transform: translateY(-20px) scale(.97); }
+}
 </style>
 </head>
 <body>
@@ -1459,7 +1604,7 @@ footer span { color: var(--rose); }
       </svg>
       Continuar con Google
     </a>
-    <p class="auth-link">¿No tienes cuenta? <a href="/registro">Regístrate aquí</a></p>
+    <p class="auth-link">¿No tienes cuenta? <a href="/registro" onclick="transicionAuth(event, '/registro')">Regístrate aquí</a></p>
   </div>
 </section>
 {% endif %}
@@ -1500,7 +1645,7 @@ footer span { color: var(--rose); }
       </svg>
       Continuar con Google
     </a>
-    <p class="auth-link">¿Ya tienes cuenta? <a href="/login">Inicia sesión</a></p>
+    <p class="auth-link">¿Ya tienes cuenta? <a href="/login" onclick="transicionAuth(event, '/login')">Inicia sesión</a></p>
   </div>
 </section>
 {% endif %}
@@ -2272,6 +2417,14 @@ function toggleCarruselMovil(btn) {
   const wrap = document.getElementById('carruselMovilWrap');
   const abierto = wrap.classList.toggle('abierto');
   btn.textContent = abierto ? 'Ocultar trabajos ↑' : 'Ver mis trabajos ↓';
+}
+
+function transicionAuth(e, url) {
+  e.preventDefault();
+  const card = document.querySelector('.auth-card');
+  if (!card) return;
+  card.classList.add('saliendo');
+  setTimeout(() => { window.location.href = url; }, 280);
 }
 </script>
 
