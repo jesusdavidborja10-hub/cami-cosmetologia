@@ -80,7 +80,7 @@ body::before {
 }
 .nav-brand-name {
   font-family: var(--font-display);
-  font-size: 1.4rem; font-weight: 500; letter-spacing: 1px; color: #fff;
+  font-size: 1.6rem; font-weight: 500; letter-spacing: 2px; color: #fff;
 }
 .nav-brand-name span { color: var(--rose); font-style: italic; }
 
@@ -122,11 +122,11 @@ body::before {
 .section-tag::before, .section-tag::after { content: ''; width: 20px; height: 0.5px; background: var(--gold); }
 .section-title {
   font-family: var(--font-display);
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-size: clamp(2.4rem, 5vw, 3.8rem);
   font-weight: 400; color: #fff; line-height: 1.2;
 }
 .section-title span { color: var(--rose); font-style: italic; }
-.section-desc { color: var(--text-muted); font-size: .9rem; margin-top: 12px; font-weight: 300; }
+.section-desc { color: var(--text-muted); font-size: 1rem; line-height: 1.9; margin-top: 12px; font-weight: 300; }
 
 #sec-inicio { padding: 20px 0; position: relative; z-index: 1; }
 
@@ -205,16 +205,16 @@ body::before {
 
 .hero-title {
   font-family: var(--font-display);
-  font-size: clamp(2.8rem, 7vw, 5.5rem);
-  font-weight: 400; line-height: 1.1; color: #fff;
+  font-size: clamp(3.5rem, 8vw, 6.5rem);
+  font-weight: 400; line-height: 1.05; color: #fff;
   animation: fadeUp .8s .1s ease both;
 }
 .hero-title .accent { color: var(--rose); }
 .hero-title .italic { font-style: italic; color: var(--gold); }
 
 .hero-sub {
-  font-size: 1rem; color: var(--text-muted);
-  max-width: 520px; line-height: 1.8; margin-top: 20px; font-weight: 300;
+  font-size: 1.1rem; color: var(--text-muted);
+  max-width: 520px; line-height: 1.9; margin-top: 20px; font-weight: 300;
   animation: fadeUp .9s .2s ease both;
 }
 .hero-cta { display: flex; gap: 14px; margin-top: 36px; flex-wrap: wrap; animation: fadeUp 1s .3s ease both; }
@@ -256,7 +256,7 @@ body::before {
 .srv-card:hover { border-color: rgba(232,130,154,.3); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(232,130,154,.1); }
 .srv-card:hover::before { opacity: 1; }
 .srv-card-icon { font-size: 2rem; margin-bottom: 16px; }
-.srv-card-name { font-family: var(--font-display); font-size: 1.15rem; font-weight: 500; color: #fff; }
+.srv-card-name { font-family: var(--font-display); font-size: 1.3rem; font-weight: 500; color: #fff; }
 .srv-card-desc { font-size: .82rem; color: var(--text-muted); margin-top: 8px; line-height: 1.6; font-weight: 300; }
 .srv-card-price { margin-top: 16px; font-size: .82rem; font-weight: 500; color: var(--gold); letter-spacing: 1px; }
 
@@ -465,7 +465,7 @@ textarea { resize: vertical; min-height: 80px; }
   display: flex; align-items: center; justify-content: center;
   font-size: 24px; margin: 0 auto 20px;
 }
-.auth-title { font-family: var(--font-display); font-size: 2rem; font-weight: 400; color: #fff; text-align: center; margin-bottom: 6px; }
+.auth-title { font-family: var(--font-display); font-size: 2.4rem; font-weight: 400; color: #fff; text-align: center; margin-bottom: 6px; }
 .auth-sub { color: var(--text-muted); text-align: center; font-size: .85rem; margin-bottom: 32px; font-weight: 300; }
 .auth-fields { display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; }
 .remember-row { display: flex; align-items: center; gap: 8px; font-size: .82rem; color: var(--text-muted); cursor: pointer; }
@@ -542,7 +542,7 @@ textarea { resize: vertical; min-height: 80px; }
   color: var(--rose); border-radius: 30px; padding: 7px 18px;
   font-size: .7rem; width: fit-content; letter-spacing: 1.5px; text-transform: uppercase;
 }
-.sobre-mi-nombre { font-family: var(--font-display); font-size: 2.6rem; color: #fff; line-height: 1.1; margin: 0; font-weight: 400; }
+.sobre-mi-nombre { font-family: var(--font-display); font-size: 3rem; color: #fff; line-height: 1.1; margin: 0; font-weight: 400; }
 .sobre-mi-nombre span { color: var(--rose); font-style: italic; }
 .sobre-mi-desc { color: var(--text-muted); font-size: .9rem; line-height: 1.8; font-weight: 300; }
 .sobre-mi-chips { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
@@ -865,7 +865,7 @@ footer span { color: var(--rose); }
 <nav class="barra-nav" id="navbar">
   <div class="nav-inner">
     <a href="/" class="nav-brand">
-      <div class="nav-brand-icon">🌸</div>
+      <div class="nav-brand-icon"></div>
       <span class="nav-brand-name">CAMI <span>Cosmetología</span></span>
     </a>
 
@@ -875,26 +875,26 @@ footer span { color: var(--rose); }
     </div>
 
     <ul class="nav-links" id="navLinks">
-      <li><a href="/" class="{{ 'activo' if seccion=='inicio' else '' }}">✦ Inicio</a></li>
-      <li><a href="/citas" class="{{ 'activo' if seccion=='citas' else '' }}">📅 Citas</a></li>
-      <li><a href="/contacto" class="{{ 'activo' if seccion=='contacto' else '' }}">💬 Contacto</a></li>
-      <li><a href="/ubicacion" class="{{ 'activo' if seccion=='ubicacion' else '' }}">📍 Ubicación</a></li>
-      <li><a href="/resenas" class="{{ 'activo' if seccion=='resenas' else '' }}">⭐ Reseñas</a></li>
-      <li><a href="/sobre-mi" class="{{ 'activo' if seccion=='sobre-mi' else '' }}">🌸 Sobre mí</a></li>
+      <li><a href="/" class="{{ 'activo' if seccion=='inicio' else '' }}">Inicio</a></li>
+      <li><a href="/citas" class="{{ 'activo' if seccion=='citas' else '' }}">Citas</a></li>
+      <li><a href="/contacto" class="{{ 'activo' if seccion=='contacto' else '' }}">Contacto</a></li>
+      <li><a href="/ubicacion" class="{{ 'activo' if seccion=='ubicacion' else '' }}">Ubicación</a></li>
+      <li><a href="/resenas" class="{{ 'activo' if seccion=='resenas' else '' }}">Reseñas</a></li>
+      <li><a href="/sobre-mi" class="{{ 'activo' if seccion=='sobre-mi' else '' }}">Sobre mí</a></li>
       <!-- Bloque usuario solo visible en móvil dentro del menú -->
       <li class="nav-user-mobile">
         {% if usuario %}
-          <span class="nav-user-name">👤 {{ usuario.nombre }}</span>
-          <button class="btn-logout" onclick="doLogout()">🚪 Cerrar sesión</button>
+          <span class="nav-user-name">{{ usuario.nombre }}</span>
+          <button class="btn-logout" onclick="doLogout()">Cerrar sesión</button>
         {% else %}
-          <a href="/login" class="btn-login-mobile">🌸 Iniciar sesión</a>
+          <a href="/login" class="btn-login-mobile">Iniciar sesión</a>
         {% endif %}
       </li>
     </ul>
 
     <div class="nav-user" id="navUser">
       {% if usuario %}
-      <span class="nav-user-name">👤 {{ usuario.nombre }}</span>
+      <span class="nav-user-name">{{ usuario.nombre }}</span>
       <button class="btn-logout" onclick="doLogout()">Salir</button>
       {% else %}
       <a href="/login" class="btn-outline" style="padding:8px 18px;font-size:.8rem">Iniciar sesión</a>
@@ -924,13 +924,13 @@ footer span { color: var(--rose); }
           micropigmentación y mucho más. Agenda tu cita en minutos y potencia tu confianza.
         </p>
         <div class="hero-cta">
-          <a href="/citas" class="btn-primary">🌸 &nbsp;Apartar cita</a>
-          <a href="/contacto" class="btn-outline">💬 &nbsp;Contáctanos</a>
+          <a href="/citas" class="btn-primary">Apartar cita</a>
+          <a href="/contacto" class="btn-outline">Contáctanos</a>
         </div>
 
         <!-- Botón ver trabajos solo en móvil -->
         <button class="hero-carrusel-movil-toggle" onclick="toggleCarruselMovil(this)">
-          ✦ Ver mis trabajos ↓
+          Ver mis trabajos ↓
         </button>
         <div class="hero-carrusel-movil-wrap" id="carruselMovilWrap">
           <div class="hero-carrusel-wrap">
@@ -993,7 +993,7 @@ footer span { color: var(--rose); }
 <section class="servicios-section">
   <div class="container">
     <div class="section-header">
-      <p class="section-tag">✦ Nuestros servicios</p>
+      <p class="section-tag">Nuestros servicios</p>
       <h2 class="section-title">Todo para tu <span>bienestar</span></h2>
       <p class="section-desc">Tratamientos especializados con los mejores productos del mercado</p>
     </div>
@@ -1032,7 +1032,7 @@ footer span { color: var(--rose); }
 <section id="sec-citas">
   <div class="container">
     <div class="section-header">
-      <p class="section-tag">✦ Agenda</p>
+      <p class="section-tag">Agenda</p>
       <h2 class="section-title">Aparta tu <span>cita</span></h2>
       <p class="section-desc">Selecciona servicio, fecha y hora. ¡Así de fácil!</p>
     </div>
@@ -1063,19 +1063,19 @@ footer span { color: var(--rose); }
             <label>Servicio</label>
             <div class="servicios-chips" id="serviciosGrid">
               <div class="srv-chip" data-value="Cejas" onclick="selectServicio(this)">
-                <span class="chip-icon">🌿</span>Cejas
+                Cejas
               </div>
               <div class="srv-chip" data-value="Pestañas" onclick="selectServicio(this)">
-                <span class="chip-icon">✨</span>Pestañas
+                Pestañas
               </div>
               <div class="srv-chip" data-value="Maquillaje" onclick="selectServicio(this)">
-                <span class="chip-icon">💄</span>Maquillaje
+                Maquillaje
               </div>
               <div class="srv-chip" data-value="Depilación media pierna" onclick="selectServicio(this)">
-                <span class="chip-icon">🦵</span>Media pierna
+                Media pierna
               </div>
               <div class="srv-chip" data-value="Depilación pierna completa" onclick="selectServicio(this)">
-                <span class="chip-icon">🦵</span>Pierna completa
+                Pierna completa
               </div>
             </div>
             <input id="servicio" type="hidden">
@@ -1115,7 +1115,7 @@ footer span { color: var(--rose); }
 
           <div class="full">
             <button class="btn-form-primary" onclick="crearCita()">
-              🌸 &nbsp;Confirmar Cita
+              Confirmar Cita
             </button>
           </div>
 
@@ -1134,7 +1134,7 @@ footer span { color: var(--rose); }
 <section id="sec-contacto">
   <div class="container">
     <div class="section-header">
-      <p class="section-tag">✦ Contáctanos</p>
+      <p class="section-tag">Contáctanos</p>
       <h2 class="section-title">Estamos para <span>servirte</span></h2>
       <p class="section-desc">Escríbenos o llámanos. Siempre tendremos la mejor respuesta para ti.</p>
     </div>
@@ -1204,7 +1204,7 @@ footer span { color: var(--rose); }
 <section id="sec-ubicacion">
   <div class="container">
     <div class="section-header">
-      <p class="section-tag">✦ Encuéntranos</p>
+      <p class="section-tag">Encuéntranos</p>
       <h2 class="section-title">Nuestra <span>ubicación</span></h2>
       <p class="section-desc">En el corazón de Cartagena de Indias, Colombia</p>
     </div>
@@ -1254,7 +1254,7 @@ footer span { color: var(--rose); }
 <section id="sec-resenas">
   <div class="container">
     <div class="section-header">
-      <p class="section-tag">✦ Lo que dicen de nosotras</p>
+      <p class="section-tag">Lo que dicen de nosotras</p>
       <h2 class="section-title">Nuestras <span>reseñas</span></h2>
       <p class="section-desc">La experiencia de nuestras clientas es lo que nos impulsa cada día</p>
     </div>
@@ -1300,14 +1300,13 @@ footer span { color: var(--rose); }
             <textarea id="resena-comentario" placeholder="Cuéntanos tu experiencia…" style="min-height:110px"></textarea>
           </div>
           <button class="btn-form-primary" onclick="enviarResena()">
-            ⭐ &nbsp;Publicar reseña
+            Publicar reseña
           </button>
         </div>
         {% else %}
         <div class="login-prompt">
-          <div style="font-size:2.5rem;margin-bottom:14px">⭐</div>
           <p>Inicia sesión para dejar tu reseña<br>y ayudar a otras clientas a elegirnos</p>
-          <a href="/login" class="btn-primary" style="display:inline-flex">🌸 &nbsp;Iniciar sesión</a>
+          <a href="/login" class="btn-primary" style="display:inline-flex">Iniciar sesión</a>
         </div>
         {% endif %}
       </div>
@@ -1331,7 +1330,7 @@ footer span { color: var(--rose); }
 {% if seccion == 'login' %}
 <section id="sec-login">
   <div class="auth-card">
-    <div class="auth-icon">🌸</div>
+    <div class="auth-icon"></div>
     <h2 class="auth-title">Bienvenida de nuevo</h2>
     <p class="auth-sub">Inicia sesión para gestionar tus citas</p>
     <div class="auth-fields">
@@ -1348,7 +1347,7 @@ footer span { color: var(--rose); }
         Recordar mi sesión
       </label>
     </div>
-    <button class="btn-form-primary" onclick="doLogin()">🌸 &nbsp;Iniciar sesión</button>
+    <button class="btn-form-primary" onclick="doLogin()">Iniciar sesión</button>
     <div class="auth-divider"><span>o</span></div>
     <a href="/auth/google" class="btn-google">
       <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
@@ -1368,7 +1367,7 @@ footer span { color: var(--rose); }
 {% if seccion == 'registro' %}
 <section id="sec-registro">
   <div class="auth-card">
-    <div class="auth-icon">💐</div>
+    <div class="auth-icon"></div>
     <h2 class="auth-title">Crea tu cuenta</h2>
     <p class="auth-sub">Regístrate y gestiona tus citas fácilmente</p>
     <div class="auth-fields">
@@ -1389,7 +1388,7 @@ footer span { color: var(--rose); }
         <input id="rg-pw2" type="password" placeholder="Repite tu contraseña">
       </div>
     </div>
-    <button class="btn-form-primary" onclick="doRegistro()">💐 &nbsp;Crear cuenta</button>
+    <button class="btn-form-primary" onclick="doRegistro()">Crear cuenta</button>
     <div class="auth-divider"><span>o</span></div>
     <a href="/auth/google" class="btn-google">
       <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
@@ -1410,7 +1409,7 @@ footer span { color: var(--rose); }
 <section id="sec-sobre-mi">
   <div class="container">
     <div class="section-header">
-      <p class="section-tag">✦ Conóceme</p>
+      <p class="section-tag">Conóceme</p>
       <h2 class="section-title">Sobre <span>mí</span></h2>
       <p class="section-desc">La persona detrás de cada sonrisa</p>
     </div>
@@ -1423,9 +1422,9 @@ footer span { color: var(--rose); }
       </div>
 
       <div class="sobre-mi-texto">
-        <span class="sobre-mi-tag">🌸 Cosmetóloga & Maquilladora</span>
+        <span class="sobre-mi-tag">Cosmetóloga & Maquilladora</span>
 
-        <h2 class="sobre-mi-nombre">Hola, soy <span>Camila</span> 👋</h2>
+        <h2 class="sobre-mi-nombre">Hola, soy <span>Camila</span></h2>
 
         <p class="sobre-mi-desc">
           Soy una joven de 18 años apasionada por el mundo de la belleza desde pequeña.
@@ -1443,17 +1442,17 @@ footer span { color: var(--rose); }
           Lo que más me caracteriza es mi trato cercano y personalizado. Para mí cada clienta
           es única, y me tomo el tiempo de entender lo que necesitas para que salgas
           sintiéndote exactamente como querías. A pesar de mi juventud, mi dedicación y amor
-          por lo que hago hablan por sí solos. 🌸
+          por lo que hago hablan por sí solos.
         </p>
 
         <div class="sobre-mi-chips">
-          <span class="sobre-mi-chip">✨ Trato personalizado</span>
-          <span class="sobre-mi-chip">💄 Técnicas modernas</span>
-          <span class="sobre-mi-chip">🌸 Cosmetología</span>
-          <span class="sobre-mi-chip">💅 Maquillaje</span>
+          <span class="sobre-mi-chip">Trato personalizado</span>
+          <span class="sobre-mi-chip">Técnicas modernas</span>
+          <span class="sobre-mi-chip">Cosmetología</span>
+          <span class="sobre-mi-chip">Maquillaje</span>
         </div>
 
-        <a href="/citas" class="sobre-mi-cta">🌸 &nbsp;Agendar una cita</a>
+        <a href="/citas" class="sobre-mi-cta">Agendar una cita</a>
       </div>
 
     </div>
@@ -1556,7 +1555,7 @@ footer span { color: var(--rose); }
 {% if seccion == 'admin-login' %}
 <section id="sec-login">
   <div class="auth-card">
-    <div class="auth-icon">🔐</div>
+    <div class="auth-icon"></div>
     <h2 class="auth-title">Panel Admin</h2>
     <p class="auth-sub">Solo para Cami — ingresa la contraseña</p>
     <div class="auth-fields">
@@ -1566,7 +1565,7 @@ footer span { color: var(--rose); }
           onkeypress="if(event.key==='Enter') adminLogin()">
       </div>
     </div>
-    <button class="btn-form-primary" onclick="adminLogin()">🔐 &nbsp;Entrar</button>
+    <button class="btn-form-primary" onclick="adminLogin()">Entrar</button>
     <div id="admin-msg" style="text-align:center;margin-top:12px;font-size:.8rem;color:var(--rose);min-height:18px;"></div>
   </div>
 </section>
@@ -1594,7 +1593,7 @@ async function adminLogin() {
 <section id="sec-citas" style="padding:60px 0;position:relative;z-index:1;">
   <div class="container">
     <div class="section-header">
-      <p class="section-tag">✦ Panel</p>
+      <p class="section-tag">Panel</p>
       <h2 class="section-title">Todas las <span>citas</span></h2>
       <p class="section-desc">Panel de administración · Solo visible para Cami</p>
     </div>
@@ -1639,15 +1638,15 @@ async function cargarCitasAdmin() {
         <div>
           <div class="cita-nombre">${c.nombre}</div>
           <div class="cita-meta">
-            <span>📅 ${fmtFecha(c.fecha)} · ${c.hora}</span>
-            <span>📱 ${c.telefono}</span>
-            ${c.email ? `<span>✉ ${c.email}</span>` : ''}
+            <span>${fmtFecha(c.fecha)} · ${c.hora}</span>
+            <span>${c.telefono}</span>
+            ${c.email ? `<span>${c.email}</span>` : ''}
           </div>
           <div style="margin-top:8px;">
             <span class="badge ${c.estado}">${c.servicio}</span>
             <span class="badge ${c.estado}">${c.estado}</span>
           </div>
-          ${c.notas ? `<p style="font-size:.78rem;color:var(--text-muted);margin-top:6px;">📝 ${c.notas}</p>` : ''}
+          ${c.notas ? `<p style="font-size:.78rem;color:var(--text-muted);margin-top:6px;">${c.notas}</p>` : ''}
         </div>
         <div>
           ${c.estado !== 'cancelada' ? `<button class="btn-cancel-cita" onclick="confirmarCancelar(${c.id})">Cancelar</button>` : ''}
@@ -1677,7 +1676,7 @@ if (document.getElementById('adminListaCitas')) cargarCitasAdmin();
 <footer>
   <div class="footer-brand">Cami Cosmetología</div>
   <p>© 2025 <span>Cami Cosmetología</span> · Cartagena de Indias, Colombia</p>
-  <p style="margin-top:6px">Realza tu belleza · <span class="footer-gold">Potencia tu confianza</span> 🌸</p>
+  <p style="margin-top:6px">Realza tu belleza · <span class="footer-gold">Potencia tu confianza</span></p>
 </footer>
 
 <!-- Modal cancelar cita -->
@@ -1727,7 +1726,7 @@ async function doLogin(){
   });
   const data = await r.json();
   if(!r.ok) return toast(`⚠ ${data.error}`,'error');
-  toast(`🌸 ${data.mensaje}`,'success');
+  toast(data.mensaje,'success');
   setTimeout(()=>{ window.location.href='/'; }, 1000);
 }
 
@@ -1744,7 +1743,7 @@ async function doRegistro(){
   });
   const data = await r.json();
   if(!r.ok) return toast(`⚠ ${data.error}`,'error');
-  toast(`💐 ${data.mensaje}`,'success');
+  toast(data.mensaje,'success');
   setTimeout(()=>{ window.location.href='/'; }, 1000);
 }
 
@@ -1893,7 +1892,7 @@ async function crearCita(){
     });
     const data = await r.json();
     if(!r.ok) return toast(`⚠ ${data.error}`,'error');
-    toast('🌸 ¡Cita confirmada con éxito!','success');
+    toast('¡Cita confirmada con éxito!','success');
     resetForm();
   }catch{ toast('Sin conexión al servidor','error'); }
 }
@@ -1932,15 +1931,15 @@ async function cargarCitas(){
         <div>
           <div class="cita-nombre">${c.nombre}</div>
           <div class="cita-meta">
-            <span>📅 ${fmtFecha(c.fecha)} · ${c.hora}</span>
-            <span>📱 ${c.telefono}</span>
-            ${c.email?`<span>✉ ${c.email}</span>`:''}
+            <span>${fmtFecha(c.fecha)} · ${c.hora}</span>
+            <span>${c.telefono}</span>
+            ${c.email?`<span>${c.email}</span>`:''}
           </div>
           <div style="margin-top:8px">
             <span class="badge ${c.estado}">${c.servicio}</span>
             <span class="badge ${c.estado}">${c.estado}</span>
           </div>
-          ${c.notas?`<p style="font-size:.78rem;color:var(--text-muted);margin-top:6px">📝 ${c.notas}</p>`:''}
+          ${c.notas?`<p style="font-size:.78rem;color:var(--text-muted);margin-top:6px">${c.notas}</p>`:''}
         </div>
         <div>
           ${c.estado!=='cancelada'?`<button class="btn-cancel-cita" onclick="confirmarCancelar(${c.id})">Cancelar</button>`:''}
@@ -2051,7 +2050,7 @@ async function cargarResenas(){
     lista.innerHTML = data.map(rv => `
       <div class="resena-card">
         <div class="resena-header">
-          <span class="resena-nombre">👤 ${rv.nombre}</span>
+          <span class="resena-nombre">${rv.nombre}</span>
           <span class="resena-stars">${starsHtml(rv.estrellas)}</span>
         </div>
         <p class="resena-texto">${rv.comentario}</p>
@@ -2073,7 +2072,7 @@ async function enviarResena(){
     });
     const data = await r.json();
     if(!r.ok) return toast(`⚠ ${data.error}`,'error');
-    toast('⭐ ¡Gracias por tu reseña!','success');
+    toast('¡Gracias por tu reseña!','success');
     document.getElementById('resena-comentario').value = '';
     estrellaSel = 0;
     document.querySelectorAll('.star-btn').forEach(b => b.classList.remove('active'));
@@ -2135,7 +2134,7 @@ function heroNav(tipo, dir) {
 function toggleCarruselMovil(btn) {
   const wrap = document.getElementById('carruselMovilWrap');
   const abierto = wrap.classList.toggle('abierto');
-  btn.textContent = abierto ? '✦ Ocultar trabajos ↑' : '✦ Ver mis trabajos ↓';
+  btn.textContent = abierto ? 'Ocultar trabajos ↑' : 'Ver mis trabajos ↓';
 }
 </script>
 
