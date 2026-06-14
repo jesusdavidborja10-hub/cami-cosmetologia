@@ -9,6 +9,7 @@ from datetime import datetime, timedelta
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', secrets.token_hex(32))
 app.permanent_session_lifetime = timedelta(days=30)
+ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'cami2025')
 CORS(app)
 
 # ── Google OAuth ───────────────────────────────────────────────────────────────
@@ -104,6 +105,25 @@ def resenas_page():
 @app.route('/sobre-mi')
 def sobre_mi():
     return render_template('index.html', seccion='sobre-mi', usuario=session.get('usuario'))
+
+@app.route('/admin')
+def admin_page():
+    if not session.get('admin'):
+        return render_template('index.html', seccion='admin-login', usuario=session.get('usuario'))
+    return render_template('index.html', seccion='admin-citas', usuario=session.get('usuario'))
+
+@app.route('/api/admin/login', methods=['POST'])
+def admin_login():
+    data = request.get_json()
+    if data.get('password') == ADMIN_PASSWORD:
+        session['admin'] = True
+        return jsonify({'ok': True})
+    return jsonify({'error': 'Contraseña incorrecta'}), 401
+
+@app.route('/api/admin/logout', methods=['POST'])
+def admin_logout():
+    session.pop('admin', None)
+    return jsonify({'ok': True})
 
 @app.route('/foto-cami')
 def foto_cami():

@@ -934,10 +934,7 @@ footer span { color: var(--rose); }
       <p class="section-desc">Selecciona servicio, fecha y hora. ¡Así de fácil!</p>
     </div>
 
-    <div class="tabs-row">
-      <button class="tab-btn active" onclick="switchTab('nueva')">✦ Nueva cita</button>
-      <button class="tab-btn" onclick="switchTab('mis')">☰ Mis citas</button>
-    </div>
+    <div style="max-width:600px;margin:0 auto 36px;">
 
     <!-- Nueva cita -->
     <div id="panel-nueva">
@@ -1011,24 +1008,6 @@ footer span { color: var(--rose); }
       </div>
     </div>
 
-    <!-- Mis citas -->
-    <div id="panel-mis" style="display:none">
-      <div class="card">
-        <div class="filter-row">
-          <div class="field" style="flex:1;min-width:160px">
-            <label>Filtrar por fecha</label>
-            <input type="date" id="filtroFecha" onchange="cargarCitas()">
-          </div>
-          <button class="btn-secondary-sm" onclick="limpiarFiltro()">Ver todas</button>
-          <button class="btn-secondary-sm" onclick="cargarCitas()">↻ Actualizar</button>
-        </div>
-        <div id="listaCitas">
-          <div class="empty-state">
-            <div class="big">🌸</div>
-            <p>Cargando citas…</p>
-          </div>
-        </div>
-      </div>
     </div>
 
   </div>
@@ -1457,6 +1436,126 @@ footer span { color: var(--rose); }
 
   </div>
 </section>
+{% endif %}
+
+{% if seccion == 'admin-login' %}
+<section id="sec-login">
+  <div class="auth-card">
+    <div class="auth-icon">🔐</div>
+    <h2 class="auth-title">Panel Admin</h2>
+    <p class="auth-sub">Solo para Cami — ingresa la contraseña</p>
+    <div class="auth-fields">
+      <div class="field">
+        <label>Contraseña</label>
+        <input id="admin-pw" type="password" placeholder="••••••••"
+          onkeypress="if(event.key==='Enter') adminLogin()">
+      </div>
+    </div>
+    <button class="btn-form-primary" onclick="adminLogin()">🔐 &nbsp;Entrar</button>
+    <div id="admin-msg" style="text-align:center;margin-top:12px;font-size:.8rem;color:var(--rose);min-height:18px;"></div>
+  </div>
+</section>
+<script>
+async function adminLogin() {
+  const pw = document.getElementById('admin-pw')?.value;
+  const msg = document.getElementById('admin-msg');
+  if (!pw) return;
+  const r = await fetch('/api/admin/login', {
+    method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({password: pw})
+  });
+  const data = await r.json();
+  if (data.ok) {
+    window.location.href = '/admin';
+  } else {
+    msg.textContent = '✗ Contraseña incorrecta';
+    setTimeout(() => msg.textContent = '', 3000);
+  }
+}
+</script>
+{% endif %}
+
+{% if seccion == 'admin-citas' %}
+<section id="sec-citas" style="padding:60px 0;position:relative;z-index:1;">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-tag">✦ Panel</p>
+      <h2 class="section-title">Todas las <span>citas</span></h2>
+      <p class="section-desc">Panel de administración · Solo visible para Cami</p>
+    </div>
+
+    <div class="card" style="margin-top:32px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px;">
+        <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;">
+          <div class="field">
+            <label>Filtrar por fecha</label>
+            <input type="date" id="adminFiltroFecha" onchange="cargarCitasAdmin()">
+          </div>
+          <button class="btn-secondary-sm" onclick="limpiarFiltroAdmin()">Ver todas</button>
+          <button class="btn-secondary-sm" onclick="cargarCitasAdmin()">↻ Actualizar</button>
+        </div>
+        <button class="btn-secondary-sm" onclick="adminLogout()" style="border-color:rgba(232,130,154,.3);color:var(--rose);">
+          Cerrar sesión admin
+        </button>
+      </div>
+
+      <div id="adminListaCitas">
+        <div class="empty-state"><div class="big">🌸</div><p>Cargando citas...</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+async function cargarCitasAdmin() {
+  const fecha = document.getElementById('adminFiltroFecha')?.value;
+  const url = fecha ? `/api/citas?fecha=${fecha}` : '/api/citas';
+  const lista = document.getElementById('adminListaCitas');
+  lista.innerHTML = '<div class="empty-state"><div class="big">🌸</div><p>Cargando...</p></div>';
+  try {
+    const r = await fetch(url);
+    const citas = await r.json();
+    if (!citas.length) {
+      lista.innerHTML = '<div class="empty-state"><div class="big">📋</div><p>No hay citas registradas</p></div>';
+      return;
+    }
+    lista.innerHTML = citas.map(c => `
+      <div class="cita-card">
+        <div>
+          <div class="cita-nombre">${c.nombre}</div>
+          <div class="cita-meta">
+            <span>📅 ${fmtFecha(c.fecha)} · ${c.hora}</span>
+            <span>📱 ${c.telefono}</span>
+            ${c.email ? `<span>✉ ${c.email}</span>` : ''}
+          </div>
+          <div style="margin-top:8px;">
+            <span class="badge ${c.estado}">${c.servicio}</span>
+            <span class="badge ${c.estado}">${c.estado}</span>
+          </div>
+          ${c.notas ? `<p style="font-size:.78rem;color:var(--text-muted);margin-top:6px;">📝 ${c.notas}</p>` : ''}
+        </div>
+        <div>
+          ${c.estado !== 'cancelada' ? `<button class="btn-cancel-cita" onclick="confirmarCancelar(${c.id})">Cancelar</button>` : ''}
+        </div>
+      </div>`).join('');
+  } catch {
+    lista.innerHTML = '<div class="empty-state"><div class="big">⚠️</div><p>Error al cargar citas</p></div>';
+  }
+}
+
+async function adminLogout() {
+  await fetch('/api/admin/logout', { method: 'POST' });
+  window.location.href = '/';
+}
+
+function limpiarFiltroAdmin() {
+  const el = document.getElementById('adminFiltroFecha');
+  if (el) el.value = '';
+  cargarCitasAdmin();
+}
+
+if (document.getElementById('adminListaCitas')) cargarCitasAdmin();
+</script>
 {% endif %}
 
 <!-- ══ FOOTER ════════════════════════════════════════════════════════════════ -->
