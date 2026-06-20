@@ -8,9 +8,9 @@
   <style>
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap');
 @keyframes carritoEntrar {
-  0%   { opacity:0; transform:translate(-50%,-50%) scale(.85) translateY(20px); }
-  60%  { transform:translate(-50%,-50%) scale(1.03) translateY(-4px); }
-  100% { opacity:1; transform:translate(-50%,-50%) scale(1) translateY(0); }
+  0%   { opacity:0; transform:translateY(30px) scale(.92); }
+  60%  { transform:translateY(-6px) scale(1.02); }
+  100% { opacity:1; transform:translateY(0) scale(1); }
 }
 @keyframes overlayEntrar {
   from { opacity:0; }
@@ -19,13 +19,6 @@
 @keyframes itemEntrar {
   from { opacity:0; transform:translateX(-16px); }
   to   { opacity:1; transform:translateX(0); }
-}
-
-#carritoPanel.abriendo {
-  animation: carritoEntrar .45s cubic-bezier(.34,1.56,.64,1) both;
-}
-#carritoOverlay.abriendo {
-  animation: overlayEntrar .3s ease both;
 }
 .producto-3d-wrap {
   display: flex; flex-direction: column; align-items: center;
@@ -1481,7 +1474,7 @@ section + section {
 
 <!-- PANEL CARRITO FLOTANTE -->
 <div id="carritoOverlay" onclick="toggleCarritoPanel()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1001;backdrop-filter:blur(4px);"></div>
-<div id="carritoPanel" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1002;width:90%;max-width:400px;background:var(--dark-card);border:0.5px solid rgba(232,130,154,.25);border-radius:24px;padding:28px;box-shadow:0 40px 80px rgba(0,0,0,.6);">
+<div id="carritoPanel" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1002;width:90%;max-width:400px;background:var(--dark-card);border:0.5px solid rgba(232,130,154,.25);border-radius:24px;padding:28px;box-shadow:0 40px 80px rgba(0,0,0,.6);max-height:85vh;overflow-y:auto;">
   <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--rose) 40%,var(--gold) 60%,transparent);border-radius:24px 24px 0 0;"></div>
 
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
@@ -3107,32 +3100,28 @@ function toggleCarritoPanel() {
   const abierto = panel.style.display === 'block';
   if (abierto) {
     panel.style.opacity = '0';
-    panel.style.transform = 'translate(-50%,-50%) scale(.9)';
-    panel.style.transition = 'all .25s ease';
+    panel.style.transition = 'opacity .2s ease';
     overlay.style.opacity = '0';
-    overlay.style.transition = 'opacity .25s ease';
+    overlay.style.transition = 'opacity .2s ease';
     setTimeout(() => {
       panel.style.display = 'none';
       overlay.style.display = 'none';
       panel.style.opacity = '';
-      panel.style.transform = '';
       panel.style.transition = '';
       overlay.style.opacity = '';
       overlay.style.transition = '';
-    }, 250);
+    }, 200);
   } else {
     panel.style.display = 'block';
     overlay.style.display = 'block';
-    panel.classList.remove('abriendo');
-    overlay.classList.remove('abriendo');
+    panel.style.animation = 'none';
+    overlay.style.animation = 'none';
     requestAnimationFrame(() => {
-      panel.classList.add('abriendo');
-      overlay.classList.add('abriendo');
+      requestAnimationFrame(() => {
+        panel.style.animation = 'carritoEntrar .4s cubic-bezier(.34,1.56,.64,1) both';
+        overlay.style.animation = 'overlayEntrar .3s ease both';
+      });
     });
-    setTimeout(() => {
-      panel.classList.remove('abriendo');
-      overlay.classList.remove('abriendo');
-    }, 500);
   }
 }
 
