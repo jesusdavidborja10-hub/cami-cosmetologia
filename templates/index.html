@@ -1318,9 +1318,75 @@ section + section {
 @media (max-width: 768px) {
   #btnIgFlotante { bottom: 82px; right: 16px; width: 50px; height: 50px; }
 }
+@keyframes flotar3d {
+  0%,100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-8px) rotate(6deg); }
+}
+@keyframes pulsoActivo {
+  0%,100% { opacity: 1; }
+  50%      { opacity: .5; }
+}
+@keyframes rotarAnillo {
+  to { transform: rotate(360deg); }
+}
+@keyframes pulsoIcon {
+  0%,100% { transform: scale(1); }
+  50%      { transform: scale(1.08); }
+}
 </style>
 </head>
 <body>
+
+<!-- SPLASH SCREEN -->
+<div id="splashScreen" style="position:fixed;inset:0;background:#0D0508;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s ease;">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 50% 40%,rgba(232,130,154,.08),transparent 70%);"></div>
+
+  <!-- Partículas -->
+  <div style="position:absolute;width:3px;height:3px;background:rgba(232,130,154,.4);border-radius:50%;top:20%;left:15%;animation:flotar3d 3s ease-in-out infinite;"></div>
+  <div style="position:absolute;width:4px;height:4px;background:rgba(201,169,110,.3);border-radius:50%;top:70%;left:80%;animation:flotar3d 4s ease-in-out infinite .5s;"></div>
+  <div style="position:absolute;width:2px;height:2px;background:rgba(232,130,154,.3);border-radius:50%;top:40%;left:90%;animation:flotar3d 3.5s ease-in-out infinite 1s;"></div>
+  <div style="position:absolute;width:3px;height:3px;background:rgba(201,169,110,.2);border-radius:50%;top:80%;left:20%;animation:flotar3d 4.5s ease-in-out infinite .3s;"></div>
+
+  <!-- Anillos giratorios -->
+  <div style="position:absolute;width:130px;height:130px;border-radius:50%;border:1px solid transparent;border-top-color:rgba(232,130,154,.4);border-right-color:rgba(201,169,110,.2);animation:rotarAnillo 2s linear infinite;"></div>
+  <div style="position:absolute;width:100px;height:100px;border-radius:50%;border:0.5px solid transparent;border-bottom-color:rgba(232,130,154,.2);animation:rotarAnillo 1.5s linear infinite reverse;"></div>
+
+  <!-- Logo -->
+  <div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;animation:entrarCard .6s cubic-bezier(.34,1.56,.64,1) both;">
+    <div style="width:70px;height:70px;border-radius:50%;border:1.5px solid rgba(232,130,154,.5);background:rgba(232,130,154,.06);display:flex;align-items:center;justify-content:center;font-size:2rem;margin-bottom:20px;animation:pulsoIcon 2s ease-in-out infinite;">🌸</div>
+    <div style="font-family:var(--font-display);font-size:2rem;color:#fff;letter-spacing:3px;font-weight:400;">CAMI</div>
+    <div style="font-family:var(--font-display);font-size:1rem;font-style:italic;letter-spacing:2px;margin-top:4px;background:linear-gradient(90deg,var(--rose),var(--gold),var(--rose));background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:brilloNav 2.5s ease infinite;">Cosmetología</div>
+  </div>
+
+  <!-- Barra de carga -->
+  <div style="position:relative;z-index:2;width:160px;margin-top:32px;">
+    <div style="width:100%;height:2px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;">
+      <div id="splashBarra" style="height:100%;border-radius:2px;background:linear-gradient(90deg,var(--rose),var(--gold));width:0%;transition:width .1s linear;"></div>
+    </div>
+    <div style="text-align:center;font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:rgba(160,136,152,.5);margin-top:10px;">Cargando...</div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const barra = document.getElementById('splashBarra');
+  const splash = document.getElementById('splashScreen');
+  if (!barra || !splash) return;
+
+  let pct = 0;
+  const intervalo = setInterval(() => {
+    pct += 2;
+    barra.style.width = pct + '%';
+    if (pct >= 100) {
+      clearInterval(intervalo);
+      setTimeout(() => {
+        splash.style.opacity = '0';
+        setTimeout(() => { splash.style.display = 'none'; }, 500);
+      }, 200);
+    }
+  }, 30);
+})();
+</script>
 
 <!-- ══ TOAST ══ -->
 <div id="toast"></div>
@@ -3312,5 +3378,60 @@ if (document.getElementById('carritoItems')) actualizarCarrito();
     <path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.932-1.414A9.955 9.955 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18.5a8.5 8.5 0 01-4.342-1.19l-.31-.184-3.222.924.887-3.17-.202-.327A8.5 8.5 0 1112 20.5z"/>
   </svg>
 </a>
+
+<!-- POPUP CITAS -->
+<div id="popupOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1100;align-items:center;justify-content:center;padding:20px;">
+  <div id="popupCard" style="background:linear-gradient(145deg,#1E1118,#221520);border:0.5px solid rgba(232,130,154,.25);border-radius:24px;padding:36px 32px;max-width:360px;width:100%;position:relative;overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,.6);animation:entrarCard .6s cubic-bezier(.34,1.56,.64,1) both;">
+    <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#E8829A 30%,#C9A96E 70%,transparent);"></div>
+
+    <button onclick="cerrarPopup()" style="position:absolute;top:14px;right:16px;background:none;border:none;color:#A08898;font-size:1.1rem;cursor:pointer;padding:4px;line-height:1;transition:color .2s;">✕</button>
+
+    <div style="font-size:2.5rem;text-align:center;margin-bottom:16px;animation:flotar3d 3s ease-in-out infinite;">🌸</div>
+
+    <div style="font-family:var(--font-display);font-size:1.6rem;color:#fff;text-align:center;line-height:1.2;margin-bottom:8px;">¿Lista para realzar<br>tu <span style="color:var(--rose);font-style:italic;">belleza</span>?</div>
+    <p style="font-size:.82rem;color:var(--text-muted);text-align:center;line-height:1.7;margin-bottom:16px;font-weight:300;">Agenda tu cita en minutos y potencia tu confianza con Cami Cosmetología</p>
+
+    <div style="display:flex;justify-content:center;gap:3px;margin-bottom:4px;">
+      <span style="color:var(--gold);font-size:.9rem;">★★★★★</span>
+    </div>
+    <div style="text-align:center;font-size:.68rem;color:var(--text-muted);margin-bottom:16px;letter-spacing:.5px;">4.9 · Más de 500 clientas satisfechas</div>
+
+    <div style="display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(232,130,154,.08);border:0.5px solid rgba(232,130,154,.2);border-radius:30px;padding:8px 20px;margin-bottom:24px;animation:pulsoActivo 2.5s ease-in-out infinite;">
+      <span style="width:7px;height:7px;border-radius:50%;background:#81c784;display:inline-block;animation:pulsoActivo 1.5s ease-in-out infinite;"></span>
+      <span style="font-size:.72rem;letter-spacing:1px;color:var(--text-light);">Solo quedan <strong style="color:var(--rose);">3 citas disponibles</strong> esta semana</span>
+    </div>
+
+    <a href="/citas" onclick="cerrarPopup()" style="display:flex;align-items:center;justify-content:center;width:100%;padding:15px;border:none;border-radius:30px;background:linear-gradient(135deg,var(--rose3),var(--rose));color:#fff;font-family:var(--font-body);font-size:.78rem;font-weight:500;letter-spacing:2px;text-transform:uppercase;text-decoration:none;margin-bottom:10px;transition:all .3s;">
+      Apartar mi cita ahora
+    </a>
+    <button onclick="cerrarPopup()" style="width:100%;padding:10px;border:0.5px solid rgba(255,255,255,.08);border-radius:30px;background:transparent;color:var(--text-muted);font-size:.72rem;letter-spacing:1px;cursor:pointer;font-family:var(--font-body);">Ahora no, gracias</button>
+  </div>
+</div>
+
+<script>
+(function() {
+  const YA_VISTO = 'cami_popup_visto';
+  if (sessionStorage.getItem(YA_VISTO)) return;
+
+  setTimeout(() => {
+    const overlay = document.getElementById('popupOverlay');
+    if (!overlay) return;
+    overlay.style.display = 'flex';
+    sessionStorage.setItem(YA_VISTO, '1');
+  }, 30000);
+})();
+
+function cerrarPopup() {
+  const overlay = document.getElementById('popupOverlay');
+  if (!overlay) return;
+  overlay.style.opacity = '0';
+  overlay.style.transition = 'opacity .3s ease';
+  setTimeout(() => { overlay.style.display = 'none'; overlay.style.opacity = ''; overlay.style.transition = ''; }, 300);
+}
+
+document.getElementById('popupOverlay')?.addEventListener('click', function(e) {
+  if (e.target === this) cerrarPopup();
+});
+</script>
 </body>
 </html>
