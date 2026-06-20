@@ -25,16 +25,15 @@
 }
 @keyframes rotarAnillo { from{transform:rotate(0)} to{transform:rotate(360deg)} }
 
-.producto-3d {
-  animation: flotar3d 4s ease-in-out infinite;
-  filter: drop-shadow(0 30px 40px rgba(0,0,0,.6)) drop-shadow(0 0 30px rgba(201,169,110,.15));
-  position: relative; z-index: 2;
-  will-change: transform;
-  transform: translateZ(0);
+@keyframes balanceo {
+  0%,100% { transform: rotate(-3deg) scale(1); }
+  50%      { transform: rotate(3deg) scale(1.03); }
 }
-@keyframes flotar3d {
-  0%,100% { transform: translateY(0) rotate(-2deg) scale(1); }
-  50%      { transform: translateY(-18px) rotate(2deg) scale(1.04); }
+.producto-3d {
+  animation: balanceo 4s ease-in-out infinite;
+  filter: drop-shadow(0 20px 30px rgba(0,0,0,.6)) drop-shadow(0 0 20px rgba(201,169,110,.12));
+  position: relative; z-index: 2;
+  transform-origin: center bottom;
 }
 .producto-3d-img {
   width: 110px; height: auto; position: relative; z-index: 2;
