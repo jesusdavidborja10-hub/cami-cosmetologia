@@ -3070,13 +3070,18 @@ document.querySelectorAll('.carrusel-wrap, .hero-carrusel-wrap').forEach(el => {
   el.classList.add('anim-escalar'); observer.observe(el);
 });
 
-// ── Carrito ──────────────────────────────────────────────────────────────────
-let carrito = [];
+// ── Carrito con localStorage ──────────────────────────────────────────────────
+let carrito = JSON.parse(localStorage.getItem('cami_carrito') || '[]');
+
+function guardarCarrito() {
+  localStorage.setItem('cami_carrito', JSON.stringify(carrito));
+}
 
 function agregarCarrito(nombre, precio, img) {
   const existe = carrito.find(p => p.nombre === nombre);
   if (existe) { existe.cantidad++; }
   else { carrito.push({ nombre, precio, cantidad: 1, img }); }
+  guardarCarrito();
   actualizarCarrito();
   toast('✓ ' + nombre + ' agregado al carrito', 'success');
 }
@@ -3086,11 +3091,13 @@ function cambiarCantidad(nombre, dir) {
   if (!item) return;
   item.cantidad += dir;
   if (item.cantidad <= 0) carrito = carrito.filter(p => p.nombre !== nombre);
+  guardarCarrito();
   actualizarCarrito();
 }
 
 function vaciarCarrito() {
   carrito = [];
+  guardarCarrito();
   actualizarCarrito();
 }
 
@@ -3135,6 +3142,9 @@ function actualizarCarrito() {
   const texto = `Hola, quiero pedir los siguientes productos de Cami Cosmetología:\n\n${msg}\n\nTotal: ${formatPrecio(totalPrecio)}`;
   waBtn.href = `https://wa.me/573105165342?text=${encodeURIComponent(texto)}`;
 }
+
+// Cargar carrito al iniciar
+if (document.getElementById('carritoItems')) actualizarCarrito();
 </script>
 </body>
 </html>
