@@ -410,27 +410,18 @@ body::before {
   background: linear-gradient(90deg, transparent, rgba(255,255,255,.04), transparent);
   transition: left .6s;
 }
-@keyframes cardShake {
-  0%,100% { transform: translateY(-10px) scale(1.02) rotate(0deg); }
-  25%      { transform: translateY(-12px) scale(1.02) rotate(-1deg); }
-  75%      { transform: translateY(-12px) scale(1.02) rotate(1deg); }
-}
-@keyframes iconSpin {
-  0%   { transform: rotate(0deg) scale(1.3); }
-  50%  { transform: rotate(20deg) scale(1.5); }
-  100% { transform: rotate(0deg) scale(1.3); }
-}
-
 .srv-card:hover {
   border-color: rgba(232,130,154,.35);
-  animation: cardShake .4s ease infinite;
+  transform: translateY(-12px) scale(1.03);
   box-shadow: 0 24px 60px rgba(232,130,154,.2), 0 0 0 0.5px rgba(232,130,154,.2);
-}
-.srv-card:hover .srv-card-icon {
-  animation: iconSpin .6s ease infinite;
+  transition: all .4s cubic-bezier(.34,1.56,.64,1);
 }
 .srv-card:hover::before, .srv-card:hover::after { opacity: 1; }
 .srv-card:hover .srv-card-shine { left: 150%; }
+.srv-card:hover .srv-card-icon {
+  transform: rotate(-12deg) scale(1.3) translateY(-4px);
+  transition: transform .4s cubic-bezier(.34,1.56,.64,1);
+}
 
 .srv-card-icon {
   font-size: 2.4rem; margin-bottom: 24px; display: inline-block;
