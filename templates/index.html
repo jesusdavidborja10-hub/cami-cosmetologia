@@ -8,9 +8,8 @@
   <style>
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap');
 @keyframes carritoEntrar {
-  0%   { opacity:0; transform:translateY(30px) scale(.92); }
-  60%  { transform:translateY(-6px) scale(1.02); }
-  100% { opacity:1; transform:translateY(0) scale(1); }
+  from { opacity:0; transform:translateY(100%); }
+  to   { opacity:1; transform:translateY(0); }
 }
 @keyframes overlayEntrar {
   from { opacity:0; }
@@ -1474,7 +1473,7 @@ section + section {
 
 <!-- PANEL CARRITO FLOTANTE -->
 <div id="carritoOverlay" onclick="toggleCarritoPanel()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1001;backdrop-filter:blur(4px);"></div>
-<div id="carritoPanel" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1002;width:90%;max-width:400px;background:var(--dark-card);border:0.5px solid rgba(232,130,154,.25);border-radius:24px;padding:28px;box-shadow:0 40px 80px rgba(0,0,0,.6);max-height:85vh;overflow-y:auto;">
+<div id="carritoPanel" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:1002;background:var(--dark-card);border:0.5px solid rgba(232,130,154,.25);border-radius:24px 24px 0 0;padding:28px 24px 40px;box-shadow:0 -20px 60px rgba(0,0,0,.6);max-height:85vh;overflow-y:auto;">
   <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--rose) 40%,var(--gold) 60%,transparent);border-radius:24px 24px 0 0;"></div>
 
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
@@ -3099,18 +3098,18 @@ function toggleCarritoPanel() {
   if (!panel) return;
   const abierto = panel.style.display === 'block';
   if (abierto) {
-    panel.style.opacity = '0';
-    panel.style.transition = 'opacity .2s ease';
+    panel.style.transform = 'translateY(100%)';
+    panel.style.transition = 'transform .3s ease';
     overlay.style.opacity = '0';
-    overlay.style.transition = 'opacity .2s ease';
+    overlay.style.transition = 'opacity .3s ease';
     setTimeout(() => {
       panel.style.display = 'none';
       overlay.style.display = 'none';
-      panel.style.opacity = '';
+      panel.style.transform = '';
       panel.style.transition = '';
       overlay.style.opacity = '';
       overlay.style.transition = '';
-    }, 200);
+    }, 300);
   } else {
     panel.style.display = 'block';
     overlay.style.display = 'block';
