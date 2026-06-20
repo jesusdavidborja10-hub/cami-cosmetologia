@@ -134,9 +134,8 @@ def foto_cami():
 @app.route('/foto-crepelo')
 def foto_crepelo():
     from flask import send_file
-    import os
-    path = os.path.join(app.static_folder, 'crepelo.jpeg')
-    return send_file(path, mimetype='image/jpeg')
+    path = os.path.join(app.static_folder, 'crepelo2.png')
+    return send_file(path, mimetype='image/png')
 
 # ── Auth API ───────────────────────────────────────────────────────────────────
 @app.route('/api/registro', methods=['POST'])

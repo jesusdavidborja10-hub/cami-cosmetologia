@@ -9,35 +9,53 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap');
 .producto-3d-wrap {
   display: flex; flex-direction: column; align-items: center;
-  justify-content: center; padding: 40px 20px; position: relative;
-  height: 100%;
+  justify-content: center; padding: 20px; position: relative; height: 100%;
 }
+.anillo1 {
+  position: absolute; width: 280px; height: 280px; border-radius: 50%;
+  border: 1px solid rgba(232,130,154,.12);
+  animation: rotarAnillo 12s linear infinite;
+}
+.anillo2 {
+  position: absolute; width: 210px; height: 210px; border-radius: 50%;
+  border: 1px dashed rgba(201,169,110,.1);
+  animation: rotarAnillo 8s linear infinite reverse;
+}
+@keyframes rotarAnillo { from{transform:rotate(0)} to{transform:rotate(360deg)} }
+
 .producto-3d {
-  animation: girar3D 5s ease-in-out infinite;
-  filter: drop-shadow(0 30px 50px rgba(0,0,0,.6)) drop-shadow(0 0 20px rgba(201,169,110,.2));
-  transform-style: preserve-3d;
+  animation: flotar3d 4s ease-in-out infinite;
+  filter: drop-shadow(0 30px 40px rgba(0,0,0,.6)) drop-shadow(0 0 30px rgba(201,169,110,.15));
+  position: relative; z-index: 2;
 }
-.producto-3d-img {
-  width: 220px; height: auto;
-  border-radius: 8px;
+@keyframes flotar3d {
+  0%,100% { transform: translateY(0) rotate(-2deg) scale(1); }
+  50%      { transform: translateY(-18px) rotate(2deg) scale(1.04); }
 }
+.producto-3d-img { width: 210px; height: auto; }
 .producto-3d-sombra {
-  width: 120px; height: 20px;
+  width: 130px; height: 18px;
   background: radial-gradient(ellipse, rgba(0,0,0,.5), transparent 70%);
-  border-radius: 50%; margin-top: 8px;
-  animation: sombraGiro 6s linear infinite;
+  border-radius: 50%; margin-top: 6px;
+  animation: sombra3d 4s ease-in-out infinite;
+  position: relative; z-index: 1;
 }
-@keyframes girar3D {
-  0%   { transform: perspective(800px) rotateY(-25deg) rotateX(5deg) scale(1); }
-  25%  { transform: perspective(800px) rotateY(0deg) rotateX(0deg) scale(1.05); }
-  50%  { transform: perspective(800px) rotateY(25deg) rotateX(-5deg) scale(1); }
-  75%  { transform: perspective(800px) rotateY(0deg) rotateX(0deg) scale(1.05); }
-  100% { transform: perspective(800px) rotateY(-25deg) rotateX(5deg) scale(1); }
+@keyframes sombra3d {
+  0%,100% { transform: scaleX(1); opacity: .45; }
+  50%      { transform: scaleX(.6); opacity: .15; }
 }
-@keyframes sombraGiro {
-  0%,100% { transform: scaleX(1); opacity: .4; }
-  25%,75%  { transform: scaleX(.5); opacity: .15; }
-  50%      { transform: scaleX(1); opacity: .4; }
+.producto-3d-nombre {
+  font-family: var(--font-display); font-size: 1.2rem;
+  color: #fff; font-style: italic; text-align: center;
+  margin-top: 12px; position: relative; z-index: 2;
+  text-shadow: 0 0 20px rgba(232,130,154,.3);
+}
+.producto-3d-precio {
+  display: inline-flex; align-items: center;
+  background: rgba(201,169,110,.08); border: 0.5px solid rgba(201,169,110,.3);
+  border-radius: 30px; padding: 6px 18px; margin-top: 6px;
+  font-family: var(--font-display); font-size: 1rem; color: var(--gold);
+  position: relative; z-index: 2;
 }
 
 :root {
@@ -1275,14 +1293,14 @@ section + section {
             <div class="hero-carrusel-track" id="heroTrackMovil">
               <div class="hero-carrusel-slide">
                 <div class="producto-3d-wrap">
+                  <div class="anillo1"></div>
+                  <div class="anillo2"></div>
                   <div class="producto-3d">
-                    <img src="/foto-crepelo" class="producto-3d-img" alt="CrePelo">
+                    <img src="/foto-crepelo" class="producto-3d-img" alt="CrePelo Aceite Capilar">
                   </div>
                   <div class="producto-3d-sombra"></div>
-                </div>
-                <div class="hero-carrusel-info">
-                  <span class="hero-carrusel-servicio">CrePelo — Aceite Capilar</span>
-                  <span class="hero-carrusel-precio">Nutritivo y Fortalecedor · 30ml</span>
+                  <div class="producto-3d-nombre">CrePelo — Aceite Capilar</div>
+                  <div class="producto-3d-precio">Nutritivo y Fortalecedor · 30ml</div>
                 </div>
               </div>
             </div>
@@ -1299,14 +1317,14 @@ section + section {
           <div class="hero-carrusel-track" id="heroTrackDesktop">
             <div class="hero-carrusel-slide">
               <div class="producto-3d-wrap">
+                <div class="anillo1"></div>
+                <div class="anillo2"></div>
                 <div class="producto-3d">
-                  <img src="/foto-crepelo" class="producto-3d-img" alt="CrePelo">
+                  <img src="/foto-crepelo" class="producto-3d-img" alt="CrePelo Aceite Capilar">
                 </div>
                 <div class="producto-3d-sombra"></div>
-              </div>
-              <div class="hero-carrusel-info">
-                <span class="hero-carrusel-servicio">CrePelo — Aceite Capilar</span>
-                <span class="hero-carrusel-precio">Nutritivo y Fortalecedor · 30ml</span>
+                <div class="producto-3d-nombre">CrePelo — Aceite Capilar</div>
+                <div class="producto-3d-precio">Nutritivo y Fortalecedor · 30ml</div>
               </div>
             </div>
           </div>
