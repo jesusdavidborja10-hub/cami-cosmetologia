@@ -1494,13 +1494,34 @@ section + section {
       <span style="font-family:var(--font-display);font-size:1.4rem;color:var(--gold);" id="carritoTotalValor">$0</span>
     </div>
 
-    <div style="margin-bottom:16px;">
-      <label style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:8px;">Direccion de domicilio <span style="color:var(--rose);">*</span></label>
-      <input id="carritoDireccion" type="text" placeholder="Ej: Calle 51 # 30-15, Barrio La Maria, Cartagena"
-        style="width:100%;background:rgba(255,255,255,.03);border:0.5px solid rgba(232,130,154,.2);border-radius:12px;padding:12px 14px;color:var(--text-light);font-family:var(--font-body);font-size:.85rem;outline:none;transition:border-color .2s;box-sizing:border-box;"
-        onfocus="this.style.borderColor='rgba(232,130,154,.5)'"
-        onblur="this.style.borderColor='rgba(232,130,154,.2)'">
-      <div id="direccionError" style="display:none;font-size:.68rem;color:var(--rose);margin-top:6px;">Por favor ingresa tu dirección de domicilio</div>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:16px;">
+
+      <div>
+        <label style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:6px;">Dirección de domicilio <span style="color:var(--rose);">*</span></label>
+        <input id="carritoDireccion" type="text" placeholder="Ej: Calle 51 # 30-15, Barrio La Maria"
+          style="width:100%;background:rgba(255,255,255,.03);border:0.5px solid rgba(232,130,154,.2);border-radius:12px;padding:12px 14px;color:var(--text-light);font-family:var(--font-body);font-size:.85rem;outline:none;transition:border-color .2s;box-sizing:border-box;"
+          onfocus="this.style.borderColor='rgba(232,130,154,.5)'"
+          onblur="this.style.borderColor='rgba(232,130,154,.2)'">
+        <div id="direccionError" style="display:none;font-size:.68rem;color:var(--rose);margin-top:4px;">Por favor ingresa tu dirección</div>
+      </div>
+
+      <div>
+        <label style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:6px;">Teléfono / WhatsApp <span style="color:var(--rose);">*</span></label>
+        <input id="carritoTelefono" type="tel" placeholder="Ej: +57 300 000 0000"
+          style="width:100%;background:rgba(255,255,255,.03);border:0.5px solid rgba(232,130,154,.2);border-radius:12px;padding:12px 14px;color:var(--text-light);font-family:var(--font-body);font-size:.85rem;outline:none;transition:border-color .2s;box-sizing:border-box;"
+          onfocus="this.style.borderColor='rgba(232,130,154,.5)'"
+          onblur="this.style.borderColor='rgba(232,130,154,.2)'">
+        <div id="telefonoError" style="display:none;font-size:.68rem;color:var(--rose);margin-top:4px;">Por favor ingresa tu teléfono</div>
+      </div>
+
+      <div>
+        <label style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:6px;">Indicaciones adicionales <span style="color:var(--text-muted);font-size:.58rem;">(opcional)</span></label>
+        <textarea id="carritoIndicaciones" placeholder="Ej: Apto 302, portería azul, llamar al llegar..."
+          style="width:100%;background:rgba(255,255,255,.03);border:0.5px solid rgba(232,130,154,.15);border-radius:12px;padding:12px 14px;color:var(--text-light);font-family:var(--font-body);font-size:.85rem;outline:none;transition:border-color .2s;box-sizing:border-box;resize:none;min-height:70px;"
+          onfocus="this.style.borderColor='rgba(232,130,154,.4)'"
+          onblur="this.style.borderColor='rgba(232,130,154,.15)'"></textarea>
+      </div>
+
     </div>
 
     <button onclick="pedirPorWhatsapp()" style="display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:14px;border-radius:30px;border:none;background:#25D366;color:#fff;font-family:var(--font-body);font-size:.75rem;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all .3s;margin-bottom:10px;">
@@ -3197,17 +3218,43 @@ function actualizarCarrito() {
 
 function pedirPorWhatsapp() {
   const direccion = document.getElementById('carritoDireccion')?.value?.trim();
-  const errorEl = document.getElementById('direccionError');
+  const telefono = document.getElementById('carritoTelefono')?.value?.trim();
+  const indicaciones = document.getElementById('carritoIndicaciones')?.value?.trim();
+  const dirError = document.getElementById('direccionError');
+  const telError = document.getElementById('telefonoError');
+
+  let valido = true;
+
   if (!direccion) {
-    errorEl.style.display = 'block';
+    dirError.style.display = 'block';
     document.getElementById('carritoDireccion').style.borderColor = 'rgba(232,130,154,.6)';
-    document.getElementById('carritoDireccion').focus();
-    return;
+    valido = false;
+  } else {
+    dirError.style.display = 'none';
+    document.getElementById('carritoDireccion').style.borderColor = 'rgba(232,130,154,.2)';
   }
-  errorEl.style.display = 'none';
+
+  if (!telefono) {
+    telError.style.display = 'block';
+    document.getElementById('carritoTelefono').style.borderColor = 'rgba(232,130,154,.6)';
+    valido = false;
+  } else {
+    telError.style.display = 'none';
+    document.getElementById('carritoTelefono').style.borderColor = 'rgba(232,130,154,.2)';
+  }
+
+  if (!valido) return;
+
   const totalPrecio = carrito.reduce((a, p) => a + p.precio * p.cantidad, 0);
   const msg = carrito.map(p => `• ${p.nombre} x${p.cantidad} — ${formatPrecio(p.precio * p.cantidad)}`).join('\n');
-  const texto = `Hola, quiero pedir los siguientes productos de Cami Cosmetología:\n\n${msg}\n\nTotal: ${formatPrecio(totalPrecio)}\n\nDirección de domicilio: ${direccion}`;
+
+  let texto = `Hola, quiero hacer un pedido de Cami Cosmetología:\n\n`;
+  texto += `*Productos:*\n${msg}\n\n`;
+  texto += `*Total:* ${formatPrecio(totalPrecio)}\n\n`;
+  texto += `*Dirección:* ${direccion}\n`;
+  texto += `*Teléfono:* ${telefono}`;
+  if (indicaciones) texto += `\n*Indicaciones:* ${indicaciones}`;
+
   window.open(`https://wa.me/573105165342?text=${encodeURIComponent(texto)}`, '_blank');
 }
 
