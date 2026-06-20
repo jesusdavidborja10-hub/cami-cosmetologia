@@ -1320,6 +1320,7 @@ section + section {
       <li><a href="/#sobre-mi" class="{{ 'activo' if seccion=='sobre-mi' else '' }}">Sobre mí</a></li>
       <!-- Bloque usuario solo visible en móvil dentro del menú -->
       <li class="nav-user-mobile">
+        <li><a href="/#productos" style="display:block;padding:10px 14px;font-size:.88rem;color:var(--text-muted);text-decoration:none;letter-spacing:1px;">Productos</a></li>
         {% if usuario %}
           <span class="nav-user-name">{{ usuario.nombre }}</span>
           <button class="btn-logout" onclick="doLogout()">Cerrar sesión</button>
