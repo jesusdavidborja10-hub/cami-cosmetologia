@@ -8,8 +8,8 @@
   <style>
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap');
 @keyframes carritoEntrar {
-  from { opacity:0; transform:translateY(100%); }
-  to   { opacity:1; transform:translateY(0); }
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
 }
 @keyframes overlayEntrar {
   from { opacity:0; }
@@ -3117,7 +3117,7 @@ function toggleCarritoPanel() {
     overlay.style.animation = 'none';
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        panel.style.animation = 'carritoEntrar .4s cubic-bezier(.34,1.56,.64,1) both';
+        panel.style.animation = 'carritoEntrar .35s ease both';
         overlay.style.animation = 'overlayEntrar .3s ease both';
       });
     });
