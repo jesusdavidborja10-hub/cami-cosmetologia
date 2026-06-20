@@ -7,6 +7,26 @@
   <title>Cami Cosmetología — Realza tu belleza</title>
   <style>
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap');
+@keyframes carritoEntrar {
+  0%   { opacity:0; transform:translate(-50%,-50%) scale(.85) translateY(20px); }
+  60%  { transform:translate(-50%,-50%) scale(1.03) translateY(-4px); }
+  100% { opacity:1; transform:translate(-50%,-50%) scale(1) translateY(0); }
+}
+@keyframes overlayEntrar {
+  from { opacity:0; }
+  to   { opacity:1; }
+}
+@keyframes itemEntrar {
+  from { opacity:0; transform:translateX(-16px); }
+  to   { opacity:1; transform:translateX(0); }
+}
+
+#carritoPanel.abriendo {
+  animation: carritoEntrar .45s cubic-bezier(.34,1.56,.64,1) both;
+}
+#carritoOverlay.abriendo {
+  animation: overlayEntrar .3s ease both;
+}
 .producto-3d-wrap {
   display: flex; flex-direction: column; align-items: center;
   justify-content: flex-start; padding: 20px;
@@ -3085,8 +3105,35 @@ function toggleCarritoPanel() {
   const overlay = document.getElementById('carritoOverlay');
   if (!panel) return;
   const abierto = panel.style.display === 'block';
-  panel.style.display = abierto ? 'none' : 'block';
-  overlay.style.display = abierto ? 'none' : 'block';
+  if (abierto) {
+    panel.style.opacity = '0';
+    panel.style.transform = 'translate(-50%,-50%) scale(.9)';
+    panel.style.transition = 'all .25s ease';
+    overlay.style.opacity = '0';
+    overlay.style.transition = 'opacity .25s ease';
+    setTimeout(() => {
+      panel.style.display = 'none';
+      overlay.style.display = 'none';
+      panel.style.opacity = '';
+      panel.style.transform = '';
+      panel.style.transition = '';
+      overlay.style.opacity = '';
+      overlay.style.transition = '';
+    }, 250);
+  } else {
+    panel.style.display = 'block';
+    overlay.style.display = 'block';
+    panel.classList.remove('abriendo');
+    overlay.classList.remove('abriendo');
+    requestAnimationFrame(() => {
+      panel.classList.add('abriendo');
+      overlay.classList.add('abriendo');
+    });
+    setTimeout(() => {
+      panel.classList.remove('abriendo');
+      overlay.classList.remove('abriendo');
+    }, 500);
+  }
 }
 
 function agregarCarrito(nombre, precio, img) {
@@ -3132,8 +3179,8 @@ function actualizarCarrito() {
     return;
   }
 
-  items.innerHTML = carrito.map(p => `
-    <div style="display:flex;align-items:center;gap:12px;padding:12px;background:rgba(255,255,255,.02);border:0.5px solid rgba(232,130,154,.1);border-radius:14px;margin-bottom:10px;">
+  items.innerHTML = carrito.map((p, i) => `
+    <div style="display:flex;align-items:center;gap:12px;padding:12px;background:rgba(255,255,255,.02);border:0.5px solid rgba(232,130,154,.1);border-radius:14px;margin-bottom:10px;animation:itemEntrar .4s ease ${i * 0.08}s both;">
       <img src="${p.img}" style="width:44px;height:auto;border-radius:8px;flex-shrink:0;">
       <div style="flex:1;">
         <div style="font-size:.82rem;color:#fff;margin-bottom:3px;">${p.nombre}</div>
