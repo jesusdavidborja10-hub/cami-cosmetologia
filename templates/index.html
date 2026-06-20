@@ -1373,6 +1373,12 @@ section + section {
   const splash = document.getElementById('splashScreen');
   if (!barra || !splash) return;
 
+  const seccion = '{{ seccion }}';
+  if (seccion === 'citas' || seccion === 'crepelo' || seccion === 'admin-login' || seccion === 'admin-citas' || seccion === 'login' || seccion === 'registro' || seccion === 'tarjeta') {
+    splash.style.display = 'none';
+    return;
+  }
+
   let pct = 0;
   const intervalo = setInterval(() => {
     pct += 2;
