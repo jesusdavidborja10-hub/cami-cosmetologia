@@ -50,17 +50,21 @@
   50%      { transform: scaleX(.6); opacity: .15; }
 }
 .producto-3d-nombre {
-  font-family: var(--font-display); font-size: 1.2rem;
+  font-family: var(--font-display); font-size: 1.4rem;
   color: #fff; font-style: italic; text-align: center;
-  margin-top: 12px; position: relative; z-index: 2;
+  margin-top: 14px; position: relative; z-index: 2;
   text-shadow: 0 0 20px rgba(232,130,154,.3);
 }
 .producto-3d-precio {
   display: inline-flex; align-items: center;
   background: rgba(201,169,110,.08); border: 0.5px solid rgba(201,169,110,.3);
-  border-radius: 30px; padding: 6px 18px; margin-top: 6px;
-  font-family: var(--font-display); font-size: 1rem; color: var(--gold);
-  position: relative; z-index: 2;
+  border-radius: 30px; padding: 8px 22px; margin-top: 8px;
+  font-family: var(--font-display); font-size: 1.3rem; color: var(--gold);
+  position: relative; z-index: 2; letter-spacing: .5px;
+}
+@media (max-width: 768px) {
+  .producto-3d-nombre { font-size: 1rem; margin-top: 10px; }
+  .producto-3d-precio { font-size: 1rem; padding: 6px 16px; }
 }
 
 :root {
