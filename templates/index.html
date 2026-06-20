@@ -1277,6 +1277,7 @@ section + section {
 @keyframes salirCard {
   to { opacity: 0; transform: translateY(-20px) scale(.97); }
 }
+#carritoPanel { animation: entrarCard .3s cubic-bezier(.34,1.56,.64,1); }
 </style>
 </head>
 <body>
@@ -1300,6 +1301,7 @@ section + section {
     <ul class="nav-links" id="navLinks">
       <li><a href="/" class="{{ 'activo' if seccion=='inicio' else '' }}">Inicio</a></li>
       <li><a href="/citas" class="{{ 'activo' if seccion=='citas' else '' }}">Citas</a></li>
+      <li><a href="/#productos" class="">Productos</a></li>
       <li><a href="/#contacto" class="{{ 'activo' if seccion=='contacto' else '' }}">Contacto</a></li>
       <li><a href="/#ubicacion" class="{{ 'activo' if seccion=='ubicacion' else '' }}">Ubicación</a></li>
       <li><a href="/#resenas" class="{{ 'activo' if seccion=='resenas' else '' }}">Reseñas</a></li>
@@ -1430,61 +1432,62 @@ section + section {
       <p class="section-desc">Cuida tu cabello con lo mejor de la naturaleza</p>
     </div>
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start;margin-top:48px;">
-
-      <!-- LISTA DE PRODUCTOS -->
-      <div style="display:flex;flex-direction:column;gap:16px;">
-        <div style="background:linear-gradient(145deg,#1E1118,#221520);border:0.5px solid rgba(232,130,154,.15);border-radius:20px;padding:20px;position:relative;overflow:hidden;display:flex;align-items:center;gap:18px;transition:all .3s;">
-          <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#E8829A,#C9A96E,transparent);"></div>
-          <img src="/foto-crepelo" style="width:80px;height:auto;flex-shrink:0;filter:drop-shadow(0 8px 16px rgba(0,0,0,.5));" alt="CrePelo">
-          <div style="flex:1;">
-            <div style="font-family:var(--font-display);font-size:1.2rem;color:#fff;font-style:italic;">CrePelo</div>
-            <div style="font-size:.65rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin:3px 0 8px;">Aceite Capilar · 30ml</div>
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
-              <span style="font-family:var(--font-display);font-size:1.1rem;color:var(--gold);">$20.000</span>
-              <button onclick="agregarCarrito('CrePelo — Aceite Capilar', 20000, '/foto-crepelo')" style="padding:8px 16px;border-radius:20px;border:none;background:linear-gradient(135deg,var(--rose3),var(--rose));color:#fff;font-size:.65rem;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;font-family:var(--font-body);transition:all .3s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(232,130,154,.4)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
-                + Agregar
-              </button>
-            </div>
+    <div style="max-width:400px;margin:40px auto 0;">
+      <div style="background:linear-gradient(145deg,#1E1118,#221520);border:0.5px solid rgba(232,130,154,.15);border-radius:20px;padding:20px;position:relative;overflow:hidden;display:flex;align-items:center;gap:18px;">
+        <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#E8829A,#C9A96E,transparent);"></div>
+        <img src="/foto-crepelo" style="width:70px;height:auto;flex-shrink:0;filter:drop-shadow(0 8px 16px rgba(0,0,0,.5));" alt="CrePelo">
+        <div style="flex:1;">
+          <div style="font-family:var(--font-display);font-size:1.2rem;color:#fff;font-style:italic;">CrePelo</div>
+          <div style="font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin:3px 0 10px;">Aceite Capilar · 30ml</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+            <span style="font-family:var(--font-display);font-size:1.1rem;color:var(--gold);">$20.000</span>
+            <button onclick="agregarCarrito('CrePelo — Aceite Capilar', 20000, '/foto-crepelo')" style="padding:8px 16px;border-radius:20px;border:none;background:linear-gradient(135deg,var(--rose3),var(--rose));color:#fff;font-size:.65rem;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;font-family:var(--font-body);transition:all .3s;">
+              + Agregar
+            </button>
           </div>
         </div>
       </div>
 
-      <!-- CARRITO -->
-      <div style="background:var(--dark-card);border:0.5px solid rgba(232,130,154,.2);border-radius:24px;padding:28px;position:relative;overflow:hidden;">
-        <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--rose) 40%,var(--gold) 60%,transparent);"></div>
-
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
-          <div style="font-family:var(--font-display);font-size:1.3rem;color:#fff;font-style:italic;">Tu carrito</div>
-          <div style="background:rgba(232,130,154,.1);border:0.5px solid rgba(232,130,154,.2);border-radius:20px;padding:4px 12px;font-size:.68rem;color:var(--rose);" id="carritoContador">0 items</div>
-        </div>
-
-        <div id="carritoItems">
-          <div style="text-align:center;padding:32px 0;color:var(--text-muted);font-size:.85rem;">
-            <div style="font-size:2rem;margin-bottom:10px;">🛒</div>
-            Tu carrito está vacío
-          </div>
-        </div>
-
-        <div id="carritoResumen" style="display:none;border-top:0.5px solid rgba(255,255,255,.06);margin-top:16px;padding-top:16px;">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-            <span style="font-size:.75rem;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);">Total</span>
-            <span style="font-family:var(--font-display);font-size:1.4rem;color:var(--gold);" id="carritoTotalValor">$0</span>
-          </div>
-          <a id="carritoWaBtn" href="#" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:14px;border-radius:30px;border:none;background:#25D366;color:#fff;font-family:var(--font-body);font-size:.75rem;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;transition:all .3s;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-              <circle cx="12" cy="12" r="12" fill="white" fill-opacity=".2"/>
-              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" fill="white"/>
-            </svg>
-            Pedir por WhatsApp
-          </a>
-          <button onclick="vaciarCarrito()" style="width:100%;margin-top:10px;padding:10px;border-radius:30px;border:0.5px solid rgba(255,255,255,.08);background:transparent;color:var(--text-muted);font-size:.72rem;letter-spacing:1px;cursor:pointer;transition:all .2s;font-family:var(--font-body);">Vaciar carrito</button>
-        </div>
+      <div style="text-align:center;margin-top:16px;">
+        <button onclick="toggleCarritoPanel()" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:30px;border:0.5px solid rgba(232,130,154,.3);background:rgba(232,130,154,.06);color:var(--rose);font-size:.72rem;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:var(--font-body);transition:all .3s;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+          Ver carrito
+          <span id="carritoContador" style="background:var(--rose);color:#fff;border-radius:20px;padding:2px 8px;font-size:.6rem;">0</span>
+        </button>
       </div>
-
     </div>
   </div>
 </section>
+
+<!-- PANEL CARRITO FLOTANTE -->
+<div id="carritoOverlay" onclick="toggleCarritoPanel()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1001;backdrop-filter:blur(4px);"></div>
+<div id="carritoPanel" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1002;width:90%;max-width:400px;background:var(--dark-card);border:0.5px solid rgba(232,130,154,.25);border-radius:24px;padding:28px;box-shadow:0 40px 80px rgba(0,0,0,.6);">
+  <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--rose) 40%,var(--gold) 60%,transparent);border-radius:24px 24px 0 0;"></div>
+
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+    <div style="font-family:var(--font-display);font-size:1.3rem;color:#fff;font-style:italic;">Tu carrito</div>
+    <button onclick="toggleCarritoPanel()" style="background:none;border:none;color:var(--text-muted);font-size:1.2rem;cursor:pointer;padding:4px;line-height:1;">✕</button>
+  </div>
+
+  <div id="carritoItems">
+    <div style="text-align:center;padding:32px 0;color:var(--text-muted);font-size:.85rem;">
+      <div style="font-size:2rem;margin-bottom:10px;">🛒</div>
+      Tu carrito está vacío
+    </div>
+  </div>
+
+  <div id="carritoResumen" style="display:none;border-top:0.5px solid rgba(255,255,255,.06);margin-top:16px;padding-top:16px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <span style="font-size:.75rem;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);">Total</span>
+      <span style="font-family:var(--font-display);font-size:1.4rem;color:var(--gold);" id="carritoTotalValor">$0</span>
+    </div>
+    <a id="carritoWaBtn" href="#" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:14px;border-radius:30px;background:#25D366;color:#fff;font-family:var(--font-body);font-size:.75rem;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;margin-bottom:10px;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="12" fill="white" fill-opacity=".2"/><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" fill="white"/></svg>
+      Pedir por WhatsApp
+    </a>
+    <button onclick="vaciarCarrito()" style="width:100%;padding:10px;border-radius:30px;border:0.5px solid rgba(255,255,255,.08);background:transparent;color:var(--text-muted);font-size:.72rem;letter-spacing:1px;cursor:pointer;font-family:var(--font-body);">Vaciar carrito</button>
+  </div>
+</div>
 
 <!-- CONTACTO -->
 <section id="contacto" style="padding:80px 0;position:relative;z-index:1;">
@@ -3077,6 +3080,15 @@ function guardarCarrito() {
   localStorage.setItem('cami_carrito', JSON.stringify(carrito));
 }
 
+function toggleCarritoPanel() {
+  const panel = document.getElementById('carritoPanel');
+  const overlay = document.getElementById('carritoOverlay');
+  if (!panel) return;
+  const abierto = panel.style.display === 'block';
+  panel.style.display = abierto ? 'none' : 'block';
+  overlay.style.display = abierto ? 'none' : 'block';
+}
+
 function agregarCarrito(nombre, precio, img) {
   const existe = carrito.find(p => p.nombre === nombre);
   if (existe) { existe.cantidad++; }
@@ -3112,38 +3124,37 @@ function actualizarCarrito() {
   const totalItems = carrito.reduce((a, p) => a + p.cantidad, 0);
   const totalPrecio = carrito.reduce((a, p) => a + p.precio * p.cantidad, 0);
 
-  contador.textContent = totalItems + (totalItems === 1 ? ' item' : ' items');
+  if (contador) contador.textContent = totalItems;
 
   if (carrito.length === 0) {
     items.innerHTML = '<div style="text-align:center;padding:32px 0;color:var(--text-muted);font-size:.85rem;"><div style="font-size:2rem;margin-bottom:10px;">🛒</div>Tu carrito está vacío</div>';
-    resumen.style.display = 'none';
+    if (resumen) resumen.style.display = 'none';
     return;
   }
 
   items.innerHTML = carrito.map(p => `
     <div style="display:flex;align-items:center;gap:12px;padding:12px;background:rgba(255,255,255,.02);border:0.5px solid rgba(232,130,154,.1);border-radius:14px;margin-bottom:10px;">
-      <img src="${p.img}" style="width:44px;height:auto;border-radius:8px;flex-shrink:0;" alt="${p.nombre}">
+      <img src="${p.img}" style="width:44px;height:auto;border-radius:8px;flex-shrink:0;">
       <div style="flex:1;">
         <div style="font-size:.82rem;color:#fff;margin-bottom:3px;">${p.nombre}</div>
         <div style="font-size:.75rem;color:var(--gold);">${formatPrecio(p.precio)}</div>
       </div>
       <div style="display:flex;align-items:center;gap:8px;">
-        <button onclick="cambiarCantidad('${p.nombre}', -1)" style="width:26px;height:26px;border-radius:50%;border:0.5px solid rgba(232,130,154,.3);background:transparent;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.9rem;">−</button>
+        <button onclick="cambiarCantidad('${p.nombre}',-1)" style="width:26px;height:26px;border-radius:50%;border:0.5px solid rgba(232,130,154,.3);background:transparent;color:#fff;cursor:pointer;">−</button>
         <span style="font-size:.82rem;color:#fff;min-width:16px;text-align:center;">${p.cantidad}</span>
-        <button onclick="cambiarCantidad('${p.nombre}', 1)" style="width:26px;height:26px;border-radius:50%;border:0.5px solid rgba(232,130,154,.3);background:transparent;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.9rem;">+</button>
+        <button onclick="cambiarCantidad('${p.nombre}',1)" style="width:26px;height:26px;border-radius:50%;border:0.5px solid rgba(232,130,154,.3);background:transparent;color:#fff;cursor:pointer;">+</button>
       </div>
     </div>
   `).join('');
 
-  resumen.style.display = 'block';
-  totalEl.textContent = formatPrecio(totalPrecio);
+  if (resumen) resumen.style.display = 'block';
+  if (totalEl) totalEl.textContent = formatPrecio(totalPrecio);
 
   const msg = carrito.map(p => `• ${p.nombre} x${p.cantidad} — ${formatPrecio(p.precio * p.cantidad)}`).join('\n');
   const texto = `Hola, quiero pedir los siguientes productos de Cami Cosmetología:\n\n${msg}\n\nTotal: ${formatPrecio(totalPrecio)}`;
-  waBtn.href = `https://wa.me/573105165342?text=${encodeURIComponent(texto)}`;
+  if (waBtn) waBtn.href = `https://wa.me/573105165342?text=${encodeURIComponent(texto)}`;
 }
 
-// Cargar carrito al iniciar
 if (document.getElementById('carritoItems')) actualizarCarrito();
 </script>
 </body>
