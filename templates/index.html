@@ -7,6 +7,34 @@
   <title>Cami Cosmetología — Realza tu belleza</title>
   <style>
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap');
+.producto-3d-wrap {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; padding: 40px 20px; position: relative;
+  height: 100%;
+}
+.producto-3d {
+  animation: girar3D 6s linear infinite;
+  filter: drop-shadow(0 20px 40px rgba(0,0,0,.5));
+}
+.producto-3d-img { width: 200px; height: auto; }
+.producto-3d-sombra {
+  width: 120px; height: 20px;
+  background: radial-gradient(ellipse, rgba(0,0,0,.5), transparent 70%);
+  border-radius: 50%; margin-top: 8px;
+  animation: sombraGiro 6s linear infinite;
+}
+@keyframes girar3D {
+  0%   { transform: perspective(600px) rotateY(0deg) scale(1); }
+  25%  { transform: perspective(600px) rotateY(90deg) scale(.85); }
+  50%  { transform: perspective(600px) rotateY(180deg) scale(1); }
+  75%  { transform: perspective(600px) rotateY(270deg) scale(.85); }
+  100% { transform: perspective(600px) rotateY(360deg) scale(1); }
+}
+@keyframes sombraGiro {
+  0%,100% { transform: scaleX(1); opacity: .4; }
+  25%,75%  { transform: scaleX(.5); opacity: .15; }
+  50%      { transform: scaleX(1); opacity: .4; }
+}
 
 :root {
   --rose:         #E8829A;
@@ -1242,8 +1270,16 @@ section + section {
           <div class="hero-carrusel-wrap">
             <div class="hero-carrusel-track" id="heroTrackMovil">
               <div class="hero-carrusel-slide">
-                <div class="hero-carrusel-placeholder"><span style="font-size:2rem">💄</span><span>Foto trabajo 1</span></div>
-                <div class="hero-carrusel-info"><span class="hero-carrusel-servicio">Maquillaje de noche</span><span class="hero-carrusel-precio">Desde $60.000</span></div>
+                <div class="producto-3d-wrap">
+                  <div class="producto-3d">
+                    <img src="/foto-crepelo" class="producto-3d-img" alt="CrePelo">
+                  </div>
+                  <div class="producto-3d-sombra"></div>
+                </div>
+                <div class="hero-carrusel-info">
+                  <span class="hero-carrusel-servicio">CrePelo — Aceite Capilar</span>
+                  <span class="hero-carrusel-precio">Nutritivo y Fortalecedor · 30ml</span>
+                </div>
               </div>
               <div class="hero-carrusel-slide">
                 <div class="hero-carrusel-placeholder"><span style="font-size:2rem">✨</span><span>Foto trabajo 2</span></div>
@@ -1270,8 +1306,16 @@ section + section {
         <div class="hero-carrusel-wrap">
           <div class="hero-carrusel-track" id="heroTrackDesktop">
             <div class="hero-carrusel-slide">
-              <div class="hero-carrusel-placeholder"><span style="font-size:2.5rem">💄</span><span>Foto trabajo 1</span></div>
-              <div class="hero-carrusel-info"><span class="hero-carrusel-servicio">Maquillaje de noche</span><span class="hero-carrusel-precio">Desde $60.000</span></div>
+              <div class="producto-3d-wrap">
+                <div class="producto-3d">
+                  <img src="/foto-crepelo" class="producto-3d-img" alt="CrePelo">
+                </div>
+                <div class="producto-3d-sombra"></div>
+              </div>
+              <div class="hero-carrusel-info">
+                <span class="hero-carrusel-servicio">CrePelo — Aceite Capilar</span>
+                <span class="hero-carrusel-precio">Nutritivo y Fortalecedor · 30ml</span>
+              </div>
             </div>
             <div class="hero-carrusel-slide">
               <div class="hero-carrusel-placeholder"><span style="font-size:2.5rem">✨</span><span>Foto trabajo 2</span></div>
