@@ -9,9 +9,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap');
 .producto-3d-wrap {
   display: flex; flex-direction: column; align-items: center;
-  justify-content: center; padding: 60px 20px 20px;
-  position: relative; min-height: 520px; width: 100%;
-  overflow: visible;
+  justify-content: center; padding: 60px 20px 16px;
+  position: relative; min-height: 480px; width: 100%;
+  background: none;
 }
 .anillo1 {
   position: absolute; width: 300px; height: 300px; border-radius: 50%;
@@ -224,10 +224,13 @@ body::before {
 }
 .hero-carrusel-wrap {
   position: relative; overflow: visible;
-  border-radius: 24px; border: 0.5px solid var(--dark-border);
+  border-radius: 0; border: none; background: none;
 }
 .hero-carrusel-track { display: flex; transition: transform .5s cubic-bezier(.4,0,.2,1); }
-.hero-carrusel-slide { min-width: 100%; position: relative; }
+.hero-carrusel-slide {
+  min-width: 100%; position: relative; overflow: visible;
+  background: none;
+}
 .hero-carrusel-slide img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 24px; display: block; }
 .hero-carrusel-placeholder {
   width: 100%; aspect-ratio: 4/3;
@@ -236,10 +239,7 @@ body::before {
   gap: 10px; color: var(--text-muted); font-size: .85rem;
 }
 .hero-carrusel-info {
-  position: absolute; bottom: 0; left: 0; right: 0;
-  padding: 50px 20px 18px;
-  background: linear-gradient(to top, rgba(0,0,0,.75), transparent);
-  border-radius: 0 0 24px 24px;
+  text-align: center; padding: 16px 20px 0;
 }
 .hero-carrusel-servicio {
   font-family: var(--font-display); font-size: 1.1rem; color: #fff; font-style: italic; display: block;
