@@ -13,10 +13,14 @@
   height: 100%;
 }
 .producto-3d {
-  animation: girar3D 6s linear infinite;
-  filter: drop-shadow(0 20px 40px rgba(0,0,0,.5));
+  animation: girar3D 5s ease-in-out infinite;
+  filter: drop-shadow(0 30px 50px rgba(0,0,0,.6)) drop-shadow(0 0 20px rgba(201,169,110,.2));
+  transform-style: preserve-3d;
 }
-.producto-3d-img { width: 200px; height: auto; }
+.producto-3d-img {
+  width: 220px; height: auto;
+  border-radius: 8px;
+}
 .producto-3d-sombra {
   width: 120px; height: 20px;
   background: radial-gradient(ellipse, rgba(0,0,0,.5), transparent 70%);
@@ -24,11 +28,11 @@
   animation: sombraGiro 6s linear infinite;
 }
 @keyframes girar3D {
-  0%   { transform: perspective(600px) rotateY(0deg) scale(1); }
-  25%  { transform: perspective(600px) rotateY(90deg) scale(.85); }
-  50%  { transform: perspective(600px) rotateY(180deg) scale(1); }
-  75%  { transform: perspective(600px) rotateY(270deg) scale(.85); }
-  100% { transform: perspective(600px) rotateY(360deg) scale(1); }
+  0%   { transform: perspective(800px) rotateY(-25deg) rotateX(5deg) scale(1); }
+  25%  { transform: perspective(800px) rotateY(0deg) rotateX(0deg) scale(1.05); }
+  50%  { transform: perspective(800px) rotateY(25deg) rotateX(-5deg) scale(1); }
+  75%  { transform: perspective(800px) rotateY(0deg) rotateX(0deg) scale(1.05); }
+  100% { transform: perspective(800px) rotateY(-25deg) rotateX(5deg) scale(1); }
 }
 @keyframes sombraGiro {
   0%,100% { transform: scaleX(1); opacity: .4; }
@@ -1281,18 +1285,6 @@ section + section {
                   <span class="hero-carrusel-precio">Nutritivo y Fortalecedor · 30ml</span>
                 </div>
               </div>
-              <div class="hero-carrusel-slide">
-                <div class="hero-carrusel-placeholder"><span style="font-size:2rem">✨</span><span>Foto trabajo 2</span></div>
-                <div class="hero-carrusel-info"><span class="hero-carrusel-servicio">Limpieza facial</span><span class="hero-carrusel-precio">Desde $80.000</span></div>
-              </div>
-              <div class="hero-carrusel-slide">
-                <div class="hero-carrusel-placeholder"><span style="font-size:2rem">💅</span><span>Foto trabajo 3</span></div>
-                <div class="hero-carrusel-info"><span class="hero-carrusel-servicio">Manicure semipermanente</span><span class="hero-carrusel-precio">Desde $35.000</span></div>
-              </div>
-              <div class="hero-carrusel-slide">
-                <div class="hero-carrusel-placeholder"><span style="font-size:2rem">🌸</span><span>Foto trabajo 4</span></div>
-                <div class="hero-carrusel-info"><span class="hero-carrusel-servicio">Maquillaje natural</span><span class="hero-carrusel-precio">Desde $60.000</span></div>
-              </div>
             </div>
             <button class="hero-carrusel-btn hero-carrusel-btn-prev" onclick="heroNav('movil',-1)">&#8592;</button>
             <button class="hero-carrusel-btn hero-carrusel-btn-next" onclick="heroNav('movil',1)">&#8594;</button>
@@ -1316,18 +1308,6 @@ section + section {
                 <span class="hero-carrusel-servicio">CrePelo — Aceite Capilar</span>
                 <span class="hero-carrusel-precio">Nutritivo y Fortalecedor · 30ml</span>
               </div>
-            </div>
-            <div class="hero-carrusel-slide">
-              <div class="hero-carrusel-placeholder"><span style="font-size:2.5rem">✨</span><span>Foto trabajo 2</span></div>
-              <div class="hero-carrusel-info"><span class="hero-carrusel-servicio">Limpieza facial</span><span class="hero-carrusel-precio">Desde $80.000</span></div>
-            </div>
-            <div class="hero-carrusel-slide">
-              <div class="hero-carrusel-placeholder"><span style="font-size:2.5rem">💅</span><span>Foto trabajo 3</span></div>
-              <div class="hero-carrusel-info"><span class="hero-carrusel-servicio">Manicure semipermanente</span><span class="hero-carrusel-precio">Desde $35.000</span></div>
-            </div>
-            <div class="hero-carrusel-slide">
-              <div class="hero-carrusel-placeholder"><span style="font-size:2.5rem">🌸</span><span>Foto trabajo 4</span></div>
-              <div class="hero-carrusel-info"><span class="hero-carrusel-servicio">Maquillaje natural</span><span class="hero-carrusel-precio">Desde $60.000</span></div>
             </div>
           </div>
           <button class="hero-carrusel-btn hero-carrusel-btn-prev" onclick="heroNav('desktop',-1)">&#8592;</button>
