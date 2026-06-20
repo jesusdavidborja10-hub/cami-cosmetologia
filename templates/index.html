@@ -9,17 +9,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap');
 .producto-3d-wrap {
   display: flex; flex-direction: column; align-items: center;
-  justify-content: center; padding: 20px; position: relative; height: 100%;
+  justify-content: center; padding: 30px 20px 16px;
+  position: relative; min-height: 420px; width: 100%;
 }
 .anillo1 {
-  position: absolute; width: 280px; height: 280px; border-radius: 50%;
-  border: 1px solid rgba(232,130,154,.12);
-  animation: rotarAnillo 12s linear infinite;
+  position: absolute; width: 300px; height: 300px; border-radius: 50%;
+  border: 0.5px solid rgba(232,130,154,.12);
+  animation: rotarAnillo 12s linear infinite; z-index: 0;
 }
 .anillo2 {
-  position: absolute; width: 210px; height: 210px; border-radius: 50%;
-  border: 1px dashed rgba(201,169,110,.1);
-  animation: rotarAnillo 8s linear infinite reverse;
+  position: absolute; width: 220px; height: 220px; border-radius: 50%;
+  border: 0.5px dashed rgba(201,169,110,.1);
+  animation: rotarAnillo 8s linear infinite reverse; z-index: 0;
 }
 @keyframes rotarAnillo { from{transform:rotate(0)} to{transform:rotate(360deg)} }
 
@@ -32,7 +33,7 @@
   0%,100% { transform: translateY(0) rotate(-2deg) scale(1); }
   50%      { transform: translateY(-18px) rotate(2deg) scale(1.04); }
 }
-.producto-3d-img { width: 210px; height: auto; }
+.producto-3d-img { width: 190px; height: auto; }
 .producto-3d-sombra {
   width: 130px; height: 18px;
   background: radial-gradient(ellipse, rgba(0,0,0,.5), transparent 70%);
@@ -218,8 +219,8 @@ body::before {
   display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; min-height: 70vh;
 }
 .hero-carrusel-wrap {
-  position: relative; overflow: hidden; border-radius: 24px;
-  border: 0.5px solid var(--dark-border);
+  position: relative; overflow: visible;
+  border-radius: 24px; border: 0.5px solid var(--dark-border);
 }
 .hero-carrusel-track { display: flex; transition: transform .5s cubic-bezier(.4,0,.2,1); }
 .hero-carrusel-slide { min-width: 100%; position: relative; }
