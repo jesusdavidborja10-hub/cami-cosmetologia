@@ -1306,6 +1306,18 @@ section + section {
 @media (max-width: 768px) {
   #btnWaFlotante { bottom: 20px; right: 16px; width: 50px; height: 50px; }
 }
+@keyframes pulsoIg {
+  0%,100% { box-shadow: 0 8px 24px rgba(214,36,159,.3), 0 0 0 0 rgba(214,36,159,.3); }
+  50%      { box-shadow: 0 8px 24px rgba(214,36,159,.3), 0 0 0 12px rgba(214,36,159,0); }
+}
+#btnIgFlotante:hover {
+  transform: translateY(-4px) scale(1.1);
+  box-shadow: 0 12px 32px rgba(214,36,159,.5) !important;
+  animation: none;
+}
+@media (max-width: 768px) {
+  #btnIgFlotante { bottom: 82px; right: 16px; width: 50px; height: 50px; }
+}
 </style>
 </head>
 <body>
@@ -3281,6 +3293,16 @@ function pedirPorWhatsapp() {
 
 if (document.getElementById('carritoItems')) actualizarCarrito();
 </script>
+
+<!-- BOTÓN FLOTANTE INSTAGRAM -->
+<a href="https://www.instagram.com/cami_hernandeez22" target="_blank" id="btnIgFlotante"
+  style="position:fixed;bottom:96px;right:28px;z-index:900;width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(214,36,159,.3);text-decoration:none;transition:all .3s;animation:pulsoIg 2.5s ease-in-out infinite 1s;background:radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="white">
+    <rect x="2" y="2" width="20" height="20" rx="5.5" fill="none" stroke="white" stroke-width="1.8"/>
+    <circle cx="12" cy="12" r="4.5" stroke="white" stroke-width="1.8" fill="none"/>
+    <circle cx="17.2" cy="6.8" r="1.1" fill="white"/>
+  </svg>
+</a>
 
 <!-- BOTÓN FLOTANTE WHATSAPP -->
 <a href="https://wa.me/573105165342?text=Hola%2C%20me%20comunico%20desde%20su%20página%20web%2C%20tengo%20una%20pregunta." target="_blank" id="btnWaFlotante"
