@@ -9,8 +9,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap');
 .producto-3d-wrap {
   display: flex; flex-direction: column; align-items: center;
-  justify-content: center; padding: 30px 20px 16px;
-  position: relative; min-height: 420px; width: 100%;
+  justify-content: center; padding: 60px 20px 20px;
+  position: relative; min-height: 520px; width: 100%;
+  overflow: visible;
 }
 .anillo1 {
   position: absolute; width: 300px; height: 300px; border-radius: 50%;
@@ -33,7 +34,10 @@
   0%,100% { transform: translateY(0) rotate(-2deg) scale(1); }
   50%      { transform: translateY(-18px) rotate(2deg) scale(1.04); }
 }
-.producto-3d-img { width: 190px; height: auto; }
+.producto-3d-img {
+  width: 170px; height: auto; position: relative; z-index: 2;
+  margin-top: 20px;
+}
 .producto-3d-sombra {
   width: 130px; height: 18px;
   background: radial-gradient(ellipse, rgba(0,0,0,.5), transparent 70%);
