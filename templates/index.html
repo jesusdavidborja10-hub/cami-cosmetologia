@@ -220,7 +220,8 @@ body::before {
 #sec-inicio { padding: 20px 0; position: relative; z-index: 1; }
 
 .hero-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; min-height: 70vh;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 32px;
+  align-items: center; min-height: 70vh;
 }
 .hero-carrusel-wrap {
   position: relative; overflow: visible;
@@ -275,9 +276,17 @@ body::before {
 .hero-carrusel-movil-wrap.abierto { display: block; margin-top: 16px; }
 
 @media (max-width: 768px) {
-  .hero-grid { grid-template-columns: 1fr; gap: 0; min-height: unset; }
-  .hero-carrusel-desktop { display: none; }
-  .hero-carrusel-movil-toggle { display: block; }
+  .hero-grid { grid-template-columns: 1fr 1fr; gap: 16px; min-height: unset; align-items: center; }
+  .hero-carrusel-desktop { display: block !important; }
+  .hero-title { font-size: 2rem; }
+  .hero-sub { font-size: .85rem; }
+  .hero-badge { font-size: .62rem; padding: 5px 12px; }
+  .hero-cta { gap: 8px; margin-top: 20px; }
+  .btn-primary, .btn-outline { padding: 11px 18px; font-size: .72rem; }
+  .producto-3d-img { width: 130px; }
+  .producto-3d-wrap { min-height: 320px; padding: 40px 10px 10px; }
+  .anillo1 { width: 200px; height: 200px; }
+  .anillo2 { width: 150px; height: 150px; }
 }
 
 .hero-badge {
@@ -1289,31 +1298,6 @@ section + section {
           <a href="/contacto" class="btn-outline">Contáctanos</a>
         </div>
 
-        <!-- Botón ver trabajos solo en móvil -->
-        <button class="hero-carrusel-movil-toggle" onclick="toggleCarruselMovil(this)">
-          Ver mis trabajos ↓
-        </button>
-        <div class="hero-carrusel-movil-wrap" id="carruselMovilWrap">
-          <div class="hero-carrusel-wrap">
-            <div class="hero-carrusel-track" id="heroTrackMovil">
-              <div class="hero-carrusel-slide">
-                <div class="producto-3d-wrap">
-                  <div class="anillo1"></div>
-                  <div class="anillo2"></div>
-                  <div class="producto-3d">
-                    <img src="/foto-crepelo" class="producto-3d-img" alt="CrePelo Aceite Capilar">
-                  </div>
-                  <div class="producto-3d-sombra"></div>
-                  <div class="producto-3d-nombre">CrePelo — Aceite Capilar</div>
-                  <div class="producto-3d-precio">Nutritivo y Fortalecedor · 30ml</div>
-                </div>
-              </div>
-            </div>
-            <button class="hero-carrusel-btn hero-carrusel-btn-prev" onclick="heroNav('movil',-1)">&#8592;</button>
-            <button class="hero-carrusel-btn hero-carrusel-btn-next" onclick="heroNav('movil',1)">&#8594;</button>
-          </div>
-          <div class="hero-carrusel-dots" id="heroDotsMovil"></div>
-        </div>
       </div>
 
       <!-- Carrusel derecha solo desktop -->
