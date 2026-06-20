@@ -66,6 +66,23 @@
   .producto-3d-nombre { font-size: 1rem; margin-top: 10px; }
   .producto-3d-precio { font-size: 1rem; padding: 6px 16px; }
 }
+.crepelo-btn-info {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-top: 12px; padding: 10px 24px; border-radius: 30px;
+  border: 0.5px solid rgba(232,130,154,.3);
+  background: rgba(232,130,154,.06);
+  color: var(--rose); font-size: .72rem; letter-spacing: 2px;
+  text-transform: uppercase; text-decoration: none;
+  transition: all .3s; font-family: var(--font-body);
+  position: relative; z-index: 3;
+  animation: pulsoActivo 2.5s ease-in-out infinite;
+}
+.crepelo-btn-info:hover {
+  background: rgba(232,130,154,.15);
+  border-color: var(--rose);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(232,130,154,.25);
+}
 
 :root {
   --rose:         #E8829A;
@@ -1318,6 +1335,7 @@ section + section {
                 <div class="producto-3d-sombra"></div>
                 <div class="producto-3d-nombre">CrePelo — Aceite Capilar de 30ml</div>
                 <div class="producto-3d-precio">20 mil</div>
+                <a href="/crepelo" class="crepelo-btn-info">Más información</a>
               </div>
             </div>
           </div>
@@ -2214,6 +2232,95 @@ function limpiarFiltroAdmin() {
 
 if (document.getElementById('adminListaCitas')) cargarCitasAdmin();
 </script>
+{% endif %}
+
+{% if seccion == 'crepelo' %}
+<section style="padding:60px 0;position:relative;z-index:1;">
+  <div class="container" style="max-width:600px;">
+
+    <div style="text-align:center;margin-bottom:40px;animation:fadeUp .6s ease both;">
+      <p class="section-tag">Producto destacado</p>
+      <h2 class="section-title">Cre<span>Pelo</span></h2>
+      <p class="section-desc">Aceite Capilar Nutritivo y Fortalecedor</p>
+    </div>
+
+    <div style="display:flex;flex-direction:column;align-items:center;animation:fadeUp .6s ease .1s both;">
+      <img src="/foto-crepelo" style="width:160px;height:auto;filter:drop-shadow(0 24px 40px rgba(0,0,0,.6)) drop-shadow(0 0 20px rgba(201,169,110,.15));animation:flotar3d 4s ease-in-out infinite;margin-bottom:6px;" alt="CrePelo">
+      <div style="width:90px;height:12px;background:radial-gradient(ellipse,rgba(0,0,0,.4),transparent 70%);border-radius:50%;animation:sombra3d 4s ease-in-out infinite;margin-bottom:20px;"></div>
+      <div style="font-family:var(--font-display);font-size:1.5rem;color:#fff;font-style:italic;text-align:center;letter-spacing:.5px;">CrePelo — Aceite Capilar</div>
+      <div style="display:inline-flex;align-items:center;background:rgba(201,169,110,.1);border:0.5px solid rgba(201,169,110,.4);border-radius:30px;padding:8px 24px;margin-top:10px;font-family:var(--font-display);font-size:1.2rem;color:var(--gold);">$20.000 COP</div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin:28px 0 0;border-radius:16px;overflow:hidden;border:0.5px solid rgba(232,130,154,.12);">
+      <div style="padding:16px 8px;text-align:center;background:rgba(255,255,255,.02);position:relative;">
+        <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(232,130,154,.3),transparent);"></div>
+        <div style="font-family:var(--font-display);font-size:1.6rem;color:var(--rose);">6</div>
+        <div style="font-size:.58rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-top:4px;">Beneficios</div>
+      </div>
+      <div style="padding:16px 8px;text-align:center;background:rgba(255,255,255,.02);border-left:0.5px solid rgba(232,130,154,.1);border-right:0.5px solid rgba(232,130,154,.1);position:relative;">
+        <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(232,130,154,.3),transparent);"></div>
+        <div style="font-family:var(--font-display);font-size:1.6rem;color:var(--rose);">5</div>
+        <div style="font-size:.58rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-top:4px;">Ingredientes</div>
+      </div>
+      <div style="padding:16px 8px;text-align:center;background:rgba(255,255,255,.02);position:relative;">
+        <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(232,130,154,.3),transparent);"></div>
+        <div style="font-family:var(--font-display);font-size:1.6rem;color:var(--rose);">30ml</div>
+        <div style="font-size:.58rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-top:4px;">Contenido</div>
+      </div>
+    </div>
+
+    <div style="margin-top:24px;">
+      <div style="font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+        <span style="flex:1;height:0.5px;background:rgba(255,255,255,.06);display:block;"></span>
+        Beneficios
+        <span style="flex:1;height:0.5px;background:rgba(255,255,255,.06);display:block;"></span>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <span style="background:rgba(232,130,154,.08);border:0.5px solid rgba(232,130,154,.2);border-radius:30px;padding:7px 16px;font-size:.75rem;color:var(--rose);">Fortalece la fibra</span>
+        <span style="background:rgba(232,130,154,.08);border:0.5px solid rgba(232,130,154,.2);border-radius:30px;padding:7px 16px;font-size:.75rem;color:var(--rose);">Controla el frizz</span>
+        <span style="background:rgba(232,130,154,.08);border:0.5px solid rgba(232,130,154,.2);border-radius:30px;padding:7px 16px;font-size:.75rem;color:var(--rose);">Brillo natural</span>
+        <span style="background:rgba(232,130,154,.08);border:0.5px solid rgba(232,130,154,.2);border-radius:30px;padding:7px 16px;font-size:.75rem;color:var(--rose);">Suaviza y nutre</span>
+        <span style="background:rgba(232,130,154,.08);border:0.5px solid rgba(232,130,154,.2);border-radius:30px;padding:7px 16px;font-size:.75rem;color:var(--rose);">Crecimiento saludable</span>
+        <span style="background:rgba(232,130,154,.08);border:0.5px solid rgba(232,130,154,.2);border-radius:30px;padding:7px 16px;font-size:.75rem;color:var(--rose);">Nutre la raíz</span>
+      </div>
+    </div>
+
+    <div style="margin-top:20px;background:rgba(255,255,255,.02);border:0.5px solid rgba(201,169,110,.15);border-radius:16px;padding:18px;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);"></div>
+      <div style="font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:12px;">Ingredientes naturales</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <span style="background:rgba(201,169,110,.08);border:0.5px solid rgba(201,169,110,.25);border-radius:20px;padding:5px 14px;font-size:.72rem;color:var(--gold);">Romero</span>
+        <span style="background:rgba(201,169,110,.08);border:0.5px solid rgba(201,169,110,.25);border-radius:20px;padding:5px 14px;font-size:.72rem;color:var(--gold);">Ricino</span>
+        <span style="background:rgba(201,169,110,.08);border:0.5px solid rgba(201,169,110,.25);border-radius:20px;padding:5px 14px;font-size:.72rem;color:var(--gold);">Linaza</span>
+        <span style="background:rgba(201,169,110,.08);border:0.5px solid rgba(201,169,110,.25);border-radius:20px;padding:5px 14px;font-size:.72rem;color:var(--gold);">Canela</span>
+        <span style="background:rgba(201,169,110,.08);border:0.5px solid rgba(201,169,110,.25);border-radius:20px;padding:5px 14px;font-size:.72rem;color:var(--gold);">Vitamina E</span>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:center;justify-content:center;gap:20px;margin-top:16px;padding:14px;background:rgba(255,255,255,.02);border-radius:14px;border:0.5px solid rgba(255,255,255,.05);">
+      <div style="display:flex;align-items:center;gap:6px;font-size:.68rem;color:var(--text-muted);">
+        <span style="width:7px;height:7px;border-radius:50%;background:#81c784;display:inline-block;"></span>
+        Cruelty Free
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:.68rem;color:var(--text-muted);">
+        <span style="width:7px;height:7px;border-radius:50%;background:#81c784;display:inline-block;"></span>
+        Sin parabenos
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:.68rem;color:var(--text-muted);">
+        <span style="width:7px;height:7px;border-radius:50%;background:#81c784;display:inline-block;"></span>
+        Sin sulfatos
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:28px;">
+      <a href="https://wa.me/573105165342?text=Hola%2C%20quiero%20pedir%20el%20aceite%20CrePelo" target="_blank" class="btn-primary">Pedir por WhatsApp</a>
+      <div style="margin-top:12px;">
+        <a href="/" style="font-size:.72rem;color:var(--text-muted);text-decoration:none;letter-spacing:1px;">← Volver al inicio</a>
+      </div>
+    </div>
+
+  </div>
+</section>
 {% endif %}
 
 <!-- ══ FOOTER ════════════════════════════════════════════════════════════════ -->

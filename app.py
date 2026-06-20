@@ -78,6 +78,10 @@ def home():
 def citas_page():
     return render_template('index.html', seccion='citas', usuario=session.get('usuario'))
 
+@app.route('/crepelo')
+def crepelo_page():
+    return render_template('index.html', seccion='crepelo', usuario=session.get('usuario'))
+
 @app.route('/contacto')
 def contacto_page():
     return redirect('/#contacto')
