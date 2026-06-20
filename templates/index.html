@@ -1374,7 +1374,7 @@ section + section {
   if (!barra || !splash) return;
 
   const seccion = '{{ seccion }}';
-  if (seccion === 'citas' || seccion === 'crepelo' || seccion === 'admin-login' || seccion === 'admin-citas' || seccion === 'login' || seccion === 'registro' || seccion === 'tarjeta') {
+  if (seccion !== 'inicio') {
     splash.style.display = 'none';
     return;
   }
