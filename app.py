@@ -380,6 +380,10 @@ def sitemap():
 </urlset>'''
     return app.response_class(xml, mimetype='application/xml')
 
+@app.errorhandler(404)
+def pagina_no_encontrada(e):
+    return render_template('404.html'), 404
+
 if __name__ == '__main__':
     print("🌸 Cami Cosmetología — http://localhost:5000")
     app.run(debug=True, port=5000)
