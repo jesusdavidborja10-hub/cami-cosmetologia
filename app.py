@@ -369,6 +369,17 @@ def crear_resena():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@app.route('/sitemap.xml')
+def sitemap():
+    xml = '''<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://www.camicosmetologia.com/</loc><priority>1.0</priority></url>
+  <url><loc>https://www.camicosmetologia.com/citas</loc><priority>0.9</priority></url>
+  <url><loc>https://www.camicosmetologia.com/crepelo</loc><priority>0.7</priority></url>
+  <url><loc>https://www.camicosmetologia.com/tarjeta</loc><priority>0.6</priority></url>
+</urlset>'''
+    return app.response_class(xml, mimetype='application/xml')
+
 if __name__ == '__main__':
     print("🌸 Cami Cosmetología — http://localhost:5000")
     app.run(debug=True, port=5000)
