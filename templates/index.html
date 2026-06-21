@@ -2426,13 +2426,15 @@ async function adminLogin() {
     </div>
 
     <div class="card" style="margin-top:32px;">
+      <h3 id="adminTituloCitas" style="font-family:var(--font-display);font-size:1.2rem;color:#fff;margin:0 0 20px;"></h3>
+
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px;">
         <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;">
           <div class="field">
             <label>Filtrar por fecha</label>
-            <input type="date" id="adminFiltroFecha" onchange="cargarCitasAdmin()">
+            <input type="date" id="adminFiltroFecha" value="{{ fecha_hoy }}" onchange="cargarCitasAdmin()">
           </div>
-          <button class="btn-secondary-sm" onclick="limpiarFiltroAdmin()">Ver todas</button>
+          <button class="btn-secondary-sm" id="btnToggleVistaAdmin" onclick="toggleVistaAdmin()">Ver todas las citas</button>
           <button class="btn-secondary-sm" onclick="cargarCitasAdmin()">↻ Actualizar</button>
         </div>
         <button class="btn-secondary-sm" onclick="adminLogout()" style="border-color:rgba(232,130,154,.3);color:var(--rose);">
@@ -2448,16 +2450,49 @@ async function adminLogin() {
 </section>
 
 <script>
+const FECHA_HOY_ADMIN = '{{ fecha_hoy }}';
+
+function fmtFechaAdmin(f) {
+  if (!f) return '';
+  const [y, m, d] = f.split('-');
+  return `${d}/${m}/${y}`;
+}
+
+function actualizarEncabezadoAdmin(fecha) {
+  const titulo = document.getElementById('adminTituloCitas');
+  const btn = document.getElementById('btnToggleVistaAdmin');
+  if (!titulo || !btn) return;
+  if (fecha === FECHA_HOY_ADMIN) {
+    titulo.textContent = `Citas de hoy — ${fmtFechaAdmin(FECHA_HOY_ADMIN)}`;
+    btn.textContent = 'Ver todas las citas';
+  } else if (!fecha) {
+    titulo.textContent = 'Todas las citas';
+    btn.textContent = 'Ver solo hoy';
+  } else {
+    titulo.textContent = `Citas del ${fmtFechaAdmin(fecha)}`;
+    btn.textContent = 'Ver todas las citas';
+  }
+}
+
+function toggleVistaAdmin() {
+  const el = document.getElementById('adminFiltroFecha');
+  if (!el) return;
+  el.value = el.value ? '' : FECHA_HOY_ADMIN;
+  cargarCitasAdmin();
+}
+
 async function cargarCitasAdmin() {
   const fecha = document.getElementById('adminFiltroFecha')?.value;
   const url = fecha ? `/api/citas?fecha=${fecha}` : '/api/citas';
   const lista = document.getElementById('adminListaCitas');
   lista.innerHTML = '<div class="empty-state"><div class="big">🌸</div><p>Cargando...</p></div>';
+  actualizarEncabezadoAdmin(fecha);
   try {
     const r = await fetch(url);
     const citas = await r.json();
     if (!citas.length) {
-      lista.innerHTML = '<div class="empty-state"><div class="big">📋</div><p>No hay citas registradas</p></div>';
+      const msg = fecha === FECHA_HOY_ADMIN ? 'No hay citas para hoy' : 'No hay citas registradas';
+      lista.innerHTML = `<div class="empty-state"><div class="big">📋</div><p>${msg}</p></div>`;
       return;
     }
     lista.innerHTML = citas.map(c => `
@@ -2487,12 +2522,6 @@ async function cargarCitasAdmin() {
 async function adminLogout() {
   await fetch('/api/admin/logout', { method: 'POST' });
   window.location.href = '/';
-}
-
-function limpiarFiltroAdmin() {
-  const el = document.getElementById('adminFiltroFecha');
-  if (el) el.value = '';
-  cargarCitasAdmin();
 }
 
 if (document.getElementById('adminListaCitas')) cargarCitasAdmin();

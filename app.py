@@ -114,7 +114,8 @@ def sobre_mi():
 def admin_page():
     if not session.get('admin'):
         return render_template('index.html', seccion='admin-login', usuario=session.get('usuario'))
-    return render_template('index.html', seccion='admin-citas', usuario=session.get('usuario'))
+    fecha_hoy = datetime.now().strftime('%Y-%m-%d')
+    return render_template('index.html', seccion='admin-citas', usuario=session.get('usuario'), fecha_hoy=fecha_hoy)
 
 @app.route('/api/admin/login', methods=['POST'])
 def admin_login():
