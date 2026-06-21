@@ -328,6 +328,18 @@ def cancelar_cita(cid):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@app.route('/api/citas/<int:id>/completar', methods=['PUT'])
+def completar_cita(id):
+    try:
+        conn = get_conn()
+        c = conn.cursor()
+        c.execute("UPDATE citas SET estado='completada' WHERE id=%s", (id,))
+        conn.commit()
+        conn.close()
+        return jsonify({'mensaje': 'Cita marcada como completada'})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 # ── Reseñas API ────────────────────────────────────────────────────────────────
 @app.route('/api/resenas', methods=['GET'])
 def listar_resenas():

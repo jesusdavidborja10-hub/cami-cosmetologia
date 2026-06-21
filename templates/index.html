@@ -619,6 +619,12 @@ textarea { resize: vertical; min-height: 80px; }
   transition: all .2s; font-family: var(--font-body); letter-spacing: 1px;
 }
 .btn-cancel-cita:hover { background: rgba(232,130,154,.12); }
+.btn-complete-cita {
+  padding: 7px 14px; border: 0.5px solid rgba(76,175,80,.3); border-radius: 20px;
+  background: transparent; color: #81c784; font-size: .72rem; cursor: pointer;
+  transition: all .2s; font-family: var(--font-body); letter-spacing: 1px;
+}
+.btn-complete-cita:hover { background: rgba(76,175,80,.12); }
 .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
 .empty-state .big { font-size: 2.5rem; margin-bottom: 12px; }
 
@@ -2510,12 +2516,29 @@ async function cargarCitasAdmin() {
           </div>
           ${c.notas ? `<p style="font-size:.78rem;color:var(--text-muted);margin-top:6px;">${c.notas}</p>` : ''}
         </div>
-        <div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          ${c.estado === 'pendiente' ? `<button class="btn-complete-cita" onclick="marcarCompletada(${c.id}, this)">Completada</button>` : ''}
           ${c.estado !== 'cancelada' ? `<button class="btn-cancel-cita" onclick="confirmarCancelar(${c.id})">Cancelar</button>` : ''}
         </div>
       </div>`).join('');
   } catch {
     lista.innerHTML = '<div class="empty-state"><div class="big">⚠️</div><p>Error al cargar citas</p></div>';
+  }
+}
+
+async function marcarCompletada(id, btn) {
+  try {
+    const r = await fetch(`/api/citas/${id}/completar`, { method: 'PUT' });
+    if (!r.ok) throw new Error();
+    const card = btn.closest('.cita-card');
+    card.querySelectorAll('.badge.pendiente').forEach(b => {
+      b.classList.remove('pendiente');
+      b.classList.add('completada');
+      if (b.textContent.trim().toLowerCase() === 'pendiente') b.textContent = 'completada';
+    });
+    btn.remove();
+  } catch {
+    alert('No se pudo marcar la cita como completada');
   }
 }
 
