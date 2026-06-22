@@ -210,23 +210,26 @@ def auth_google_callback():
             return redirect(url_for('login_page'))
         email  = userinfo['email'].strip().lower()
         nombre = userinfo.get('name', email.split('@')[0])
+        foto   = userinfo.get('picture')
         conn = get_conn()
         c = conn.cursor()
         c.execute('SELECT id, nombre, email FROM usuarios WHERE email=%s', (email,))
         row = c.fetchone()
         if row:
             uid, nombre_db, email_db = row
+            c.execute('UPDATE usuarios SET foto_perfil=%s WHERE id=%s', (foto, uid))
+            conn.commit()
             conn.close()
         else:
             placeholder_pw = 'GOOGLE_OAUTH_' + secrets.token_hex(16)
-            c.execute('INSERT INTO usuarios (nombre, email, password) VALUES (%s,%s,%s) RETURNING id',
-                      (nombre, email, placeholder_pw))
+            c.execute('INSERT INTO usuarios (nombre, email, password, foto_perfil) VALUES (%s,%s,%s,%s) RETURNING id',
+                      (nombre, email, placeholder_pw, foto))
             uid = c.fetchone()[0]
             conn.commit()
             conn.close()
             nombre_db, email_db = nombre, email
         session.permanent = True
-        session['usuario'] = {'id': uid, 'nombre': nombre_db, 'email': email_db}
+        session['usuario'] = {'id': uid, 'nombre': nombre_db, 'email': email_db, 'foto_perfil': foto}
         return redirect(url_for('home'))
     except Exception as e:
         print(f"Google OAuth error: {e}")

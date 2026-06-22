@@ -244,6 +244,12 @@ body::before {
 
 .nav-user { display: flex; align-items: center; gap: 8px; }
 .nav-user-name { font-size: .82rem; color: var(--rose); font-weight: 500; font-family: var(--font-display); font-style: italic; }
+.nav-avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+.nav-avatar-iniciales {
+  width: 32px; height: 32px; border-radius: 50%; background: #E8829A;
+  color: #fff; display: flex; align-items: center; justify-content: center;
+  font-size: .8rem; font-weight: 600; font-family: var(--font-body); flex-shrink: 0;
+}
 .btn-logout {
   padding: 7px 16px; border-radius: 20px;
   border: 1px solid rgba(232,130,154,.3);
@@ -1449,6 +1455,11 @@ section + section {
       <!-- Bloque usuario solo visible en móvil dentro del menú -->
       <li class="nav-user-mobile">
         {% if usuario %}
+          {% if usuario.foto_perfil %}
+            <img class="nav-avatar" src="{{ usuario.foto_perfil }}" alt="{{ usuario.nombre }}">
+          {% else %}
+            <span class="nav-avatar-iniciales">{{ (usuario.nombre.split(' ')[:2])|map('first')|join('')|upper }}</span>
+          {% endif %}
           <span class="nav-user-name">{{ usuario.nombre }}</span>
           <button class="btn-logout" onclick="doLogout()">Cerrar sesión</button>
         {% else %}
@@ -1459,7 +1470,11 @@ section + section {
 
     <div class="nav-user" id="navUser">
       {% if usuario %}
-      <span class="nav-user-name">{{ usuario.nombre }}</span>
+      {% if usuario.foto_perfil %}
+        <img class="nav-avatar" src="{{ usuario.foto_perfil }}" alt="{{ usuario.nombre }}">
+      {% else %}
+        <span class="nav-avatar-iniciales">{{ (usuario.nombre.split(' ')[:2])|map('first')|join('')|upper }}</span>
+      {% endif %}
       <button class="btn-logout" onclick="doLogout()">Salir</button>
       {% else %}
       <a href="/login" class="btn-outline" style="padding:8px 18px;font-size:.8rem">Iniciar sesión</a>
