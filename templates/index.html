@@ -2758,25 +2758,27 @@ const navCloseBtn = document.getElementById('navCloseBtn');
 
 function cerrarNav(){
   if(navLinks) navLinks.classList.remove('open');
-  if(navOverlay) { navOverlay.style.background = 'rgba(0,0,0,0)'; navOverlay.style.pointerEvents = 'none'; }
+  if(navOverlay) navOverlay.classList.remove('open');
   document.body.style.overflow = '';
 }
 
-if(navToggle && navLinks){
-  navToggle.addEventListener('click', ()=>{
+if(navToggle){
+  navToggle.addEventListener('click', function(){
+    if(!navLinks) return;
     const abierto = navLinks.classList.toggle('open');
-    if(abierto && navOverlay){
-      navOverlay.style.background = 'rgba(0,0,0,0.65)';
-      navOverlay.style.pointerEvents = 'all';
-      document.body.style.overflow = 'hidden';
-    } else {
-      cerrarNav();
+    if(navOverlay){
+      if(abierto){
+        navOverlay.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      } else {
+        cerrarNav();
+      }
     }
   });
-  navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click', cerrarNav));
+  if(navLinks) navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click', cerrarNav));
 }
-if(navCloseBtn){ navCloseBtn.addEventListener('click', cerrarNav); }
-if(navOverlay){ navOverlay.addEventListener('click', cerrarNav); }
+if(navCloseBtn) navCloseBtn.addEventListener('click', cerrarNav);
+if(navOverlay) navOverlay.addEventListener('click', cerrarNav);
 
 // ── Auth ─────────────────────────────────────────────────────────────────────
 async function doLogin(){
