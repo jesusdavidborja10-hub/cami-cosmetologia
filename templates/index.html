@@ -1035,7 +1035,7 @@ footer span { color: var(--rose); }
     background: none; border: none; color: var(--text-light);
     font-size: 1.4rem; line-height: 1; cursor: pointer; padding: 4px;
   }
-  #navCloseBtn { display: block !important; }
+  #navCloseBtn { display: block; position: absolute; top: 12px; right: 14px; background: none; border: none; color: #E8829A; font-size: 1.4rem; cursor: pointer; z-index: 10000; }
 }
 @media (max-width: 768px) {
   .hero-title { font-size: 2.5rem; }
@@ -1511,8 +1511,8 @@ section + section {
       </div>
     </div>
 
-    <button id="navCloseBtn" aria-label="Cerrar menú" style="position:absolute;top:12px;right:14px;background:none;border:none;color:#E8829A;font-size:1.4rem;cursor:pointer;display:none;z-index:10000;">✕</button>
-    <ul class="nav-links" id="navLinks">
+    <ul class="nav-links" id="navLinks" style="position:relative;">
+      <button id="navCloseBtn" aria-label="Cerrar menú">✕</button>
       <li><a href="/" class="{{ 'activo' if seccion=='inicio' else '' }}">Inicio</a></li>
       <li><a href="/citas" class="{{ 'activo' if seccion=='citas' else '' }}">Citas</a></li>
       <li><a href="/#productos" class="">Productos</a></li>
