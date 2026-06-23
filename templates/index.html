@@ -2755,16 +2755,19 @@ const navToggle = document.getElementById('navToggle');
 const navLinks  = document.getElementById('navLinks');
 const navOverlay = document.getElementById('navOverlay');
 const navCloseBtn = document.getElementById('navCloseBtn');
+
 function cerrarNav(){
   if(navLinks) navLinks.classList.remove('open');
-  if(navOverlay) navOverlay.classList.remove('open');
+  if(navOverlay) { navOverlay.style.background = 'rgba(0,0,0,0)'; navOverlay.style.pointerEvents = 'none'; }
   document.body.style.overflow = '';
 }
+
 if(navToggle && navLinks){
   navToggle.addEventListener('click', ()=>{
     const abierto = navLinks.classList.toggle('open');
-    if(abierto){
-      navOverlay.classList.add('open');
+    if(abierto && navOverlay){
+      navOverlay.style.background = 'rgba(0,0,0,0.65)';
+      navOverlay.style.pointerEvents = 'all';
       document.body.style.overflow = 'hidden';
     } else {
       cerrarNav();
@@ -2772,9 +2775,8 @@ if(navToggle && navLinks){
   });
   navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click', cerrarNav));
 }
-if(navCloseBtn){
-  navCloseBtn.addEventListener('click', cerrarNav);
-}
+if(navCloseBtn){ navCloseBtn.addEventListener('click', cerrarNav); }
+if(navOverlay){ navOverlay.addEventListener('click', cerrarNav); }
 
 // ── Auth ─────────────────────────────────────────────────────────────────────
 async function doLogin(){
