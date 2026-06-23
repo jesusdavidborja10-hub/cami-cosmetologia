@@ -2805,8 +2805,7 @@ if(navToggle){
       if(abierto){
         navOverlay.classList.add('open');
         document.body.style.overflow = 'hidden';
-        document.querySelector('main') && document.querySelector('main').style.setProperty('filter', 'blur(3px)');
-        document.querySelectorAll('section, .hero, main, .barra-nav + *').forEach(el => el.classList.add('page-blurred'));
+        document.querySelectorAll('section').forEach(el => el.classList.add('page-blurred'));
       } else {
         cerrarNav();
       }
