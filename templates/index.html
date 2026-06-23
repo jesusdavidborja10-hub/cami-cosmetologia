@@ -267,6 +267,14 @@ main { transition: filter 0.4s ease; }
   transition: filter 0.4s ease;
 }
 * { transition: filter 0.4s ease; }
+body.menu-abierto::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(50,0,20,0.75);
+  z-index: 9990;
+  pointer-events: all;
+}
 
 .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; width: 100%; position: relative; z-index: 1; }
 
@@ -2797,6 +2805,7 @@ function cerrarNav(){
   document.body.style.overflow = '';
   document.querySelector('main') && document.querySelector('main').style.setProperty('filter', '');
   document.querySelectorAll('.page-blurred').forEach(el => el.classList.remove('page-blurred'));
+  document.body.classList.remove('menu-abierto');
 }
 
 if(navToggle){
@@ -2807,6 +2816,7 @@ if(navToggle){
       if(abierto){
         navOverlay.classList.add('open');
         document.body.style.overflow = 'hidden';
+        document.body.classList.add('menu-abierto');
         document.querySelectorAll('section').forEach(el => el.classList.add('page-blurred'));
       } else {
         cerrarNav();
