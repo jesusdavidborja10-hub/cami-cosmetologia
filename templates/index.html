@@ -1419,6 +1419,10 @@ section + section {
   0%,100% { transform: translateY(0) rotate(0deg); }
   50%      { transform: translateY(-8px) rotate(6deg); }
 }
+@keyframes flotar {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
 @keyframes pulsoActivo {
   0%,100% { opacity: 1; }
   50%      { opacity: .5; }
@@ -1657,29 +1661,27 @@ section + section {
       <p class="section-desc">Cuida tu cabello con lo mejor de la naturaleza</p>
     </div>
 
-    <div style="max-width:400px;margin:40px auto 0;">
-      <div style="background:linear-gradient(145deg,#1E1118,#221520);border:0.5px solid rgba(232,130,154,.15);border-radius:20px;padding:20px;position:relative;overflow:hidden;display:flex;align-items:center;gap:18px;">
-        <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#E8829A,#C9A96E,transparent);"></div>
-        <img src="/foto-crepelo" style="width:70px;height:auto;flex-shrink:0;filter:drop-shadow(0 8px 16px rgba(0,0,0,.5));" alt="CrePelo">
-        <div style="flex:1;">
-          <div style="font-family:var(--font-display);font-size:1.2rem;color:#fff;font-style:italic;">CrePelo</div>
-          <div style="font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin:3px 0 10px;">Aceite Capilar · 30ml</div>
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
-            <span style="font-family:var(--font-display);font-size:1.1rem;color:var(--gold);">$20.000</span>
-            <button onclick="agregarCarrito('CrePelo — Aceite Capilar', 20000, '/foto-crepelo')" style="padding:8px 16px;border-radius:20px;border:none;background:linear-gradient(135deg,var(--rose3),var(--rose));color:#fff;font-size:.65rem;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;font-family:var(--font-body);transition:all .3s;">
-              + Agregar
-            </button>
-          </div>
+    <div style="display:flex;justify-content:center;margin:40px auto 0;">
+      <div style="background:linear-gradient(145deg,#1E1118,#221520);border:0.5px solid rgba(232,130,154,.2);border-radius:24px;padding:0;position:relative;overflow:hidden;width:220px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.4);">
+        <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#E8829A,#C9A96E,transparent);"></div>
+        <div style="padding:28px 20px 0;display:flex;justify-content:center;">
+          <img src="/foto-crepelo" alt="CrePelo" style="width:130px;height:auto;filter:drop-shadow(0 12px 24px rgba(232,130,154,.3));animation:flotar 3s ease-in-out infinite;">
+        </div>
+        <div style="padding:16px 20px 24px;">
+          <div style="font-family:var(--font-display);font-size:1.3rem;color:#fff;font-style:italic;margin-bottom:4px;">CrePelo</div>
+          <div style="font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:14px;">Aceite Capilar · 30ml</div>
+          <div style="font-family:var(--font-display);font-size:1.4rem;color:var(--gold);margin-bottom:16px;">$20.000</div>
+          <button onclick="agregarCarrito('CrePelo — Aceite Capilar', 20000, '/foto-crepelo')" style="width:100%;padding:11px;border-radius:20px;border:none;background:linear-gradient(135deg,var(--rose3),var(--rose));color:#fff;font-size:.65rem;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:var(--font-body);">+ Agregar</button>
         </div>
       </div>
+    </div>
 
-      <div style="text-align:center;margin-top:16px;">
-        <button onclick="toggleCarritoPanel()" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:30px;border:0.5px solid rgba(232,130,154,.3);background:rgba(232,130,154,.06);color:var(--rose);font-size:.72rem;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:var(--font-body);transition:all .3s;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-          Ver carrito
-          <span id="carritoContador" style="background:var(--rose);color:#fff;border-radius:20px;padding:2px 8px;font-size:.6rem;">0</span>
-        </button>
-      </div>
+    <div style="text-align:center;margin-top:16px;">
+      <button onclick="toggleCarritoPanel()" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:30px;border:0.5px solid rgba(232,130,154,.3);background:rgba(232,130,154,.06);color:var(--rose);font-size:.72rem;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:var(--font-body);transition:all .3s;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        Ver carrito
+        <span id="carritoContador" style="background:var(--rose);color:#fff;border-radius:20px;padding:2px 8px;font-size:.6rem;">0</span>
+      </button>
     </div>
   </div>
 </section>
