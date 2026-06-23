@@ -1423,6 +1423,30 @@ section + section {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-10px); }
 }
+button[onclick*="agregarCarrito"] {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+button[onclick*="agregarCarrito"]:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 24px rgba(232,130,154,0.4);
+  opacity: 0.9;
+}
+button[onclick*="agregarCarrito"]:active {
+  transform: scale(0.96);
+  box-shadow: 0 4px 12px rgba(232,130,154,0.3);
+}
+
+button[onclick*="toggleCarritoPanel"] {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+button[onclick*="toggleCarritoPanel"]:hover {
+  transform: scale(1.04);
+  box-shadow: 0 6px 20px rgba(232,130,154,0.25);
+  background: rgba(232,130,154,0.12) !important;
+}
+button[onclick*="toggleCarritoPanel"]:active {
+  transform: scale(0.97);
+}
 @keyframes pulsoActivo {
   0%,100% { opacity: 1; }
   50%      { opacity: .5; }
