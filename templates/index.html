@@ -24,6 +24,14 @@
   <meta name="twitter:image" content="/foto-cami">
   <style>
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap');
+@keyframes brilloPulse {
+  0%, 100% { text-shadow: 0 0 8px rgba(232,130,154,0); }
+  50% { text-shadow: 0 0 18px rgba(232,130,154,0.5), 0 0 35px rgba(201,169,110,0.2); }
+}
+
+.section-title, .hero-title, .section-tag {
+  animation: brilloPulse 3s ease-in-out infinite;
+}
 @keyframes carritoEntrar {
   from { transform: translateY(100%); }
   to   { transform: translateY(0); }
