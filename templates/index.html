@@ -260,17 +260,6 @@ body::before {
 .btn-logout:hover { border-color: var(--rose); color: #fff; }
 .nav-toggle { display: none; background: none; border: none; cursor: pointer; color: var(--text-light); font-size: 1.4rem; padding: 4px; }
 .nav-user-mobile { display: none; }
-.nav-overlay {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,0);
-  z-index: 9998;
-  pointer-events: none;
-  transition: background 0.4s ease;
-}
-.nav-overlay.open {
-  background: rgba(0,0,0,0.65);
-  pointer-events: all;
-}
 
 .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; width: 100%; position: relative; z-index: 1; }
 
@@ -959,6 +948,17 @@ footer span { color: var(--rose); }
 .btn-google:hover { border-color: rgba(232,130,154,.3); background: rgba(255,255,255,.05); }
 
 @media (max-width: 768px) {
+  .nav-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0);
+    z-index: 9998;
+    pointer-events: none;
+    transition: background 0.4s ease;
+  }
+  .nav-overlay.open {
+    background: rgba(0,0,0,0.65);
+    pointer-events: all;
+  }
   .nav-toggle { display: block; }
   .nav-inner { flex-wrap: wrap; position: relative; }
   .nav-links {
@@ -2755,25 +2755,25 @@ const navToggle = document.getElementById('navToggle');
 const navLinks  = document.getElementById('navLinks');
 const navOverlay = document.getElementById('navOverlay');
 const navCloseBtn = document.getElementById('navCloseBtn');
+function cerrarNav(){
+  if(navLinks) navLinks.classList.remove('open');
+  if(navOverlay) navOverlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
 if(navToggle && navLinks){
   navToggle.addEventListener('click', ()=>{
     const abierto = navLinks.classList.toggle('open');
     if(abierto){
       navOverlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
     } else {
-      navOverlay.classList.remove('open');
+      cerrarNav();
     }
   });
-  navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click', ()=>{
-    navLinks.classList.remove('open');
-    navOverlay.classList.remove('open');
-  }));
+  navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click', cerrarNav));
 }
 if(navCloseBtn){
-  navCloseBtn.addEventListener('click', ()=>{
-    navLinks.classList.remove('open');
-    navOverlay.classList.remove('open');
-  });
+  navCloseBtn.addEventListener('click', cerrarNav);
 }
 
 // ── Auth ─────────────────────────────────────────────────────────────────────
@@ -3593,6 +3593,6 @@ document.getElementById('popupOverlay')?.addEventListener('click', function(e) {
   if (e.target === this) cerrarPopup();
 });
 </script>
-<div class="nav-overlay" id="navOverlay"></div>
+<div class="nav-overlay" id="navOverlay" onclick="cerrarNav()"></div>
 </body>
 </html>
