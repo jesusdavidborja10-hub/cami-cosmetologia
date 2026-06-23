@@ -260,6 +260,8 @@ body::before {
 .btn-logout:hover { border-color: var(--rose); color: #fff; }
 .nav-toggle { display: none; background: none; border: none; cursor: pointer; color: var(--text-light); font-size: 1.4rem; padding: 4px; }
 .nav-user-mobile { display: none; }
+.nav-drawer-close-wrap { display: none; }
+.nav-overlay { display: none; }
 
 .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; width: 100%; position: relative; z-index: 1; }
 
@@ -948,26 +950,73 @@ footer span { color: var(--rose); }
 .btn-google:hover { border-color: rgba(232,130,154,.3); background: rgba(255,255,255,.05); }
 
 @media (max-width: 768px) {
-  .nav-links { display: none; flex-direction: column; gap: 4px; }
-  .nav-links.open { display: flex; }
-  .nav-toggle { display: block; }
+  .nav-toggle { display: flex; }
   .nav-inner { flex-wrap: wrap; position: relative; }
-  .nav-links {
-    position: absolute; top: var(--nav-h); left: 0; right: 0; width: 100%; max-width: 100vw;
-    background: rgba(20,12,16,.97); backdrop-filter: blur(20px);
-    padding: 12px 16px 20px; border-bottom: 0.5px solid var(--dark-border); overflow: hidden;
+
+  .nav-overlay {
+    display: block; position: fixed; inset: 0;
+    background: rgba(10,5,8,.65); z-index: 1001;
+    opacity: 0; pointer-events: none;
+    transition: opacity .45s ease;
   }
+  .nav-overlay.open { opacity: 1; pointer-events: auto; }
+
+  .nav-links {
+    display: flex; flex-direction: column; gap: 4px;
+    position: fixed; top: 0; right: 0; bottom: 0; width: min(310px, 84vw);
+    max-width: 100vw; height: 100%;
+    background: rgba(20,12,16,.97); backdrop-filter: blur(20px);
+    padding: 56px 20px 24px; border-left: 0.5px solid var(--dark-border);
+    overflow-y: auto; z-index: 1002;
+    transform: translateX(100%);
+    transition: transform .45s cubic-bezier(.25,.8,.25,1);
+  }
+  .nav-links::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--rose), var(--gold), transparent);
+  }
+  .nav-links.open { transform: translateX(0); }
+
   .nav-links a { display: block; padding: 10px 14px; font-size: .88rem; }
   .nav-user { display: none; }
-  .nav-user-mobile {
-    display: flex; flex-direction: column; gap: 8px;
-    margin-top: 10px; padding-top: 14px; border-top: 0.5px solid var(--dark-border);
+
+  .nav-drawer-close-wrap { display: block; }
+  .nav-drawer-close {
+    position: absolute; top: 14px; right: 14px;
+    width: 30px; height: 30px; border-radius: 50%;
+    border: 0.5px solid rgba(232,130,154,.25);
+    background: rgba(232,130,154,.1); color: var(--rose);
+    font-size: .75rem; line-height: 1; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .2s;
   }
-  .nav-user-mobile .nav-user-name { font-size: .88rem; color: var(--rose); font-weight: 500; padding: 4px 14px; }
+  .nav-drawer-close:hover { background: rgba(232,130,154,.2); }
+
+  .nav-user-mobile {
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    text-align: center; margin-bottom: 16px; padding-bottom: 20px;
+    border-bottom: 0.5px solid var(--dark-border);
+  }
+  .nav-avatar-mobile-ring {
+    width: 64px; height: 64px; border-radius: 50%; padding: 2px;
+    background: linear-gradient(135deg, var(--rose), var(--gold));
+    display: flex; align-items: center; justify-content: center; margin-bottom: 4px;
+  }
+  .nav-avatar-mobile { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; background: #140C10; }
+  .nav-avatar-iniciales-mobile {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; font-weight: 600; color: #fff; font-family: var(--font-body);
+  }
+  .nav-user-name-mobile {
+    font-family: var(--font-display); font-size: 18px; color: var(--rose);
+    font-style: italic; font-weight: 500;
+  }
+  .nav-user-email-mobile { font-family: var(--font-body); font-size: 11px; color: var(--text-muted); }
   .nav-user-mobile .btn-logout, .nav-user-mobile .btn-login-mobile {
     display: block; width: 100%; text-align: center; padding: 11px 14px;
     border-radius: 20px; font-size: .85rem; font-family: var(--font-body);
     cursor: pointer; text-decoration: none; transition: all .2s; letter-spacing: 1px;
+    margin-top: 8px;
   }
   .nav-user-mobile .btn-logout { border: 0.5px solid rgba(232,130,154,.3); background: rgba(232,130,154,.06); color: var(--rose); }
   .nav-user-mobile .btn-login-mobile { border: none; background: linear-gradient(135deg, var(--rose3), var(--rose)); color: #fff; font-weight: 500; text-transform: uppercase; }
@@ -1007,16 +1056,20 @@ footer span { color: var(--rose); }
 
 .nav-toggle-wrap {
   display: none; flex-direction: column; align-items: center;
-  cursor: pointer; gap: 2px; background: none; border: none; padding: 4px;
+  cursor: pointer; gap: 3px; background: none; border: none; padding: 4px;
 }
 .nav-toggle {
-  display: none; background: none; border: none; cursor: pointer;
-  color: var(--text-light); font-size: 1.4rem; padding: 0;
-  animation: pulsoMenu 2s ease-in-out infinite;
+  display: none; flex-direction: column; justify-content: space-between;
+  width: 22px; height: 15px; background: none; border: none; cursor: pointer;
+  padding: 0; animation: pulsoMenu 2s ease-in-out infinite;
+}
+.nav-toggle-line {
+  display: block; width: 100%; height: 1.5px; border-radius: 2px;
+  background: var(--text-light);
 }
 .nav-toggle-label {
-  font-size: .55rem; letter-spacing: 2px; color: var(--rose);
-  font-family: var(--font-body); font-weight: 500;
+  font-family: var(--font-body); font-size: 8px; letter-spacing: 1.5px;
+  color: var(--rose); font-weight: 500;
   animation: pulsoMenu 2s ease-in-out infinite;
 }
 @keyframes pulsoMenu {
@@ -1025,7 +1078,7 @@ footer span { color: var(--rose); }
 }
 @media (max-width: 768px) {
   .nav-toggle-wrap { display: flex; }
-  .nav-toggle { display: block; }
+  .nav-toggle { display: flex; }
 }
 #btnProductosMovil { display: none !important; }
 @media (max-width: 768px) {
@@ -1439,12 +1492,38 @@ section + section {
         Productos
       </a>
       <div class="nav-toggle-wrap" id="navToggle">
-        <button class="nav-toggle" aria-label="Menú">☰</button>
-        <span class="nav-toggle-label">MENÚ</span>
+        <button class="nav-toggle" aria-label="Menú">
+          <span class="nav-toggle-line"></span>
+          <span class="nav-toggle-line"></span>
+          <span class="nav-toggle-line"></span>
+        </button>
+        <span class="nav-toggle-label">Menú</span>
       </div>
     </div>
 
+    <div class="nav-overlay" id="navOverlay"></div>
+
     <ul class="nav-links" id="navLinks">
+      <li class="nav-drawer-close-wrap">
+        <button class="nav-drawer-close" id="navDrawerClose" aria-label="Cerrar menú">✕</button>
+      </li>
+      <!-- Bloque usuario solo visible en móvil dentro del menú -->
+      <li class="nav-user-mobile">
+        {% if usuario %}
+          <div class="nav-avatar-mobile-ring">
+            {% if usuario.foto_perfil %}
+              <img class="nav-avatar-mobile" src="{{ usuario.foto_perfil }}" alt="{{ usuario.nombre }}">
+            {% else %}
+              <span class="nav-avatar-mobile nav-avatar-iniciales-mobile">{{ (usuario.nombre.split(' ')[:2])|map('first')|join('')|upper }}</span>
+            {% endif %}
+          </div>
+          <span class="nav-user-name-mobile">{{ usuario.nombre }}</span>
+          <span class="nav-user-email-mobile">{{ usuario.email }}</span>
+          <button class="btn-logout" onclick="doLogout()">Cerrar sesión</button>
+        {% else %}
+          <a href="/login" class="btn-login-mobile">Iniciar sesión</a>
+        {% endif %}
+      </li>
       <li><a href="/" class="{{ 'activo' if seccion=='inicio' else '' }}">Inicio</a></li>
       <li><a href="/citas" class="{{ 'activo' if seccion=='citas' else '' }}">Citas</a></li>
       <li><a href="/#productos" class="">Productos</a></li>
@@ -1452,20 +1531,6 @@ section + section {
       <li><a href="/#ubicacion" class="{{ 'activo' if seccion=='ubicacion' else '' }}">Ubicación</a></li>
       <li><a href="/#resenas" class="{{ 'activo' if seccion=='resenas' else '' }}">Reseñas</a></li>
       <li><a href="/#sobre-mi" class="{{ 'activo' if seccion=='sobre-mi' else '' }}">Sobre mí</a></li>
-      <!-- Bloque usuario solo visible en móvil dentro del menú -->
-      <li class="nav-user-mobile">
-        {% if usuario %}
-          {% if usuario.foto_perfil %}
-            <img class="nav-avatar" src="{{ usuario.foto_perfil }}" alt="{{ usuario.nombre }}">
-          {% else %}
-            <span class="nav-avatar-iniciales">{{ (usuario.nombre.split(' ')[:2])|map('first')|join('')|upper }}</span>
-          {% endif %}
-          <span class="nav-user-name">{{ usuario.nombre }}</span>
-          <button class="btn-logout" onclick="doLogout()">Cerrar sesión</button>
-        {% else %}
-          <a href="/login" class="btn-login-mobile">Iniciar sesión</a>
-        {% endif %}
-      </li>
     </ul>
 
     <div class="nav-user" id="navUser">
@@ -2708,15 +2773,26 @@ function toast(msg, type='info'){
   setTimeout(()=>{ el.className=''; }, 3800);
 }
 
-// ── Navbar hamburger ─────────────────────────────────────────────────────────
-const navToggle = document.getElementById('navToggle');
-const navLinks  = document.getElementById('navLinks');
-if(navToggle && navLinks){
-  navToggle.addEventListener('click', ()=>{
-    navLinks.classList.toggle('open');
-  });
-  navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click', ()=>navLinks.classList.remove('open')));
+// ── Navbar hamburger / drawer móvil ───────────────────────────────────────────
+const navToggle      = document.getElementById('navToggle');
+const navLinks       = document.getElementById('navLinks');
+const navOverlay     = document.getElementById('navOverlay');
+const navDrawerClose = document.getElementById('navDrawerClose');
+
+function abrirMenuMovil(){
+  navLinks.classList.add('open');
+  navOverlay.classList.add('open');
 }
+function cerrarMenuMovil(){
+  navLinks.classList.remove('open');
+  navOverlay.classList.remove('open');
+}
+if(navToggle && navLinks){
+  navToggle.addEventListener('click', abrirMenuMovil);
+  navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click', cerrarMenuMovil));
+}
+if(navDrawerClose) navDrawerClose.addEventListener('click', cerrarMenuMovil);
+if(navOverlay) navOverlay.addEventListener('click', cerrarMenuMovil);
 
 // ── Auth ─────────────────────────────────────────────────────────────────────
 async function doLogin(){
