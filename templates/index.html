@@ -261,6 +261,7 @@ body::before {
 .nav-toggle { display: none; background: none; border: none; cursor: pointer; color: var(--text-light); font-size: 1.4rem; padding: 4px; }
 .nav-user-mobile { display: none; }
 #navCloseBtn { display: none; }
+main { transition: filter 0.4s ease; }
 
 .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; width: 100%; position: relative; z-index: 1; }
 
@@ -2787,6 +2788,7 @@ function cerrarNav(){
   if(navLinks) navLinks.classList.remove('open');
   if(navOverlay) navOverlay.classList.remove('open');
   document.body.style.overflow = '';
+  document.querySelector('main') && document.querySelector('main').style.setProperty('filter', '');
 }
 
 if(navToggle){
@@ -2797,6 +2799,7 @@ if(navToggle){
       if(abierto){
         navOverlay.classList.add('open');
         document.body.style.overflow = 'hidden';
+        document.querySelector('main') && document.querySelector('main').style.setProperty('filter', 'blur(3px)');
       } else {
         cerrarNav();
       }
