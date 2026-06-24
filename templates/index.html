@@ -1603,7 +1603,7 @@ button[onclick*="toggleCarritoPanel"]:active {
         </p>
         <div class="hero-cta">
           <a href="/citas" class="btn-primary">Apartar cita</a>
-          <a href="/contacto" class="btn-outline">Contáctanos</a>
+          <a href="/reclamos" class="btn-outline">Reclamos</a>
         </div>
 
       </div>
@@ -2538,13 +2538,19 @@ async function adminLogin() {
   <div class="container">
     <div class="section-header">
       <p class="section-tag">Panel</p>
-      <h2 class="section-title">Todas las <span>citas</span></h2>
-      <p class="section-desc">Panel de administración · Solo visible para Cami</p>
+      <h2 class="section-title">Panel de <span>administración</span></h2>
+      <p class="section-desc">Solo visible para Cami</p>
     </div>
 
-    <div class="card" style="margin-top:32px;">
-      <h3 id="adminTituloCitas" style="font-family:var(--font-display);font-size:1.2rem;color:#fff;margin:0 0 20px;"></h3>
+    <!-- Pestañas -->
+    <div style="display:flex;gap:6px;background:var(--dark-card);border:0.5px solid var(--dark-border);border-radius:30px;padding:5px;max-width:360px;margin:32px auto 0;">
+      <button id="tabBtnCitas" onclick="cambiarTab('citas')" style="flex:1;padding:11px;border:none;border-radius:24px;background:linear-gradient(135deg,var(--rose3),var(--rose));color:#fff;font-family:var(--font-body);font-size:.72rem;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;box-shadow:0 4px 20px rgba(232,130,154,.35);">📅 Citas</button>
+      <button id="tabBtnReclamos" onclick="cambiarTab('reclamos')" style="flex:1;padding:11px;border:none;border-radius:24px;background:transparent;color:var(--text-muted);font-family:var(--font-body);font-size:.72rem;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;">📋 Reclamos</button>
+    </div>
 
+    <!-- Panel Citas -->
+    <div id="panelCitas" class="card" style="margin-top:32px;">
+      <h3 id="adminTituloCitas" style="font-family:var(--font-display);font-size:1.2rem;color:#fff;margin:0 0 20px;"></h3>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px;">
         <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;">
           <div class="field">
@@ -2554,23 +2560,54 @@ async function adminLogin() {
           <button class="btn-secondary-sm" id="btnToggleVistaAdmin" onclick="toggleVistaAdmin()">Ver todas las citas</button>
           <button class="btn-secondary-sm" onclick="cargarCitasAdmin()">↻ Actualizar</button>
         </div>
-        <button class="btn-secondary-sm" onclick="adminLogout()" style="border-color:rgba(232,130,154,.3);color:var(--rose);">
-          Cerrar sesión admin
-        </button>
+        <button class="btn-secondary-sm" onclick="adminLogout()" style="border-color:rgba(232,130,154,.3);color:var(--rose);">Cerrar sesión admin</button>
       </div>
-
       <div id="adminContadorCitas" style="font-size:.78rem;color:var(--text-muted);margin-bottom:16px;letter-spacing:.3px;"></div>
-
       <div id="adminListaCitas">
         <div class="empty-state"><div class="big">🌸</div><p>Cargando citas...</p></div>
       </div>
     </div>
+
+    <!-- Panel Reclamos -->
+    <div id="panelReclamos" class="card" style="margin-top:32px;display:none;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px;">
+        <h3 style="font-family:var(--font-display);font-size:1.2rem;color:#fff;margin:0;">Reclamos recibidos</h3>
+        <div style="display:flex;gap:8px;">
+          <button class="btn-secondary-sm" onclick="cargarReclamosAdmin()">↻ Actualizar</button>
+          <button class="btn-secondary-sm" onclick="adminLogout()" style="border-color:rgba(232,130,154,.3);color:var(--rose);">Cerrar sesión admin</button>
+        </div>
+      </div>
+      <div id="adminContadorReclamos" style="font-size:.78rem;color:var(--text-muted);margin-bottom:16px;letter-spacing:.3px;"></div>
+      <div id="adminListaReclamos">
+        <div class="empty-state"><div class="big">📋</div><p>Cargando reclamos...</p></div>
+      </div>
+    </div>
+
   </div>
 </section>
 
 <script>
 const FECHA_HOY_ADMIN = '{{ fecha_hoy }}';
 
+// ── Pestañas ──────────────────────────────────────────────────────────────────
+function cambiarTab(tab) {
+  const activoStyle = 'flex:1;padding:11px;border:none;border-radius:24px;background:linear-gradient(135deg,var(--rose3),var(--rose));color:#fff;font-family:var(--font-body);font-size:.72rem;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;box-shadow:0 4px 20px rgba(232,130,154,.35);';
+  const inactivoStyle = 'flex:1;padding:11px;border:none;border-radius:24px;background:transparent;color:var(--text-muted);font-family:var(--font-body);font-size:.72rem;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;';
+  if (tab === 'citas') {
+    document.getElementById('tabBtnCitas').style.cssText = activoStyle;
+    document.getElementById('tabBtnReclamos').style.cssText = inactivoStyle;
+    document.getElementById('panelCitas').style.display = 'block';
+    document.getElementById('panelReclamos').style.display = 'none';
+  } else {
+    document.getElementById('tabBtnCitas').style.cssText = inactivoStyle;
+    document.getElementById('tabBtnReclamos').style.cssText = activoStyle;
+    document.getElementById('panelCitas').style.display = 'none';
+    document.getElementById('panelReclamos').style.display = 'block';
+    cargarReclamosAdmin();
+  }
+}
+
+// ── Citas ─────────────────────────────────────────────────────────────────────
 function fmtFechaAdmin(f) {
   if (!f) return '';
   const [y, m, d] = f.split('-');
@@ -2680,6 +2717,68 @@ async function adminLogout() {
 }
 
 if (document.getElementById('adminListaCitas')) cargarCitasAdmin();
+
+// ── Reclamos ──────────────────────────────────────────────────────────────────
+async function cargarReclamosAdmin() {
+  const lista = document.getElementById('adminListaReclamos');
+  const contador = document.getElementById('adminContadorReclamos');
+  lista.innerHTML = '<div class="empty-state"><div class="big">📋</div><p>Cargando...</p></div>';
+  try {
+    const r = await fetch('/api/reclamos');
+    const reclamos = await r.json();
+    const total = reclamos.length;
+    const pendientes = reclamos.filter(x => x.estado === 'pendiente').length;
+    const resueltos = reclamos.filter(x => x.estado === 'resuelto').length;
+    if (contador) contador.innerHTML = `Total: ${total} reclamos · <span style="color:#E8829A">${pendientes} pendientes</span> · <span style="color:#81c784">${resueltos} resueltos</span>`;
+    if (!reclamos.length) {
+      lista.innerHTML = '<div class="empty-state"><div class="big">✅</div><p>No hay reclamos registrados</p></div>';
+      return;
+    }
+    lista.innerHTML = reclamos.map(rec => {
+      const colores = { pendiente: '#E8829A', revisado: '#C9A96E', resuelto: '#81c784' };
+      const fondos  = { pendiente: 'rgba(232,130,154,.1)', revisado: 'rgba(201,169,110,.1)', resuelto: 'rgba(129,199,132,.1)' };
+      const color = colores[rec.estado] || '#E8829A';
+      const fondo = fondos[rec.estado] || 'rgba(232,130,154,.1)';
+      const fechaFmt = rec.creado_en ? rec.creado_en.slice(0,10).split('-').reverse().join('/') : '';
+      return `
+      <div class="cita-card" id="rec-${rec.id}">
+        <div style="flex:1;">
+          <div class="cita-nombre">${rec.nombre}</div>
+          <div class="cita-meta">
+            <span>${rec.email}</span>
+            ${rec.telefono ? `<span>${rec.telefono}</span>` : ''}
+            <span>${fechaFmt}</span>
+          </div>
+          <p style="font-size:.84rem;color:var(--text-muted);margin-top:8px;line-height:1.6;">${rec.mensaje}</p>
+          <div style="margin-top:10px;">
+            <span style="display:inline-block;padding:3px 12px;border-radius:20px;font-size:.66rem;letter-spacing:1.5px;text-transform:uppercase;background:${fondo};border:0.5px solid ${color};color:${color};">${rec.estado}</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-start;flex-shrink:0;">
+          ${rec.estado !== 'revisado' && rec.estado !== 'resuelto' ? `<button class="btn-secondary-sm" onclick="cambiarEstadoReclamo(${rec.id},'revisado')" style="border-color:rgba(201,169,110,.4);color:var(--gold);">Revisado</button>` : ''}
+          ${rec.estado !== 'resuelto' ? `<button class="btn-complete-cita" onclick="cambiarEstadoReclamo(${rec.id},'resuelto')">Resuelto</button>` : ''}
+          <a href="mailto:${rec.email}?subject=Tu reclamo en Cami Cosmetología&body=Hola ${rec.nombre}," class="btn-secondary-sm" style="text-decoration:none;display:inline-flex;align-items:center;">Responder</a>
+        </div>
+      </div>`;
+    }).join('');
+  } catch {
+    lista.innerHTML = '<div class="empty-state"><div class="big">⚠️</div><p>Error al cargar reclamos</p></div>';
+  }
+}
+
+async function cambiarEstadoReclamo(id, estado) {
+  try {
+    const r = await fetch(`/api/reclamos/${id}`, {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({estado})
+    });
+    if (!r.ok) throw new Error();
+    cargarReclamosAdmin();
+  } catch {
+    alert('No se pudo actualizar el estado');
+  }
+}
 </script>
 {% endif %}
 

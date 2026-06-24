@@ -58,6 +58,15 @@ def init_db():
         estrellas  INTEGER NOT NULL CHECK (estrellas BETWEEN 1 AND 5),
         creada_en  TIMESTAMP DEFAULT NOW()
     )''')
+    c.execute('''CREATE TABLE IF NOT EXISTS reclamos (
+        id         SERIAL PRIMARY KEY,
+        nombre     TEXT NOT NULL,
+        email      TEXT NOT NULL,
+        telefono   TEXT,
+        mensaje    TEXT NOT NULL,
+        estado     TEXT DEFAULT 'pendiente',
+        creado_en  TIMESTAMP DEFAULT NOW()
+    )''')
     conn.commit()
     conn.close()
 
@@ -85,6 +94,10 @@ def crepelo_page():
 @app.route('/contacto')
 def contacto_page():
     return redirect('/#contacto')
+
+@app.route('/reclamos')
+def reclamos_page():
+    return render_template('reclamos.html')
 
 @app.route('/ubicacion')
 def ubicacion_page():
@@ -382,6 +395,64 @@ def crear_resena():
         conn.commit()
         conn.close()
         return jsonify({'mensaje': '¡Gracias por tu reseña!', 'id': rid}), 201
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/reclamos', methods=['POST'])
+def crear_reclamo():
+    data    = request.get_json()
+    nombre  = data.get('nombre', '').strip()
+    email   = data.get('email', '').strip().lower()
+    telefono = data.get('telefono', '').strip() or None
+    mensaje = data.get('mensaje', '').strip()
+    if not nombre or not email or not mensaje:
+        return jsonify({'error': 'Nombre, email y mensaje son obligatorios'}), 400
+    try:
+        conn = get_conn()
+        c = conn.cursor()
+        c.execute('INSERT INTO reclamos (nombre,email,telefono,mensaje) VALUES (%s,%s,%s,%s) RETURNING id',
+                  (nombre, email, telefono, mensaje))
+        rid = c.fetchone()[0]
+        conn.commit()
+        conn.close()
+        return jsonify({'mensaje': 'Reclamo enviado', 'id': rid}), 201
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/reclamos', methods=['GET'])
+def listar_reclamos():
+    if not session.get('admin'):
+        return jsonify({'error': 'No autorizado'}), 403
+    try:
+        conn = get_conn()
+        c = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        c.execute('SELECT * FROM reclamos ORDER BY creado_en DESC')
+        rows = c.fetchall()
+        conn.close()
+        result = []
+        for row in rows:
+            d = dict(row)
+            if d.get('creado_en'): d['creado_en'] = str(d['creado_en'])
+            result.append(d)
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/reclamos/<int:rid>', methods=['PUT'])
+def actualizar_reclamo(rid):
+    if not session.get('admin'):
+        return jsonify({'error': 'No autorizado'}), 403
+    data   = request.get_json()
+    estado = data.get('estado')
+    if estado not in ('pendiente', 'revisado', 'resuelto'):
+        return jsonify({'error': 'Estado inválido'}), 400
+    try:
+        conn = get_conn()
+        c = conn.cursor()
+        c.execute('UPDATE reclamos SET estado=%s WHERE id=%s', (estado, rid))
+        conn.commit()
+        conn.close()
+        return jsonify({'mensaje': 'Estado actualizado'})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
