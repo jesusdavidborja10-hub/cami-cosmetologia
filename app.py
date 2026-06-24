@@ -5,6 +5,7 @@ import os, hashlib, secrets
 import psycopg2
 import psycopg2.extras
 from datetime import datetime, timedelta
+import pytz
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', secrets.token_hex(32))
@@ -75,6 +76,9 @@ try:
 except Exception as e:
     print(f"DB init warning: {e}")
 
+def hoy_bogota():
+    return datetime.now(pytz.timezone('America/Bogota')).strftime('%Y-%m-%d')
+
 def hash_password(pw):
     return hashlib.sha256(pw.encode()).hexdigest()
 
@@ -127,7 +131,7 @@ def sobre_mi():
 def admin_page():
     if not session.get('admin'):
         return render_template('index.html', seccion='admin-login', usuario=session.get('usuario'))
-    fecha_hoy = datetime.now().strftime('%Y-%m-%d')
+    fecha_hoy = hoy_bogota()
     return render_template('index.html', seccion='admin-citas', usuario=session.get('usuario'), fecha_hoy=fecha_hoy)
 
 @app.route('/api/admin/login', methods=['POST'])
@@ -149,7 +153,7 @@ def admin_listar_citas():
         if fecha:
             c.execute("SELECT * FROM citas WHERE fecha=%s ORDER BY hora", (fecha,))
         else:
-            c.execute("SELECT * FROM citas WHERE fecha >= CURRENT_DATE ORDER BY fecha,hora")
+            c.execute("SELECT * FROM citas WHERE fecha >= %s ORDER BY fecha,hora", (hoy_bogota(),))
         rows = c.fetchall()
         conn.close()
         result = []
@@ -310,12 +314,12 @@ def listar_citas():
             if fecha:
                 c.execute("SELECT * FROM citas WHERE usuario_id=%s AND fecha=%s ORDER BY hora", (u['id'], fecha))
             else:
-                c.execute("SELECT * FROM citas WHERE usuario_id=%s AND fecha >= CURRENT_DATE ORDER BY fecha,hora", (u['id'],))
+                c.execute("SELECT * FROM citas WHERE usuario_id=%s AND fecha >= %s ORDER BY fecha,hora", (u['id'], hoy_bogota()))
         else:
             if fecha:
                 c.execute("SELECT * FROM citas WHERE fecha=%s ORDER BY hora", (fecha,))
             else:
-                c.execute("SELECT * FROM citas WHERE fecha >= CURRENT_DATE ORDER BY fecha,hora")
+                c.execute("SELECT * FROM citas WHERE fecha >= %s ORDER BY fecha,hora", (hoy_bogota(),))
         rows = c.fetchall()
         conn.close()
         # Convertir fecha y datetime a string para JSON
