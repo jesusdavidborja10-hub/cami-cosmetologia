@@ -138,6 +138,30 @@ def admin_login():
         return jsonify({'ok': True})
     return jsonify({'error': 'Contraseña incorrecta'}), 401
 
+@app.route('/api/admin/citas', methods=['GET'])
+def admin_listar_citas():
+    if not session.get('admin'):
+        return jsonify({'error': 'No autorizado'}), 401
+    fecha = request.args.get('fecha')
+    try:
+        conn = get_conn()
+        c = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        if fecha:
+            c.execute("SELECT * FROM citas WHERE fecha=%s ORDER BY hora", (fecha,))
+        else:
+            c.execute("SELECT * FROM citas WHERE fecha >= CURRENT_DATE ORDER BY fecha,hora")
+        rows = c.fetchall()
+        conn.close()
+        result = []
+        for row in rows:
+            d = dict(row)
+            if d.get('fecha'): d['fecha'] = str(d['fecha'])
+            if d.get('creada_en'): d['creada_en'] = str(d['creada_en'])
+            result.append(d)
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 @app.route('/api/admin/logout', methods=['POST'])
 def admin_logout():
     session.pop('admin', None)

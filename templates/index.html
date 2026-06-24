@@ -2651,7 +2651,7 @@ function actualizarContadorAdmin(fecha) {
 
 async function cargarCitasAdmin() {
   const fecha = document.getElementById('adminFiltroFecha')?.value;
-  const url = fecha ? `/api/citas?fecha=${fecha}` : '/api/citas';
+  const url = fecha ? `/api/admin/citas?fecha=${fecha}` : '/api/admin/citas';
   const lista = document.getElementById('adminListaCitas');
   lista.innerHTML = '<div class="empty-state"><div class="big">🌸</div><p>Cargando...</p></div>';
   actualizarEncabezadoAdmin(fecha);
