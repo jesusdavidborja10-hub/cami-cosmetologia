@@ -441,18 +441,33 @@ body.menu-abierto::after {
 
 .servicios-section { padding: 80px 0 60px; position: relative; z-index: 1; }
 
-.srv-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 24px;
+.srv-cat-label {
+  font-family: var(--font-body);
+  font-size: .72rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin: 40px 0 16px;
+  font-weight: 600;
+  background: linear-gradient(90deg, var(--gold) 0%, #f3e0b8 25%, var(--gold) 50%, #f3e0b8 75%, var(--gold) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: var(--gold);
+  animation: srvCatShine 4s linear infinite;
+  display: inline-block;
 }
+.srv-cat-label:first-of-type { margin-top: 8px; }
+
+@keyframes srvCatShine {
+  to { background-position: -200% center; }
+}
+
+.srv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 14px; }
 .srv-card {
-  background: linear-gradient(145deg, #1E1118, #221320);
-  border: 0.5px solid rgba(232,130,154,.12);
-  border-radius: 24px; padding: 36px 30px;
-  position: relative; overflow: hidden;
-  transition: transform .4s cubic-bezier(.34,1.56,.64,1), border-color .4s, box-shadow .4s;
-  cursor: default; display: flex; flex-direction: column; gap: 0;
-  animation: none !important;
+  background: var(--dark-card); border: 0.5px solid var(--dark-border);
+  border-radius: 16px; padding: 18px 16px;
+  position: relative; overflow: hidden; transition: all .3s;
 }
 .srv-card::before {
   content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
@@ -481,35 +496,23 @@ body.menu-abierto::after {
 .srv-card:hover::before, .srv-card:hover::after { opacity: 1; }
 .srv-card:hover .srv-card-shine { left: 150%; }
 
-.srv-card-icon {
-  font-size: 2.4rem; margin-bottom: 24px; display: inline-block;
-  transition: transform .4s cubic-bezier(.34,1.56,.64,1);
-  filter: drop-shadow(0 4px 8px rgba(0,0,0,.3));
-}
-
-.srv-card-name {
-  font-family: var(--font-display); font-size: 1.5rem;
-  font-weight: 400; color: #fff; margin-bottom: 10px; line-height: 1.2;
-}
-.srv-card-desc {
-  font-size: .82rem; color: var(--text-muted); line-height: 1.7;
-  font-weight: 300; flex: 1; margin-bottom: 20px;
-}
-.srv-card-price {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-family: var(--font-display); font-size: 1.1rem;
-  font-weight: 400; color: var(--gold);
-  padding: 8px 16px; border-radius: 30px;
-  background: rgba(201,169,110,.08);
-  border: 0.5px solid rgba(201,169,110,.2);
-  width: fit-content; margin-top: auto;
-  transition: all .3s;
-}
+.srv-card-icon { font-size: 1.5rem; margin-bottom: 10px; }
+.srv-card-name { font-family: var(--font-display); font-size: .95rem; font-weight: 500; color: #fff; line-height: 1.25; }
+.srv-card-desc { font-size: .72rem; color: var(--text-muted); margin-top: 6px; line-height: 1.5; font-weight: 300; }
+.srv-card-price { margin-top: 10px; font-size: .74rem; font-weight: 500; color: var(--gold); letter-spacing: .5px; }
 .srv-card:hover .srv-card-price {
   background: rgba(201,169,110,.15);
   border-color: rgba(201,169,110,.4);
   box-shadow: 0 4px 16px rgba(201,169,110,.15);
 }
+
+/* Fusionado desde style.css */
+.fade-up { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
+.fade-up.visible { opacity: 1; transform: translateY(0); }
+.fade-up-delay-1 { transition-delay: .1s; }
+.fade-up-delay-2 { transition-delay: .2s; }
+.fade-up-delay-3 { transition-delay: .3s; }
+.fade-up-delay-4 { transition-delay: .4s; }
 
 #sec-citas { padding: 60px 0; position: relative; z-index: 1; }
 
@@ -947,6 +950,7 @@ footer span { color: var(--rose); }
   cursor: pointer; transition: color .2s; padding: 0; line-height: 1;
 }
 .star-btn.active { color: var(--gold); }
+.star-btn:hover { color: var(--gold); transform: scale(1.2); }
 
 .login-prompt {
   text-align: center; padding: 40px 24px;
@@ -1046,7 +1050,7 @@ footer span { color: var(--rose); }
   .card { padding: 24px 20px; }
   .auth-card { padding: 32px 24px; }
   .ubicacion-grid { grid-template-columns: 1fr; }
-  .srv-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+  .srv-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
   .resenas-layout { grid-template-columns: 1fr; }
 }
 @media (max-width: 480px) {
