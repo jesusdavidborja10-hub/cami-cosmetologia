@@ -68,7 +68,43 @@ def init_db():
         estado     TEXT DEFAULT 'pendiente',
         creado_en  TIMESTAMP DEFAULT NOW()
     )''')
+    c.execute('''CREATE TABLE IF NOT EXISTS servicios (
+        id          SERIAL PRIMARY KEY,
+        nombre      TEXT NOT NULL,
+        categoria   TEXT NOT NULL,
+        precio      INTEGER NOT NULL DEFAULT 0,
+        precio_texto TEXT,
+        icono       TEXT DEFAULT '✨',
+        descripcion TEXT,
+        orden       INTEGER DEFAULT 0,
+        activo      BOOLEAN DEFAULT TRUE,
+        creado_en   TIMESTAMP DEFAULT NOW()
+    )''')
     conn.commit()
+
+    c.execute('SELECT COUNT(*) FROM servicios')
+    if c.fetchone()[0] == 0:
+        servicios_iniciales = [
+            ('Cejas semipermanente', 'Cejas', 15000, None, '🖌️', 'Diseño de cejas semipermanente para realzar tu mirada por más tiempo.', 1),
+            ('Cejas con cera', 'Cejas', 10000, None, '🌿', 'Depilación de cejas con cera, suave y precisa.', 2),
+            ('Cejas con cuchilla', 'Cejas', 3000, None, '✂️', 'Diseño rápido de cejas con técnica de cuchilla.', 3),
+            ('Pestañas', 'Pestañas y maquillaje', 20000, None, '👁️', 'Tratamiento de pestañas para una mirada más expresiva y definida.', 4),
+            ('Maquillaje', 'Pestañas y maquillaje', 65000, 'Desde $65.000 en adelante', '💄', 'Maquillaje profesional para cualquier ocasión. Natural, social o de noche.', 5),
+            ('Media pierna en cera', 'Depilación', 25000, None, '🦵', 'Depilación suave y duradera con cera.', 6),
+            ('Pierna completa en cera', 'Depilación', 45000, None, '🦵', 'Depilación completa con cera, piel suave por más tiempo.', 7),
+            ('Axilas', 'Depilación', 15000, None, '🧴', 'Depilación de axilas con cera.', 8),
+            ('Bikini', 'Depilación', 30000, None, '🌷', 'Depilación de zona bikini con cera.', 9),
+            ('Bozo', 'Depilación', 8000, None, '💋', 'Depilación de bozo con cera.', 10),
+            ('Masaje cuerpo completo', 'Masajes', 78000, None, '💆‍♀️', 'Masaje relajante de cuerpo completo para liberar tensiones.', 11),
+            ('Masaje facial', 'Masajes', 28000, None, '🧖‍♀️', 'Masaje facial para relajar y renovar la piel del rostro.', 12),
+            ('Masaje reductor', 'Masajes', 35000, None, '🔥', 'Masaje enfocado en modelar y reducir medidas.', 13),
+            ('Masaje relajante', 'Masajes', 45000, None, '🕯️', 'Masaje relajante de 40 a 60 minutos para desconectar por completo.', 14),
+            ('Hidratación cabellos', 'Cabello', 40000, None, '💧', 'Hidratación profunda para devolverle brillo y suavidad a tu cabello.', 15),
+        ]
+        c.executemany('''INSERT INTO servicios (nombre,categoria,precio,precio_texto,icono,descripcion,orden)
+                         VALUES (%s,%s,%s,%s,%s,%s,%s)''', servicios_iniciales)
+        conn.commit()
+
     conn.close()
 
 try:
@@ -481,6 +517,109 @@ def actualizar_reclamo(rid):
         conn.commit()
         conn.close()
         return jsonify({'mensaje': 'Estado actualizado'})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/servicios', methods=['GET'])
+def listar_servicios():
+    try:
+        conn = get_conn()
+        c = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        c.execute('SELECT * FROM servicios WHERE activo=TRUE ORDER BY categoria, orden, id')
+        rows = c.fetchall()
+        conn.close()
+        result = []
+        for row in rows:
+            d = dict(row)
+            if d.get('creado_en'): d['creado_en'] = str(d['creado_en'])
+            result.append(d)
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/admin/servicios', methods=['GET'])
+def admin_listar_servicios():
+    if not session.get('admin'):
+        return jsonify({'error': 'No autorizado'}), 401
+    try:
+        conn = get_conn()
+        c = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        c.execute('SELECT * FROM servicios ORDER BY categoria, orden, id')
+        rows = c.fetchall()
+        conn.close()
+        result = []
+        for row in rows:
+            d = dict(row)
+            if d.get('creado_en'): d['creado_en'] = str(d['creado_en'])
+            result.append(d)
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/admin/servicios', methods=['POST'])
+def admin_crear_servicio():
+    if not session.get('admin'):
+        return jsonify({'error': 'No autorizado'}), 401
+    data = request.get_json()
+    nombre = (data.get('nombre') or '').strip()
+    categoria = (data.get('categoria') or '').strip()
+    precio = data.get('precio')
+    if not nombre or not categoria or precio is None:
+        return jsonify({'error': 'Nombre, categoría y precio son obligatorios'}), 400
+    if not isinstance(precio, int) or precio < 0:
+        return jsonify({'error': 'El precio debe ser un entero mayor o igual a 0'}), 400
+    try:
+        conn = get_conn()
+        c = conn.cursor()
+        c.execute('''INSERT INTO servicios (nombre,categoria,precio,precio_texto,icono,descripcion,orden)
+                     VALUES (%s,%s,%s,%s,%s,%s,%s) RETURNING id''',
+                  (nombre, categoria, precio, data.get('precio_texto') or None,
+                   data.get('icono') or '✨', data.get('descripcion') or '', data.get('orden') or 0))
+        sid = c.fetchone()[0]
+        conn.commit()
+        conn.close()
+        return jsonify({'mensaje': 'Servicio creado', 'id': sid}), 201
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/admin/servicios/<int:sid>', methods=['PUT'])
+def admin_editar_servicio(sid):
+    if not session.get('admin'):
+        return jsonify({'error': 'No autorizado'}), 401
+    data = request.get_json()
+    campos = ['nombre', 'categoria', 'precio', 'precio_texto', 'icono', 'descripcion', 'orden', 'activo']
+    sets, valores = [], []
+    for campo in campos:
+        if campo in data:
+            valor = data[campo]
+            if campo == 'precio' and (not isinstance(valor, int) or valor < 0):
+                return jsonify({'error': 'El precio debe ser un entero mayor o igual a 0'}), 400
+            sets.append(f'{campo}=%s')
+            valores.append(valor)
+    if not sets:
+        return jsonify({'error': 'Nada para actualizar'}), 400
+    valores.append(sid)
+    try:
+        conn = get_conn()
+        c = conn.cursor()
+        c.execute(f'UPDATE servicios SET {", ".join(sets)} WHERE id=%s', valores)
+        conn.commit()
+        conn.close()
+        return jsonify({'mensaje': 'Servicio actualizado'})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/admin/servicios/<int:sid>', methods=['DELETE'])
+def admin_eliminar_servicio(sid):
+    if not session.get('admin'):
+        return jsonify({'error': 'No autorizado'}), 401
+    try:
+        conn = get_conn()
+        c = conn.cursor()
+        c.execute('DELETE FROM servicios WHERE id=%s', (sid,))
+        conn.commit()
+        conn.close()
+        return jsonify({'mensaje': 'Servicio eliminado'})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
