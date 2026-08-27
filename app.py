@@ -10,7 +10,7 @@ import pytz
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', secrets.token_hex(32))
 app.permanent_session_lifetime = timedelta(days=30)
-ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'cami2025')
+ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD')
 CORS(app)
 
 # ── Google OAuth ───────────────────────────────────────────────────────────────
