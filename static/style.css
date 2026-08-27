@@ -189,6 +189,8 @@ body::before {
 /* ── SERVICIOS ── */
 .servicios-section { padding: 80px 0 60px; position: relative; z-index: 1; }
 
+.srv-cat-label { font-family: var(--font-body); font-size: .68rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin: 40px 0 16px; opacity: .85; }
+.srv-cat-label:first-of-type { margin-top: 8px; }
 .srv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
 .srv-card {
   background: var(--dark-card); border: 0.5px solid var(--dark-border);
