@@ -327,12 +327,16 @@ HORARIOS = ['09:00','09:30','10:00','10:30','11:00','11:30',
 @app.route('/api/disponibilidad')
 def disponibilidad():
     fecha = request.args.get('fecha')
+    excluir_id = request.args.get('excluir_id', type=int)
     if not fecha:
         return jsonify({'error': 'Fecha requerida'}), 400
     try:
         conn = get_conn()
         c = conn.cursor()
-        c.execute("SELECT hora FROM citas WHERE fecha=%s AND estado!='cancelada'", (fecha,))
+        if excluir_id:
+            c.execute("SELECT hora FROM citas WHERE fecha=%s AND estado!='cancelada' AND id!=%s", (fecha, excluir_id))
+        else:
+            c.execute("SELECT hora FROM citas WHERE fecha=%s AND estado!='cancelada'", (fecha,))
         ocupados = {r[0] for r in c.fetchall()}
         conn.close()
         return jsonify([{'hora': h, 'disponible': h not in ocupados} for h in HORARIOS])
@@ -400,7 +404,17 @@ def crear_cita():
 def cancelar_cita(cid):
     try:
         conn = get_conn()
-        c = conn.cursor()
+        c = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        c.execute("SELECT usuario_id FROM citas WHERE id=%s", (cid,))
+        cita = c.fetchone()
+        if not cita:
+            conn.close()
+            return jsonify({'error': 'Cita no encontrada'}), 404
+        u = session.get('usuario')
+        es_dueño = bool(u) and cita['usuario_id'] == u['id']
+        if not session.get('admin') and not es_dueño:
+            conn.close()
+            return jsonify({'error': 'No autorizado'}), 403
         c.execute("UPDATE citas SET estado='cancelada' WHERE id=%s", (cid,))
         conn.commit()
         conn.close()
@@ -417,6 +431,75 @@ def completar_cita(id):
         conn.commit()
         conn.close()
         return jsonify({'mensaje': 'Cita marcada como completada'})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/citas/mias', methods=['GET'])
+def mis_citas():
+    u = session.get('usuario')
+    if not u:
+        return jsonify({'error': 'No autorizado'}), 401
+    try:
+        conn = get_conn()
+        c = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        c.execute("SELECT * FROM citas WHERE usuario_id=%s ORDER BY fecha DESC, hora DESC", (u['id'],))
+        rows = c.fetchall()
+        conn.close()
+        result = []
+        for row in rows:
+            d = dict(row)
+            if d.get('fecha'): d['fecha'] = str(d['fecha'])
+            if d.get('creada_en'): d['creada_en'] = str(d['creada_en'])
+            result.append(d)
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/citas/<int:cid>/reagendar', methods=['PUT'])
+def reagendar_cita(cid):
+    u = session.get('usuario')
+    if not u:
+        return jsonify({'error': 'No autorizado'}), 401
+    data = request.get_json() or {}
+    nueva_fecha = data.get('fecha')
+    nueva_hora  = data.get('hora')
+    if not nueva_fecha or not nueva_hora:
+        return jsonify({'error': 'Selecciona una fecha y hora'}), 400
+    try:
+        conn = get_conn()
+        c = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        c.execute("SELECT * FROM citas WHERE id=%s", (cid,))
+        cita = c.fetchone()
+        if not cita:
+            conn.close()
+            return jsonify({'error': 'Cita no encontrada'}), 404
+        if cita['usuario_id'] != u['id']:
+            conn.close()
+            return jsonify({'error': 'No autorizado'}), 403
+        if cita['estado'] != 'pendiente':
+            conn.close()
+            return jsonify({'error': 'Solo se pueden reagendar citas pendientes'}), 400
+
+        tz = pytz.timezone('America/Bogota')
+        ahora = datetime.now(tz)
+        dt_actual = tz.localize(datetime.strptime(f"{cita['fecha']} {cita['hora']}", '%Y-%m-%d %H:%M'))
+        if dt_actual - ahora < timedelta(hours=3):
+            conn.close()
+            return jsonify({'error': 'Ya no se puede reagendar esta cita, contáctanos directamente por WhatsApp'}), 400
+
+        c.execute("SELECT id FROM citas WHERE fecha=%s AND hora=%s AND estado!='cancelada' AND id!=%s",
+                  (nueva_fecha, nueva_hora, cid))
+        if c.fetchone():
+            conn.close()
+            return jsonify({'error': 'Ese horario ya está reservado'}), 409
+
+        c.execute("UPDATE citas SET fecha=%s, hora=%s WHERE id=%s RETURNING *", (nueva_fecha, nueva_hora, cid))
+        actualizada = dict(c.fetchone())
+        conn.commit()
+        conn.close()
+        if actualizada.get('fecha'): actualizada['fecha'] = str(actualizada['fecha'])
+        if actualizada.get('creada_en'): actualizada['creada_en'] = str(actualizada['creada_en'])
+        return jsonify(actualizada)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 

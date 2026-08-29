@@ -1944,6 +1944,13 @@ button[onclick*="toggleCarritoPanel"]:active {
 
     <div style="max-width:600px;margin:0 auto 36px;">
 
+    {% if usuario %}
+    <div class="tabs-row">
+      <button class="tab-btn active" onclick="switchTab('nueva')">Nueva cita</button>
+      <button class="tab-btn" onclick="switchTab('mis')">Mis citas</button>
+    </div>
+    {% endif %}
+
     <!-- Nueva cita -->
     <div id="panel-nueva">
       <div class="card">
@@ -2025,6 +2032,195 @@ button[onclick*="toggleCarritoPanel"]:active {
         </div>
       </div>
     </div>
+
+    <!-- Mis citas -->
+    {% if usuario %}
+    <div id="panel-mis" style="display:none;">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px;">
+          <h3 style="font-family:var(--font-display);font-size:1.2rem;color:#fff;margin:0;">Mis citas</h3>
+          <button class="btn-secondary-sm" onclick="cargarCitas()">↻ Actualizar</button>
+        </div>
+        <div id="listaCitas">
+          <div class="empty-state"><div class="big">🌸</div><p>Cargando…</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal reagendar -->
+    <div class="modal-overlay" id="modalReagendarOverlay">
+      <div class="modal" style="max-width:480px;max-height:85vh;overflow-y:auto;">
+        <h3>Reagendar cita</h3>
+        <p>Elige la nueva fecha y hora para tu cita de <strong id="reagServicioNombre" style="color:#fff;"></strong>.</p>
+
+        <div class="field full" style="margin-top:20px;">
+          <label>Selecciona una fecha</label>
+          <div class="calendario-wrap" id="calendarioWrapReagendar">
+            <div class="cal-header">
+              <button class="cal-nav" onclick="cambiarMesReagendar(-1)">&#8592;</button>
+              <span class="cal-mes-titulo" id="calMesTituloReagendar"></span>
+              <button class="cal-nav" onclick="cambiarMesReagendar(1)">&#8594;</button>
+            </div>
+            <div class="cal-dias-semana">
+              <span>Dom</span><span>Lun</span><span>Mar</span><span>Mié</span>
+              <span>Jue</span><span>Vie</span><span>Sáb</span>
+            </div>
+            <div class="cal-grid" id="calGridReagendar"></div>
+          </div>
+        </div>
+
+        <div class="field full" id="horasSectionReagendar" style="display:none;margin-top:16px;">
+          <label id="horasLabelReagendar">Horas disponibles</label>
+          <div class="horas-grid-visual" id="horasGridReagendar">
+            <p style="color:var(--text-muted);font-size:.85rem;grid-column:1/-1;padding:8px 0">
+              Selecciona una fecha primero
+            </p>
+          </div>
+        </div>
+
+        <div class="modal-btns">
+          <button class="btn-secondary-sm" onclick="cerrarModalReagendar()">Cancelar</button>
+          <button class="btn-form-primary" style="width:auto;padding:9px 22px;margin-top:0;" onclick="confirmarReagendar()">Confirmar nueva fecha</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+    let citaReagendarId = null;
+    let calFechaReagendar = new Date();
+    let horaSelReagendar = '';
+    let fechaSelReagendar = '';
+
+    function abrirModalReagendar(id, servicio, fechaActual) {
+      citaReagendarId = id;
+      horaSelReagendar = '';
+      fechaSelReagendar = '';
+      document.getElementById('reagServicioNombre').textContent = servicio;
+      document.getElementById('horasSectionReagendar').style.display = 'none';
+      document.getElementById('horasGridReagendar').innerHTML = '<p style="color:var(--text-muted);font-size:.85rem;grid-column:1/-1;padding:8px 0">Selecciona una fecha primero</p>';
+      const [y, m] = fechaActual.split('-');
+      calFechaReagendar = new Date(parseInt(y, 10), parseInt(m, 10) - 1, 1);
+      renderCalendarioReagendar();
+      document.getElementById('modalReagendarOverlay').classList.add('open');
+    }
+
+    function cerrarModalReagendar() {
+      document.getElementById('modalReagendarOverlay').classList.remove('open');
+    }
+
+    document.getElementById('modalReagendarOverlay').addEventListener('click', e => {
+      if (e.target === e.currentTarget) cerrarModalReagendar();
+    });
+
+    function renderCalendarioReagendar() {
+      const hoy = new Date();
+      hoy.setHours(0,0,0,0);
+      const mes = calFechaReagendar.getMonth();
+      const anio = calFechaReagendar.getFullYear();
+
+      document.getElementById('calMesTituloReagendar').textContent = MESES[mes] + ' ' + anio;
+
+      const grid = document.getElementById('calGridReagendar');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      const primerDia = new Date(anio, mes, 1).getDay();
+      const diasEnMes = new Date(anio, mes + 1, 0).getDate();
+
+      for (let i = 0; i < primerDia; i++) {
+        const vacio = document.createElement('div');
+        vacio.className = 'cal-dia cal-dia-vacio';
+        grid.appendChild(vacio);
+      }
+
+      for (let d = 1; d <= diasEnMes; d++) {
+        const fecha = new Date(anio, mes, d);
+        fecha.setHours(0,0,0,0);
+        const fechaStr = `${anio}-${String(mes+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+        const esHoy = fecha.getTime() === hoy.getTime();
+        const esPasado = fecha < hoy;
+        const seleccionado = fechaStr === fechaSelReagendar;
+
+        const div = document.createElement('div');
+        div.textContent = d;
+        div.className = 'cal-dia' +
+          (esPasado ? ' cal-dia-pasado' : '') +
+          (esHoy ? ' cal-dia-hoy' : '') +
+          (seleccionado ? ' cal-dia-seleccionado' : '');
+
+        if (!esPasado) {
+          div.onclick = () => seleccionarFechaReagendar(fechaStr);
+        }
+        grid.appendChild(div);
+      }
+    }
+
+    function cambiarMesReagendar(dir) {
+      calFechaReagendar.setMonth(calFechaReagendar.getMonth() + dir);
+      renderCalendarioReagendar();
+    }
+
+    async function seleccionarFechaReagendar(fechaStr) {
+      fechaSelReagendar = fechaStr;
+      horaSelReagendar = '';
+      renderCalendarioReagendar();
+      await cargarHorariosVisualesReagendar(fechaStr);
+    }
+
+    async function cargarHorariosVisualesReagendar(fecha) {
+      const seccion = document.getElementById('horasSectionReagendar');
+      const grid = document.getElementById('horasGridReagendar');
+      const label = document.getElementById('horasLabelReagendar');
+
+      seccion.style.display = 'block';
+      const [anio, mes, dia] = fecha.split('-');
+      label.textContent = `Horas disponibles — ${dia}/${mes}/${anio}`;
+      grid.innerHTML = '<div style="grid-column:1/-1;color:var(--text-muted);font-size:.85rem;padding:8px;">Cargando horarios...</div>';
+
+      try {
+        const r = await fetch(`/api/disponibilidad?fecha=${fecha}&excluir_id=${citaReagendarId}`);
+        const data = await r.json();
+        grid.innerHTML = '';
+        data.forEach(h => {
+          const div = document.createElement('div');
+          div.className = 'hora-visual' + (h.disponible ? '' : ' hora-ocupada');
+          div.innerHTML = `
+            <span class="hora-time">${h.hora}</span>
+            <span class="hora-estado">${h.disponible ? 'Disponible' : 'Ocupada'}</span>
+          `;
+          if (h.disponible) div.onclick = () => selectHoraReagendar(div, h.hora);
+          grid.appendChild(div);
+        });
+      } catch {
+        grid.innerHTML = '<div style="grid-column:1/-1;color:var(--rose);font-size:.85rem;">Sin conexión al servidor</div>';
+      }
+    }
+
+    function selectHoraReagendar(el, hora) {
+      document.querySelectorAll('#horasGridReagendar .hora-visual').forEach(b => b.classList.remove('hora-seleccionada'));
+      el.classList.add('hora-seleccionada');
+      horaSelReagendar = hora;
+    }
+
+    async function confirmarReagendar() {
+      if (!fechaSelReagendar) return toast('⚠ Selecciona una fecha', 'error');
+      if (!horaSelReagendar) return toast('⚠ Selecciona una hora', 'error');
+      try {
+        const r = await fetch(`${API}/citas/${citaReagendarId}/reagendar`, {
+          method: 'PUT', headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ fecha: fechaSelReagendar, hora: horaSelReagendar })
+        });
+        const data = await r.json();
+        if (!r.ok) return toast(`⚠ ${data.error}`, 'error');
+        toast('¡Cita reagendada con éxito!', 'success');
+        cerrarModalReagendar();
+        cargarCitas();
+      } catch {
+        toast('Sin conexión al servidor', 'error');
+      }
+    }
+    </script>
+    {% endif %}
 
     </div>
 
@@ -3396,35 +3592,35 @@ function fmtFecha(f){
 }
 
 async function cargarCitas(){
-  const fecha = document.getElementById('filtroFecha')?.value;
-  const url   = fecha ? `${API}/citas?fecha=${fecha}` : `${API}/citas`;
   const lista = document.getElementById('listaCitas');
   if(!lista) return;
   lista.innerHTML='<div class="empty-state"><div class="big">🌸</div><p>Cargando…</p></div>';
   try{
-    const r = await fetch(url);
+    const r = await fetch(`${API}/citas/mias`);
+    if(r.status === 401){
+      lista.innerHTML='<div class="empty-state"><div class="big">🔒</div><p>Inicia sesión para ver tus citas</p></div>';
+      return;
+    }
     const citas = await r.json();
     if(!citas.length){
-      lista.innerHTML='<div class="empty-state"><div class="big">📋</div><p>No hay citas registradas</p></div>';
+      lista.innerHTML='<div class="empty-state"><div class="big">📋</div><p>Aún no tienes citas registradas</p></div>';
       return;
     }
     lista.innerHTML = citas.map(c=>`
       <div class="cita-card">
         <div>
-          <div class="cita-nombre">${c.nombre}</div>
+          <div class="cita-nombre">${c.servicio}</div>
           <div class="cita-meta">
             <span>${fmtFecha(c.fecha)} · ${c.hora}</span>
-            <span>${c.telefono}</span>
-            ${c.email?`<span>${c.email}</span>`:''}
           </div>
           <div style="margin-top:8px">
-            <span class="badge ${c.estado}">${c.servicio}</span>
             <span class="badge ${c.estado}">${c.estado}</span>
           </div>
           ${c.notas?`<p style="font-size:.78rem;color:var(--text-muted);margin-top:6px">${c.notas}</p>`:''}
         </div>
-        <div>
-          ${c.estado!=='cancelada'?`<button class="btn-cancel-cita" onclick="confirmarCancelar(${c.id})">Cancelar</button>`:''}
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          ${c.estado==='pendiente'?`<button class="btn-secondary-sm" onclick="abrirModalReagendar(${c.id}, '${(c.servicio||'').replace(/'/g,"\\'")}', '${c.fecha}')">Reagendar</button>`:''}
+          ${c.estado==='pendiente'?`<button class="btn-cancel-cita" onclick="confirmarCancelar(${c.id})">Cancelar</button>`:''}
         </div>
       </div>`).join('');
   }catch{
@@ -3441,7 +3637,9 @@ function confirmarCancelar(id){
   document.getElementById('modalOverlay').classList.add('open');
   document.getElementById('btnConfirmCancelar').onclick = async ()=>{
     try{
-      await fetch(`${API}/citas/${id}`,{method:'DELETE'});
+      const r = await fetch(`${API}/citas/${id}`,{method:'DELETE'});
+      const data = await r.json();
+      if(!r.ok) return toast(`⚠ ${data.error}`,'error');
       toast('Cita cancelada','info');
       cerrarModal(); cargarCitas();
     }catch{ toast('Error al cancelar','error'); }
