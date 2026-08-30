@@ -131,6 +131,10 @@ def citas_page():
 def crepelo_page():
     return render_template('index.html', seccion='crepelo', usuario=session.get('usuario'))
 
+@app.route('/privacidad')
+def privacidad_page():
+    return render_template('index.html', seccion='privacidad', usuario=session.get('usuario'))
+
 @app.route('/contacto')
 def contacto_page():
     return redirect('/#contacto')
@@ -714,6 +718,7 @@ def sitemap():
   <url><loc>https://www.camicosmetologia.com/citas</loc><priority>0.9</priority></url>
   <url><loc>https://www.camicosmetologia.com/crepelo</loc><priority>0.7</priority></url>
   <url><loc>https://www.camicosmetologia.com/tarjeta</loc><priority>0.6</priority></url>
+  <url><loc>https://www.camicosmetologia.com/privacidad</loc><priority>0.3</priority></url>
 </urlset>'''
     return app.response_class(xml, mimetype='application/xml')
 

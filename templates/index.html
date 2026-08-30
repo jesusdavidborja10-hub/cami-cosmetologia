@@ -2027,6 +2027,7 @@ button[onclick*="toggleCarritoPanel"]:active {
             <button class="btn-form-primary" onclick="crearCita()">
               Confirmar Cita
             </button>
+            <p class="precio-nota" style="text-align:center;">Al continuar, aceptas nuestra <a href="/privacidad" style="color:var(--text-muted);text-decoration:underline;">Política de tratamiento de datos</a>.</p>
           </div>
 
         </div>
@@ -2488,6 +2489,7 @@ button[onclick*="toggleCarritoPanel"]:active {
       </div>
     </div>
     <button class="btn-form-primary" onclick="doRegistro()">Crear cuenta</button>
+    <p style="font-size:.68rem;color:var(--text-muted);text-align:center;margin-top:10px;">Al continuar, aceptas nuestra <a href="/privacidad" style="color:var(--text-muted);text-decoration:underline;">Política de tratamiento de datos</a>.</p>
     <div class="auth-divider"><span>o</span></div>
     <a href="/auth/google" class="btn-google">
       <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
@@ -3246,11 +3248,88 @@ async function agregarServicioAdmin() {
 </section>
 {% endif %}
 
+<!-- ══ PRIVACIDAD ═══════════════════════════════════════════════════════════ -->
+{% if seccion == 'privacidad' %}
+<section style="padding:60px 0;position:relative;z-index:1;">
+  <div class="container" style="max-width:720px;">
+
+    <div class="section-header">
+      <p class="section-tag">Tu confianza importa</p>
+      <h2 class="section-title">Política de <span>datos personales</span></h2>
+      <p class="section-desc">Así cuidamos tu información en Cami Cosmetología</p>
+    </div>
+
+    <div class="card" style="display:flex;flex-direction:column;gap:26px;animation:fadeUp .6s ease both;">
+
+      <p class="sobre-mi-desc">
+        En Cami Cosmetología nos tomamos en serio el cuidado de tu información. Aquí te contamos,
+        de forma simple, qué datos recogemos y para qué los usamos.
+      </p>
+
+      <div>
+        <h3 style="font-family:var(--font-display);font-size:1.25rem;font-weight:500;color:#fff;margin-bottom:8px;">¿Qué datos recogemos?</h3>
+        <p class="sobre-mi-desc">
+          Cuando agendas una cita, te registras, dejas una reseña o nos escribes un reclamo, podemos
+          pedirte tu nombre, teléfono, correo electrónico y, si compras alguno de nuestros productos,
+          tu dirección de entrega.
+        </p>
+      </div>
+
+      <div>
+        <h3 style="font-family:var(--font-display);font-size:1.25rem;font-weight:500;color:#fff;margin-bottom:8px;">¿Para qué los usamos?</h3>
+        <ul class="sobre-mi-desc" style="padding-left:20px;display:flex;flex-direction:column;gap:6px;">
+          <li>Agendar y confirmar tus citas</li>
+          <li>Contactarte por WhatsApp o correo sobre tu cita o pedido</li>
+          <li>Mejorar nuestro servicio con base en tus reseñas</li>
+          <li>Responder tus reclamos o preguntas</li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 style="font-family:var(--font-display);font-size:1.25rem;font-weight:500;color:#fff;margin-bottom:8px;">¿Dónde se guarda tu información?</h3>
+        <p class="sobre-mi-desc">
+          Tus datos se guardan de forma segura en nuestra base de datos, con copias de respaldo
+          periódicas, y nunca se venden ni se comparten con terceros para fines publicitarios.
+        </p>
+      </div>
+
+      <div>
+        <h3 style="font-family:var(--font-display);font-size:1.25rem;font-weight:500;color:#fff;margin-bottom:8px;">¿Cuáles son tus derechos?</h3>
+        <p class="sobre-mi-desc">
+          En cualquier momento puedes pedirnos que te mostremos, corrijamos o eliminemos tu
+          información. Solo escríbenos por WhatsApp al
+          <a href="https://wa.me/573105165342" target="_blank" style="color:var(--rose);text-decoration:underline;">+57 310 5165342</a>
+          o al correo de contacto, y lo resolvemos.
+        </p>
+      </div>
+
+      <div>
+        <h3 style="font-family:var(--font-display);font-size:1.25rem;font-weight:500;color:#fff;margin-bottom:8px;">Cambios a esta política</h3>
+        <p class="sobre-mi-desc">
+          Si algún día actualizamos esta política, lo vas a ver reflejado en esta misma página.
+        </p>
+      </div>
+
+      <p style="font-size:.68rem;color:var(--text-muted);font-style:italic;text-align:right;margin-top:4px;">
+        Última actualización: 29 de agosto de 2026
+      </p>
+
+    </div>
+
+    <div style="text-align:center;margin-top:32px;">
+      <a href="/" style="font-size:.72rem;color:var(--text-muted);text-decoration:none;letter-spacing:1px;">← Volver al inicio</a>
+    </div>
+
+  </div>
+</section>
+{% endif %}
+
 <!-- ══ FOOTER ════════════════════════════════════════════════════════════════ -->
 <footer>
   <div class="footer-brand">Cami Cosmetología</div>
   <p>© 2025 <span>Cami Cosmetología</span> · Cartagena de Indias, Colombia</p>
   <p style="margin-top:6px">Realza tu belleza · <span class="footer-gold">Potencia tu confianza</span></p>
+  <p style="margin-top:10px"><a href="/privacidad" style="color:var(--text-muted);font-size:.75rem;text-decoration:none;letter-spacing:.5px;border-bottom:0.5px solid rgba(255,255,255,.15);padding-bottom:1px;">Política de privacidad</a></p>
 </footer>
 
 <!-- Modal cancelar cita -->
