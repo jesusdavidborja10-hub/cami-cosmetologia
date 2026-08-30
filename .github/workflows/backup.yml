@@ -1,0 +1,65 @@
+name: Backup Supabase Database
+
+on:
+  schedule:
+    # 08:00 UTC = 03:00 hora Colombia (madrugada)
+    - cron: '0 8 * * *'
+  workflow_dispatch: {}
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install PostgreSQL client (pg_dump)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
+
+      - name: Compute backup filename
+        id: vars
+        run: echo "filename=backup-$(date -u +'%Y-%m-%d').sql.gz" >> "$GITHUB_OUTPUT"
+
+      - name: Dump database and compress
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          pg_dump --no-owner --no-privileges "$DATABASE_URL" | gzip -c > "${{ steps.vars.outputs.filename }}"
+
+      - name: Clone private backups repository
+        env:
+          BACKUP_TOKEN: ${{ secrets.BACKUP_TOKEN }}
+        run: |
+          git clone "https://x-access-token:${BACKUP_TOKEN}@github.com/jesusdavidborja10-hub/cami-backups.git" cami-backups-repo
+
+      - name: Copy new backup into repository
+        run: |
+          mkdir -p cami-backups-repo/backups
+          cp "${{ steps.vars.outputs.filename }}" cami-backups-repo/backups/
+
+      - name: Delete backups older than 30 days
+        run: |
+          cd cami-backups-repo/backups
+          today_epoch=$(date -u +%s)
+          for f in backup-*.sql.gz; do
+            [ -e "$f" ] || continue
+            date_part=$(echo "$f" | sed -E 's/^backup-([0-9]{4}-[0-9]{2}-[0-9]{2})\.sql\.gz$/\1/')
+            file_epoch=$(date -u -d "$date_part" +%s 2>/dev/null) || continue
+            age_days=$(( (today_epoch - file_epoch) / 86400 ))
+            if [ "$age_days" -gt 30 ]; then
+              echo "Eliminando backup antiguo: $f (edad: ${age_days} dias)"
+              rm -f "$f"
+            fi
+          done
+
+      - name: Commit and push backup
+        run: |
+          cd cami-backups-repo
+          git config user.name "cami-backup-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add backups/
+          if git diff --cached --quiet; then
+            echo "No hay cambios que commitear"
+          else
+            git commit -m "Backup $(date -u +'%Y-%m-%d')"
+            git push
+          fi
